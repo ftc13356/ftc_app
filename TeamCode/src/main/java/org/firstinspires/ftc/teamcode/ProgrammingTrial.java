@@ -11,11 +11,11 @@ public class ProgrammingTrial extends LinearOpMode
 {
     private DcMotor motorLeftfront;
     //private DcMotor motorRightfront;
-   // private DcMotor motorLeftback;
-   // private DcMotor motorRightback;
+    //private DcMotor motorLeftback;
+    //private DcMotor motorRightback;
 
     @Override
-    public void runOpMode() throws Infer.InferenceException
+    public void runOpMode() throws InterruptedException
     {
 
         motorLeftfront = hardwareMap.dcMotor.get("motorLeftfront");
