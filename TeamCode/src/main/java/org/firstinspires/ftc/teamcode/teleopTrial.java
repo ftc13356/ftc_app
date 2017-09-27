@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.sun.tools.javac.comp.Infer;
 
-@TeleOp(name = "Programming Trial")
-public class ProgrammingTrial extends LinearOpMode
+@TeleOp(name = "Teleop Trial")
+public class teleopTrial extends LinearOpMode
 {
     private DcMotor motorLeftfront;
     //private DcMotor motorRightfront;
