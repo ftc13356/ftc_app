@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Teleop Trial")
-//@Disabled
 public class teleopTrial extends OpMode
 {
     // This is declaring the hardware.
@@ -45,7 +44,7 @@ public class teleopTrial extends OpMode
     @Override
     public void init_loop() {
     }
-
+    
     // This code will do something once when the PLAY button is pressed.
     @Override
     public void start() {
@@ -63,7 +62,7 @@ public class teleopTrial extends OpMode
         double motorRightbackPower;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
-        double driveFW = -gamepad1.left_stick_y;
+        double driveFW = gamepad1.left_stick_y;
         double driveS = gamepad1.left_stick_x;
         double turn  = gamepad1.right_stick_x;
         // The speed values are calculated and stored in variables.
@@ -81,11 +80,6 @@ public class teleopTrial extends OpMode
         // This shows that time left and the motor speeds
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
-
-        //motorLeftfront = hardwareMap.dcMotor.get("motorLeftfront");
-        //motorRightfront = hardwareMap.dcMotor.get("motorRightfront");
-        //motorLeftback = hardwareMap.dcMotor.get("motorLeftback");
-        //motorRightback = hardwareMap.dcMotor.get("motorRightback");
 
     }
     // This code will run after the STOP button is pressed.
