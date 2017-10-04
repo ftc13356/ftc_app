@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -47,9 +46,14 @@ public class teleopTrial extends OpMode
     
     // This code will do something once when the PLAY button is pressed.
     @Override
-    public void start() {
+    public void start()
+    {
         runtime.reset();
     }
+
+    // This code is just defining the variables needed for the loop.
+    double speedcontrol = 0.5;
+    boolean display = true;
 
     // This code will run constantly after the previous part is runned.
     @Override
@@ -65,11 +69,25 @@ public class teleopTrial extends OpMode
         double driveFW = gamepad1.left_stick_y;
         double driveS = gamepad1.left_stick_x;
         double turn  = gamepad1.right_stick_x;
+
+        // This sets the speed mode to fast when the "A" button is pressed.
+        if (gamepad1.a)
+        {
+            speedcontrol = 1;
+            display = true;
+        }
+        // This sets the speed mode to slow (default) when the "B" button is pressed.
+        if (gamepad1.b)
+        {
+            speedcontrol = 0.25;
+            display = false;
+        }
+
         // The speed values are calculated and stored in variables.
-        motorLeftfrontPower = Range.clip(-driveFW + driveS + turn, -1.0, 1.0) ;
-        motorRightfrontPower = Range.clip(driveFW + driveS + turn, -1.0, 1.0) ;
-        motorLeftbackPower = Range.clip(-driveFW - driveS + turn, -1.0, 1.0) ;
-        motorRightbackPower = Range.clip(driveFW - driveS + turn, -1.0, 1.0) ;
+        motorLeftfrontPower = Range.clip((-driveFW + driveS + turn)*speedcontrol, -1.0, 1.0) ;
+        motorRightfrontPower = Range.clip((driveFW + driveS + turn)*speedcontrol, -1.0, 1.0) ;
+        motorLeftbackPower = Range.clip((-driveFW - driveS + turn)*speedcontrol, -1.0, 1.0) ;
+        motorRightbackPower = Range.clip((driveFW - driveS + turn)*speedcontrol, -1.0, 1.0) ;
 
         // The calculated power is then applied to the motors.
         motorLeftfront.setPower(motorLeftfrontPower);
@@ -78,10 +96,20 @@ public class teleopTrial extends OpMode
         motorRightback.setPower(motorRightbackPower);
 
         // This shows that time left and the motor speeds
+        if (display)
+        {
+            telemetry.addData("SpeedMode", "Fast");
+        }
+        else
+        {
+            telemetry.addData("SpeedMode", "Slow");
+        }
+
         telemetry.addData("Status", "Run Time: " + runtime.toString());
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
     }
+
     // This code will run after the STOP button is pressed.
     @Override
     public void stop() {
