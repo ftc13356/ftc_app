@@ -1,3 +1,32 @@
+/* Copyright (c) 2017 FIRST. All rights reserved.
+ *
+ * Redistribution and use in source and binary forms, with or without modification,
+ * are permitted (subject to the limitations in the disclaimer below) provided that
+ * the following conditions are met:
+ *
+ * Redistributions of source code must retain the above copyright notice, this list
+ * of conditions and the following disclaimer.
+ *
+ * Redistributions in binary form must reproduce the above copyright notice, this
+ * list of conditions and the following disclaimer in the documentation and/or
+ * other materials provided with the distribution.
+ *
+ * Neither the name of FIRST nor the names of its contributors may be used to endorse or
+ * promote products derived from this software without specific prior written permission.
+ *
+ * NO EXPRESS OR IMPLIED LICENSES TO ANY PARTY'S PATENT RIGHTS ARE GRANTED BY THIS
+ * LICENSE. THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
+ * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+ * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR
+ * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER
+ * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY,
+ * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
+ * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ */
+
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -20,7 +49,7 @@ public class teleopTrial extends OpMode
     @Override
     public void init() {
         // Tell the driver that the initialization is starting.
-        telemetry.addData("Status", "Initialized");
+        telemetry.addData("Status", "Initializing");
 
         // This is initializing the hardware variables.
         // The strings must be the same used when configuring the hardware using the FTC app.
@@ -49,21 +78,35 @@ public class teleopTrial extends OpMode
     public void start()
     {
         runtime.reset();
+        double autotimeleft;
+        autotimeleft = 30 - getRuntime();
+        if (autotimeleft <= 0)
+        {
+            motorLeftfront.setPower(0);
+            motorRightfront.setPower(0);
+            motorLeftback.setPower(0);
+            motorRightback.setPower(0);
+            return;
+        }
+        //Write autonomous program. After each step, write if statement after every step, and use return to exit the void.
+        //Blah, blah, blah.
+        runtime.reset();
     }
 
     // This code is just defining the variables needed for the loop.
-    double speedcontrol = 0.5;
+    double speedcontrol = 0.25;
     boolean display = true;
 
     // This code will run constantly after the previous part is runned.
     @Override
     public void loop() {
-
-        // The variables are so that the motor speed can be displayed on the phone.
+        // Some variables are being defined.
         double motorLeftfrontPower;
         double motorRightfrontPower;
         double motorLeftbackPower;
         double motorRightbackPower;
+        double timeleft;
+        timeleft = 120 - getRuntime();
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
         double driveFW = gamepad1.left_stick_y;
@@ -95,7 +138,8 @@ public class teleopTrial extends OpMode
         motorLeftback.setPower(motorLeftbackPower);
         motorRightback.setPower(motorRightbackPower);
 
-        // This shows that time left and the motor speeds
+        // This prints information on the screen.
+        telemetry.addData("Mode", "Teleop");
         if (display)
         {
             telemetry.addData("SpeedMode", "Fast");
@@ -104,10 +148,17 @@ public class teleopTrial extends OpMode
         {
             telemetry.addData("SpeedMode", "Slow");
         }
-
-        telemetry.addData("Status", "Run Time: " + runtime.toString());
+        telemetry.addData("Status", "Time Left: " + timeleft);
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
+        // If time is up, then the motors will stop.
+        if (timeleft <= 0)
+        {
+            motorLeftfront.setPower(0);
+            motorRightfront.setPower(0);
+            motorLeftback.setPower(0);
+            motorRightback.setPower(0);
+        }
     }
 
     // This code will run after the STOP button is pressed.
