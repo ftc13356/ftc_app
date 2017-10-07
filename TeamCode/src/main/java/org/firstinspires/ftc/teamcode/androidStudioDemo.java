@@ -36,28 +36,30 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name="YOURNAME")
-@Disabled
-public class AndroidStudioPresentation extends OpMode // AndroidStudio Presentation should be YOURNAME.
+@TeleOp(name="Android Studio Demo")
+public class androidStudioDemo extends OpMode
 {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor leftDrive = null;
-    private DcMotor rightDrive = null;
+    private DcMotor motorLeftfront;
+    private DcMotor motorRightfront;
+    private DcMotor motorLeftback;
+    private DcMotor motorRightback;
 
     /*
      * Code to run ONCE when the driver hits INIT
      */
     @Override
     public void init() {
-        telemetry.addData("Name","YOURNAME");
         telemetry.addData("Status", "Initializing");
 
         // Initialize the hardware variables. Note that the strings used here as parameters
         // to 'get' must correspond to the names assigned during the robot configuration
         // step (using the FTC Robot Controller app on the phone).
-        leftDrive  = hardwareMap.get(DcMotor.class, "left_drive");
-        rightDrive = hardwareMap.get(DcMotor.class, "right_drive");
+        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
+        motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
+        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
+        motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
 
         // Tell the driver that initialization is complete.
         telemetry.addData("Status", "Initialized");
@@ -74,9 +76,9 @@ public class AndroidStudioPresentation extends OpMode // AndroidStudio Presentat
      * Code to run ONCE when the driver hits PLAY
      */
     @Override
-    public void start()
-    {
+    public void start() {
         runtime.reset();
+
     }
 
     /*
@@ -85,23 +87,37 @@ public class AndroidStudioPresentation extends OpMode // AndroidStudio Presentat
     @Override
     public void loop() {
         // Setup a variable for each drive wheel to save power level for telemetry
-        double leftPower;
-        double rightPower;
+        double motorLeftfrontPower;
+        double motorRightfrontPower;
+        double motorLeftbackPower;
+        double motorRightbackPower;
 
         // POV Mode uses left stick to go forward, and right stick to turn.
         // - This uses basic math to combine motions and is easier to drive straight.
-        double drive = gamepad1.left_stick_y;
-        double turn  =  gamepad1.right_stick_x;
-        leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-        rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+        //double driveFW = gamepad1.left_stick_y;
+        //double driveS = gamepad1.left_stick_x;
+        //double turn = gamepad1.right_stick_x;
+
+        //motorLeftfrontPower = Range.clip((-driveFW + driveS + turn), -1.0, 1.0) ;
+        //motorRightfrontPower = Range.clip((driveFW + driveS + turn), -1.0, 1.0) ;
+        //motorLeftbackPower = Range.clip((-driveFW - driveS + turn), -1.0, 1.0) ;
+        //motorRightbackPower = Range.clip((driveFW - driveS + turn), -1.0, 1.0) ;
+
+        motorRightfrontPower = gamepad1.left_stick_y;
+        motorLeftbackPower = -gamepad1.left_stick_y;
+        motorLeftfrontPower = gamepad1.left_stick_x;
+        motorRightbackPower = -gamepad1.left_stick_x;
 
         // Send calculated power to wheels
-        leftDrive.setPower(leftPower);
-        rightDrive.setPower(rightPower);
+        motorLeftfront.setPower(motorLeftfrontPower);
+        motorRightfront.setPower(motorRightfrontPower);
+        motorLeftback.setPower(motorLeftbackPower);
+        motorRightback.setPower(motorRightbackPower);
 
         // Show the elapsed game time and wheel power.
         telemetry.addData("Status", "Run Time: " + runtime.toString());
-        telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+        telemetry.addData("Gamepad 1", "(%.2f)", gamepad1.left_stick_y);
+        //telemetry.addData("Motors", "Left Front (%.2f), Right Front (%.2f), Left Back (%.2f), Right Back (%2f)", motorLeftfrontPower, motorRightfrontPower, motorRightbackPower, motorRightbackPower);
     }
 
     /*
