@@ -38,7 +38,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @Autonomous(name="Autonomous Trial Jonathan")
-public class autonomousTrial extends LinearOpMode {
+public class autonomousTrialJonathan extends LinearOpMode {
 
     private DcMotor motorLeftfront;
     private DcMotor motorRightfront;
