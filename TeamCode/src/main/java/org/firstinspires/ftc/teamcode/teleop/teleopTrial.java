@@ -95,7 +95,7 @@ public class teleopTrial extends OpMode
 
     // This code is just defining the variables needed for the loop.
     double speedcontrol = 0.25;
-    boolean display = true;
+    boolean display = false;
 
     // This code will run constantly after the previous part is runned.
     @Override
@@ -127,10 +127,10 @@ public class teleopTrial extends OpMode
         }
 
         // The speed values are calculated and stored in variables.
-        motorLeftfrontPower = Range.clip((-driveFW + driveS + turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightfrontPower = Range.clip((driveFW + driveS + turn)*speedcontrol, -1.0, 1.0) ;
-        motorLeftbackPower = Range.clip((-driveFW - driveS + turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightbackPower = Range.clip((driveFW - driveS + turn)*speedcontrol, -1.0, 1.0) ;
+        motorLeftfrontPower = Range.clip((driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
+        motorRightfrontPower = Range.clip((-driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
+        motorLeftbackPower = Range.clip((driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
+        motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
 
         // The calculated power is then applied to the motors.
         motorLeftfront.setPower(motorLeftfrontPower);
