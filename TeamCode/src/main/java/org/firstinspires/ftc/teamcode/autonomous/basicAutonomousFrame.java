@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.Range;
 
 
 @Autonomous(name="Basic Autonomous Frame")
@@ -70,5 +71,47 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
 
     public void Stop () {
         stop();
+    }
+    // Defining driveStop Method (Stops Motors)
+    public void driveStop(long time) throws InterruptedException
+    {
+        // Set Motor Power to 0
+        stop();
+
+        // Wait for "time" Milliseconds
+        Thread.sleep(time);
+
+        // Print Motor Speeds
+        telemetry.addData("Motors", "Leftfront:0, Rightfront:0, Leftback:0, Rightback:0");
+        telemetry.update();
+    }
+
+    // Defining drive Method (Can Drive in All Directions)
+    public void drive(double driveFB, double driveS, double turn, long time, double speedfactor) throws InterruptedException
+    {
+        // Define Speed Variables
+        double motorLeftfrontPower;
+        double motorRightfrontPower;
+        double motorLeftbackPower;
+        double motorRightbackPower;
+
+        // Calculating Power
+        motorLeftfrontPower = Range.clip((-driveFB + driveS + turn)*speedfactor, -1.0, 1.0);
+        motorRightfrontPower = Range.clip((driveFB + driveS + turn)*speedfactor, -1.0, 1.0);
+        motorLeftbackPower = Range.clip((-driveFB - driveS + turn)*speedfactor, -1.0, 1.0);
+        motorRightbackPower = Range.clip((driveFB - driveS + turn)*speedfactor, -1.0, 1.0);
+
+        // Set Motor Power to Calculated Power
+        motorLeftfront.setPower(motorLeftfrontPower);
+        motorRightfront.setPower(motorRightfrontPower);
+        motorLeftback.setPower(motorLeftbackPower);
+        motorRightback.setPower(motorRightbackPower);
+
+        // Wait for "time" Milliseconds
+        Thread.sleep(time);
+
+        // Print Motor Speeds
+        telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
+        telemetry.update();
     }
 }

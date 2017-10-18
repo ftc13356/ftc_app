@@ -66,6 +66,5 @@ public class OpModeRegister implements com.qualcomm.robotcore.eventloop.opmode.O
          * Any manual OpMode class registrations should go here.
          */
 
-        manager.register("TeleopTrial", teleopTrial.class);
     }
 }
