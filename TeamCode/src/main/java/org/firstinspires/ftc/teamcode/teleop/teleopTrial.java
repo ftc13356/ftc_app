@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -36,6 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Teleop Trial")
+@Disabled
 public class teleopTrial extends OpMode
 {
     // This is declaring the hardware.
@@ -149,6 +151,7 @@ public class teleopTrial extends OpMode
             telemetry.addData("SpeedMode", "Slow");
         }
         telemetry.addData("Status", "Time Left: " + timeleft);
+        telemetry.addData("Output", "Hi Guys! Robot Talking!");
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
         // If time is up, then the motors will stop.
