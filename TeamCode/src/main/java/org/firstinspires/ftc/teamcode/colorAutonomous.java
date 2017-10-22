@@ -27,15 +27,29 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@Autonomous(name="Jonathan Autonomous")
-// @Disabled
-public class autonomousJonathan extends basicAutonomousFrame {
+
+@Autonomous(name="Color Autononmous")
+//@Disabled
+public class colorAutonomous extends LinearOpMode {
+
+    public DcMotor motorLeftfront;
+    public DcMotor motorRightfront;
+    public DcMotor motorLeftback;
+    public DcMotor motorRightback;
+
+    ColorSensor sensorColor;
+
+    boolean colorRed = false;
+    boolean colorBlue = false;
+    boolean colorGreen = false;
 
     @Override
     public void runOpMode() {
@@ -45,6 +59,9 @@ public class autonomousJonathan extends basicAutonomousFrame {
         motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
 
+        sensorColor = hardwareMap.get(ColorSensor.class, "color");
+        float hsvValues[] = {0F, 0F, 0F};
+
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
@@ -52,11 +69,64 @@ public class autonomousJonathan extends basicAutonomousFrame {
 
         waitForStart();
 
-        moveForward(0.5, 500);
-        moveLeft(0.5, 500);
-        moveBackward(0.5, 500);
-        moveRight(0.5, 500);
-        Stop();
-    }
-}
+        while (opModeIsActive()) {
 
+            moveForward(.1,5000);
+
+            if (hsvValues[0] >= 340 && hsvValues[0] <= 20) {
+                telemetry.addData("Color", "Red");
+                telemetry.update();
+                colorRed = true;
+            }
+            if (hsvValues[0] >= 100 && hsvValues[0] <= 140) {
+                telemetry.addData("Color", "Blue");
+                telemetry.update();
+                colorBlue = true;
+            }
+            if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
+                telemetry.addData("Color", "Green");
+                telemetry.update();
+                colorGreen = true;
+            }
+            if (colorRed) {
+                Stop();
+            }
+        }
+
+
+    }
+
+    public void moveForward(double power, long time) {
+        motorLeftfront.setPower(-power);
+        motorRightfront.setPower(power);
+        motorLeftback.setPower(-power);
+        motorRightback.setPower(power);
+        sleep(time);
+    }
+
+    public void moveLeft(double power, long time) {
+        motorLeftfront.setPower(power);
+        motorRightfront.setPower(power);
+        motorLeftback.setPower(-power);
+        motorRightback.setPower(-power);
+        sleep(time);
+    }
+
+    public void moveRight(double power, long time) {
+        moveLeft(-power, time);
+    }
+
+    public void moveBackward(double power, long time) {
+        moveForward(-power, time);
+    }
+
+    public void Stop() {
+        stop();
+    }
+
+    public void checkColor () {
+
+    }
+
+
+}
