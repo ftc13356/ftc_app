@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Claw Test")
@@ -14,20 +15,19 @@ public class clawTest extends LinearOpMode
     private Servo clawLeft;
     private Servo clawRight;
 
-    private static final double ARM_RETRACTED = 0;
-    private static final double ARM_EXTENDED = 1;
-
     @Override
     public void  runOpMode() throws InterruptedException
     {
-
         clawLeft = hardwareMap.servo.get("clawLeft");
         clawRight = hardwareMap.servo.get("clawRight");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
 
-        clawLeft.setPosition(ARM_RETRACTED);
-        clawRight.setPosition(ARM_RETRACTED);
-        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        double leftoriginal = clawLeft.getPosition();
+        double rightoriginal = clawRight.getPosition();
+        double leftposition = clawLeft.getPosition();
+        double rightposition = clawRight.getPosition();
+        double accuracy = 0.25;
+        armMotor.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
 
@@ -35,17 +35,25 @@ public class clawTest extends LinearOpMode
         {
             if(gamepad1.a)
             {
-                clawLeft.setPosition(ARM_RETRACTED);
-                clawRight.setPosition(ARM_EXTENDED);
-                telemetry.addData("Servo Status", "Close");
+                clawLeft.setPosition(leftoriginal+accuracy);
+                clawRight.setPosition(rightoriginal-accuracy);
+                leftposition = clawLeft.getPosition();
+                rightposition = clawRight.getPosition();
+                telemetry.addData("Left Servo Position", leftposition);
+                telemetry.addData("Right Servo Position", rightposition);
                 telemetry.update();
             }
 
-            if(gamepad1.b)
+            else if(gamepad1.b)
             {
-                clawLeft.setPosition(ARM_EXTENDED);
-                clawRight.setPosition(ARM_RETRACTED);
-                telemetry.addData("Servo Status", "Open");
+                leftoriginal = clawLeft.getPosition();
+                rightoriginal = clawRight.getPosition();
+                clawLeft.setPosition(leftoriginal+accuracy);
+                clawRight.setPosition(rightoriginal-accuracy);
+                leftposition = clawLeft.getPosition();
+                rightposition = clawRight.getPosition();
+                telemetry.addData("Left Servo Position", leftposition);
+                telemetry.addData("Right Servo Position", rightposition);
                 telemetry.update();
             }
 
@@ -53,6 +61,10 @@ public class clawTest extends LinearOpMode
             armMotor.setPower(armMotorPower);
 
             telemetry.addData("Motor", armMotorPower);
+            telemetry.addData("Left Servo Position", leftposition);
+            telemetry.addData("Right Servo Position", rightposition);
+            telemetry.addData("Left Servo Original Position", leftoriginal);
+            telemetry.addData("Right Servo Original Position", rightoriginal);
             telemetry.update();
 
             idle();
