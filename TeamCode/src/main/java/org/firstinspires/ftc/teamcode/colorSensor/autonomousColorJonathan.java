@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.colorSensor;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -36,9 +36,9 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
-@Autonomous(name="Color Autononmous")
+@Autonomous(name="Jonathan Autonomous Color")
 //@Disabled
-public class colorAutonomous extends LinearOpMode {
+public class autonomousColorJonathan extends LinearOpMode {
 
     public DcMotor motorLeftfront;
     public DcMotor motorRightfront;

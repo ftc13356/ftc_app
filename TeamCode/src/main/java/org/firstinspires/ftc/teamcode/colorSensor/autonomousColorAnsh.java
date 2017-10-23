@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.colorSensor;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -37,6 +37,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
 // @Disabled
@@ -99,6 +101,7 @@ public class autonomousColorAnsh extends basicAutonomousFrame
     }
     // Defining CheckColor, It prints if the color checked is red or blue.
     public float CheckColor() {
+        float mastervalue=0;
         while (opModeIsActive()) {
             float hsvValues[] = {0F, 0F, 0F};
             final float values[] = hsvValues;
@@ -118,7 +121,8 @@ public class autonomousColorAnsh extends basicAutonomousFrame
             Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
             relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));}});
             relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.WHITE);}});
-            return hsvValues[0];
+            mastervalue = hsvValues[0];
         }
+        return mastervalue;
     }
 }
