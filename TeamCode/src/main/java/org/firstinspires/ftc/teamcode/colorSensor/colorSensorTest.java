@@ -37,11 +37,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-
-import java.util.Locale;
 
 /*
  * This is an example LinearOpMode that shows how to use
@@ -58,7 +53,7 @@ import java.util.Locale;
  */
 
 @Autonomous(name = "colorSensorTest")
-// @Disabled
+@Disabled
 public class colorSensorTest extends LinearOpMode {
 
     ColorSensor sensorColor;

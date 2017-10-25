@@ -22,12 +22,9 @@ public class clawTest extends LinearOpMode
         clawRight = hardwareMap.servo.get("clawRight");
         armMotor = hardwareMap.get(DcMotor.class, "armMotor");
 
-        double leftoriginal = clawLeft.getPosition();
-        double rightoriginal = clawRight.getPosition();
-        double leftposition = clawLeft.getPosition();
-        double rightposition = clawRight.getPosition();
-        double accuracy = 0.25;
         armMotor.setDirection(DcMotor.Direction.REVERSE);
+        double leftposition = 0;
+        double rightposition = 1;
 
         waitForStart();
 
@@ -35,36 +32,23 @@ public class clawTest extends LinearOpMode
         {
             if(gamepad1.a)
             {
-                clawLeft.setPosition(leftoriginal+accuracy);
-                clawRight.setPosition(rightoriginal-accuracy);
-                leftposition = clawLeft.getPosition();
-                rightposition = clawRight.getPosition();
-                telemetry.addData("Left Servo Position", leftposition);
-                telemetry.addData("Right Servo Position", rightposition);
-                telemetry.update();
+                leftposition = 0.6;
+                telemetry.addData("Servo Status", "Closed");
             }
 
             else if(gamepad1.b)
             {
-                leftoriginal = clawLeft.getPosition();
-                rightoriginal = clawRight.getPosition();
-                clawLeft.setPosition(leftoriginal+accuracy);
-                clawRight.setPosition(rightoriginal-accuracy);
-                leftposition = clawLeft.getPosition();
-                rightposition = clawRight.getPosition();
-                telemetry.addData("Left Servo Position", leftposition);
-                telemetry.addData("Right Servo Position", rightposition);
-                telemetry.update();
+                leftposition = 0;
+                telemetry.addData("Servo Status", "Open");
             }
 
             double armMotorPower = gamepad1.left_stick_y * 0.5;
             armMotor.setPower(armMotorPower);
+            clawLeft.setPosition(leftposition);
+            rightposition = 1-leftposition;
+            clawRight.setPosition(rightposition);
 
             telemetry.addData("Motor", armMotorPower);
-            telemetry.addData("Left Servo Position", leftposition);
-            telemetry.addData("Right Servo Position", rightposition);
-            telemetry.addData("Left Servo Original Position", leftoriginal);
-            telemetry.addData("Right Servo Original Position", rightoriginal);
             telemetry.update();
 
             idle();

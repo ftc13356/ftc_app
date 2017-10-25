@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name="Android Studio Demo")
-// @Disabled
+@Disabled
 public class androidStudioDemo extends OpMode
 {
     // Declare OpMode members.
