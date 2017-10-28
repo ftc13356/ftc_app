@@ -45,6 +45,7 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
     public DcMotor motorLeftback;
     public DcMotor motorRightback;
 
+    //Function 1
     public void moveForward(double power, long time) {
         motorLeftfront.setPower(-power);
         motorRightfront.setPower(power);
@@ -72,23 +73,17 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
     public void Stop () {
         stop();
     }
-    // Defining driveStop Method (Stops Motors)
-    public void driveStop(long time) throws InterruptedException
-    {
-        // Set Motor Power to 0
+
+    //Function 2
+    public void driveStop(long time) {
         stop();
-
-        // Wait for "time" Milliseconds
-        Thread.sleep(time);
-
-        // Print Motor Speeds
+        sleep(time);
         telemetry.addData("Motors", "Leftfront:0, Rightfront:0, Leftback:0, Rightback:0");
         telemetry.update();
     }
 
     // Defining drive Method (Can Drive in All Directions)
-    public void drive(double driveFB, double driveS, double turn, long time, double speedfactor) throws InterruptedException
-    {
+    public void drive(double driveFB, double driveS, double turn, long time, double speedfactor) {
         // Define Speed Variables
         double motorLeftfrontPower;
         double motorRightfrontPower;
@@ -106,11 +101,9 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
         motorRightfront.setPower(motorRightfrontPower);
         motorLeftback.setPower(motorLeftbackPower);
         motorRightback.setPower(motorRightbackPower);
+        
+        sleep(time);
 
-        // Wait for "time" Milliseconds
-        Thread.sleep(time);
-
-        // Print Motor Speeds
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
         telemetry.update();
     }

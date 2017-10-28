@@ -40,10 +40,6 @@ public class autonomousAnsh extends basicAutonomousFrame
 {
     // Defining Autonomous OpMode Members
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
 
     @Override
     public void runOpMode() throws InterruptedException
