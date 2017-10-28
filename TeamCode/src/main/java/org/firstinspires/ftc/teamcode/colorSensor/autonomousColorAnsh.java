@@ -46,11 +46,11 @@ public class autonomousColorAnsh extends basicAutonomousFrame
 {
     // Defining Autonomous OpMode Members
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
-    ColorSensor sensorColor;
+    // private DcMotor motorLeftfront;
+    // private DcMotor motorRightfront;
+    // private DcMotor motorLeftback;
+    // private DcMotor motorRightback;
+    private ColorSensor sensorColor;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -81,14 +81,17 @@ public class autonomousColorAnsh extends basicAutonomousFrame
         runtime.reset();
 
         // ALL CODE HERE!!!
+        // driveWithoutTime(1,0,0,0.25);
         float huevalue = CheckColor();
-        drive(0,1,0,500,0.25);
         if (runtime.milliseconds() >= 500 || huevalue >= 340 && huevalue <= 360 || huevalue >= 0 && huevalue <= 20 || huevalue >= 210 && huevalue <= 275)
         {
             stop();
+            int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+            final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
+            relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.WHITE);}});
         }
         // Put Glyph into Cryptobox
-        // drive(1,0,0,1500,0.25);
+        // drive(0,1,0,1500,0.25);
         // drive(0,0,1,1000,0.25);
         // drive(1,0,0,750,0.25);
         // drive(-1,0,0,1000,0.25);
@@ -102,25 +105,22 @@ public class autonomousColorAnsh extends basicAutonomousFrame
     // Defining CheckColor, It prints if the color checked is red or blue.
     public float CheckColor() {
         float mastervalue=0;
+        float hsvValues[] = {0F, 0F, 0F};
+        final float values[] = hsvValues;
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         while (opModeIsActive()) {
-            float hsvValues[] = {0F, 0F, 0F};
-            final float values[] = hsvValues;
-            int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-            final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
             telemetry.addData("Hue", hsvValues[0]);
             if (hsvValues[0] >= 340 && hsvValues[0] <= 360 || hsvValues[0] >= 0 && hsvValues[0] <= 20) {
                 telemetry.addData("Color", "Red");
-                break;
             }
             else if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
                 telemetry.addData("Color", "Blue");
-                break;
             }
             else {telemetry.addData("Color", "None");}
             telemetry.update();
-            Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
+            Color.RGBToHSV((sensorColor.red()), (sensorColor.green()), (sensorColor.blue()), hsvValues);
             relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));}});
-            relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.WHITE);}});
             mastervalue = hsvValues[0];
         }
         return mastervalue;

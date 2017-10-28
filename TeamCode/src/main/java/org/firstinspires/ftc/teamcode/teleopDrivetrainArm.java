@@ -155,6 +155,7 @@ public class teleopDrivetrainArm extends OpMode
             motorLeftbackPower = 0;
             motorRightbackPower = 0;
             armMotorPower = 0;
+            leftposition = 0;
         }
 
         // The calculated power is then applied to the motors.
@@ -194,6 +195,7 @@ public class teleopDrivetrainArm extends OpMode
             motorLeftback.setPower(0);
             motorRightback.setPower(0);
             armMotor.setPower(0);
+            leftposition = 0;
         }
     }
 

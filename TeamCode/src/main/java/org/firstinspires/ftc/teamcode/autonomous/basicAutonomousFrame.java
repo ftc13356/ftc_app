@@ -72,6 +72,7 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
     public void Stop () {
         stop();
     }
+
     // Defining driveStop Method (Stops Motors)
     public void driveStop(long time) throws InterruptedException
     {
@@ -86,7 +87,7 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
         telemetry.update();
     }
 
-    // Defining drive Method (Can Drive in All Directions)
+    // Defining drive Method (Can Drive in All Directions, With Time Control)
     public void drive(double driveFB, double driveS, double turn, long time, double speedfactor) throws InterruptedException
     {
         // Define Speed Variables
@@ -113,5 +114,31 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
         // Print Motor Speeds
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
         telemetry.update();
+    }
+
+    // Defining drive Method (Can Drive in All Directions, Without Time Control)
+    public void driveWithoutTime(double driveFB, double driveS, double turn, double speedfactor) throws InterruptedException
+    {
+        // Define Speed Variables
+        double motorLeftfrontPower;
+        double motorRightfrontPower;
+        double motorLeftbackPower;
+        double motorRightbackPower;
+
+        // Calculating Power
+        motorLeftfrontPower = Range.clip((-driveFB + driveS + turn)*speedfactor, -1.0, 1.0);
+        motorRightfrontPower = Range.clip((driveFB + driveS + turn)*speedfactor, -1.0, 1.0);
+        motorLeftbackPower = Range.clip((-driveFB - driveS + turn)*speedfactor, -1.0, 1.0);
+        motorRightbackPower = Range.clip((driveFB - driveS + turn)*speedfactor, -1.0, 1.0);
+
+        // Set Motor Power to Calculated Power
+        motorLeftfront.setPower(motorLeftfrontPower);
+        motorRightfront.setPower(motorRightfrontPower);
+        motorLeftback.setPower(motorLeftbackPower);
+        motorRightback.setPower(motorRightbackPower);
+
+    // Print Motor Speeds
+    telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
+    telemetry.update();
     }
 }

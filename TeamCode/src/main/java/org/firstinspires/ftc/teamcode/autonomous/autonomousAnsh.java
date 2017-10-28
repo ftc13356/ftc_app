@@ -40,10 +40,10 @@ public class autonomousAnsh extends basicAutonomousFrame
 {
     // Defining Autonomous OpMode Members
     private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
+    // private DcMotor motorLeftfront;
+    // private DcMotor motorRightfront;
+    // private DcMotor motorLeftback;
+    // private DcMotor motorRightback;
 
     @Override
     public void runOpMode() throws InterruptedException
@@ -64,7 +64,7 @@ public class autonomousAnsh extends basicAutonomousFrame
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
 
-        // Tells Driver Initialization is Conplete
+        // Tells Driver Initialization is Complete
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
