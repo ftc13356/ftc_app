@@ -39,17 +39,17 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Teleop Drivetrain and Arm")
 // @Disabled
-public class teleopDrivetrainArm extends OpMode
-{
+public class teleopDrivetrainArm extends OpMode {
+
     // This is declaring the hardware.
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
-    private DcMotor armMotor;
-    private Servo clawLeft;
-    private Servo clawRight;
+    public ElapsedTime runtime = new ElapsedTime();
+    public DcMotor motorLeftfront;
+    public DcMotor motorRightfront;
+    public DcMotor motorLeftback;
+    public DcMotor motorRightback;
+    public DcMotor armMotor;
+    public Servo clawLeft;
+    public Servo clawRight;
 
     // This code will be runned when the INIT button is pressed.
     @Override
