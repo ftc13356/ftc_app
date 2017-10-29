@@ -179,7 +179,7 @@ public class teleopDrivetrainArm extends OpMode
         {
             telemetry.addData("SpeedMode", "Slow");
         }
-        timeleft = 120 - getRuntime();
+        //timeleft = 120 - getRuntime();
         telemetry.addData("Status", "Time Left: " + timeleft);
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
         telemetry.addData("Motor", armMotorPower);
