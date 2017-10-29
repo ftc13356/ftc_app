@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = "Claw Test")
-// @Disabled
+@Disabled
 public class clawTest extends LinearOpMode
     {
     private DcMotor armMotor;
