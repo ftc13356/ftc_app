@@ -1,0 +1,9 @@
+public class teleop2 extends OpMode implements iChassis, iArm
+
+public interface iChassis
+
+public interface iArm
+
+public class Chassis extends OpMode implements iChassis
+
+public class Arm extends OpMode implements iArm
