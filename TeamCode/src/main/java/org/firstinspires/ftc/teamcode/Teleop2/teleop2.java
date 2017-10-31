@@ -32,17 +32,12 @@ package org.firstinspires.ftc.teamcode.Teleop2;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.Teleop2.Arm;
-import org.firstinspires.ftc.teamcode.Teleop2.Chassis;
-import org.firstinspires.ftc.teamcode.Teleop2.iArm;
-import org.firstinspires.ftc.teamcode.Teleop2.iChassis;
-
 @TeleOp(name = "Teleop Chassis Arm 2")
 //@Disabled
-public class teleop2 extends OpMode implements iChassis, iArm {
+public class teleop2 extends OpMode {
 
-    Chassis chassis = new Chassis();
-    Arm arm = new Arm();
+    Chassis chassis = new Chassis(this);
+    Arm arm = new Arm(this);
 
     @Override
     public void init() {
