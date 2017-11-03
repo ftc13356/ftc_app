@@ -27,31 +27,34 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.Teleop2;
+package org.firstinspires.ftc.teamcode.teleop.teleopV2;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-@TeleOp(name = "Teleop Chassis Arm 2")
-//@Disabled
-public class teleop2 extends OpMode {
+@TeleOp(name = "Teleop Drivetrain and Arm")
+// @Disabled
+public class teleopDrivetrainArm extends OpMode {
 
     Chassis chassis = new Chassis(this);
     Arm arm = new Arm(this);
 
     @Override
     public void init() {
-        chassis.init();
-        arm.init();
+       chassis.init();
+       arm.init();
     }
 
     @Override
     public void init_loop() {
+        chassis.init_loop();
+        arm.init_loop();
     }
 
     @Override
     public void start() {
         chassis.start();
+        arm.start();
     }
 
     @Override

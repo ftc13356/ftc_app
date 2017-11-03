@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Teleop2;
+package org.firstinspires.ftc.teamcode.telopOrganizationConcept;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -7,9 +7,9 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Chasis")
+@TeleOp(name = "chassis")
 @Disabled
-public class Chassis {
+public class chassis {
 
     private DcMotor motorLeftfront;
     private DcMotor motorRightfront;
@@ -20,13 +20,13 @@ public class Chassis {
 
     private OpMode op;
 
-    Chassis(OpMode opmode) {
+    chassis(OpMode opmode) {
         op = opmode;
     }
 
     public void init() {
         // Tell the driver that the initialization is starting.
-        op.telemetry.addData("Chassis", "Initializing");
+        op.telemetry.addData("chassis", "Initializing");
 
         // This is initializing the hardware variables.
         // The strings must be the same used when configuring the hardware using the FTC app.
@@ -38,7 +38,7 @@ public class Chassis {
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
-        op.telemetry.addData("Chassis", "Initialized");
+        op.telemetry.addData("chassis", "Initialized");
     }
 
     public void start () {
