@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Teleop Drivetrain and Arm")
+@TeleOp(name = "Teleop Drivetrain and arm")
 // @Disabled
 public class teleopDrivetrainArm extends OpMode {
 
