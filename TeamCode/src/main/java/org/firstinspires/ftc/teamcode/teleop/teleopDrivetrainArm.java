@@ -29,175 +29,40 @@
 
 package org.firstinspires.ftc.teamcode.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Teleop Drivetrain and arm")
+@TeleOp(name = "Teleop Drivetrain and Arm")
 // @Disabled
 public class teleopDrivetrainArm extends OpMode {
 
-    // This is declaring the hardware.
-    public ElapsedTime runtime = new ElapsedTime();
-    public DcMotor motorLeftfront;
-    public DcMotor motorRightfront;
-    public DcMotor motorLeftback;
-    public DcMotor motorRightback;
-    public DcMotor armMotor;
-    public Servo clawLeft;
-    public Servo clawRight;
+    Chassis chassis = new Chassis(this);
+    Arm arm = new Arm(this);
 
-    // This code will be runned when the INIT button is pressed.
     @Override
     public void init() {
-        // Tell the driver that the initialization is starting.
-        telemetry.addData("Status", "Initializing");
-
-        // This is initializing the hardware variables.
-        // The strings must be the same used when configuring the hardware using the FTC app.
-        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
-        motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
-        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
-        motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
-        clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight = hardwareMap.servo.get("clawRight");
-
-        // This is just telling the direction of the motors.
-        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
-        motorRightfront.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftback.setDirection(DcMotor.Direction.FORWARD);
-        motorRightback.setDirection(DcMotor.Direction.FORWARD);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
-
-        // Tell the driver that initialization is complete.
-        telemetry.addData("Status", "Initialized");
+       chassis.init();
+       arm.init();
     }
 
-    // This code is just waiting for the PLAY button to be pressed.
     @Override
     public void init_loop() {
+        chassis.init_loop();
+        arm.init_loop();
     }
-    
-    // This code will do something once when the PLAY button is pressed.
+
     @Override
-    public void start()
-    {
-        runtime.reset();
+    public void start() {
+        chassis.start();
+        arm.start();
     }
 
-    // This code is just defining the variables needed for the loop.
-    double speedcontrol = 0.25;
-    boolean display = false;
-    double leftposition = 0;
-    double rightposition = 1;
-    double armSpeedControl = 0.5;
-
-    // This code will run constantly after the previous part is runned.
     @Override
     public void loop() {
-        // Some variables are being defined.
-        double motorLeftfrontPower;
-        double motorRightfrontPower;
-        double motorLeftbackPower;
-        double motorRightbackPower;
-        double armMotorPower;
-        double timeleft;
-
-        // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
-        double driveFW = gamepad1.left_stick_y;
-        double driveS = gamepad1.left_stick_x;
-        double turn  = gamepad1.right_stick_x;
-
-        // This sets the speed mode to fast when the "A" button is pressed.
-        if (gamepad1.a)
-        {
-            speedcontrol = 1;
-            display = true;
-        }
-        // This sets the speed mode to slow (default) when the "B" button is pressed.
-        else if (gamepad1.b)
-        {
-            speedcontrol = 0.25;
-            display = false;
-        }
-        // This closes the arm when the "A" button is pressed.
-        if(gamepad2.a)
-        {
-            leftposition = 0.6;
-            telemetry.addData("Servo Status", "Closed");
-        }
-        // This opens the arm when the "B" button is pressed.
-        else if(gamepad2.b)
-        {
-            leftposition = 0;
-            telemetry.addData("Servo Status", "Open");
-        }
-
-        // The speed values are calculated and stored in variables.
-
-        motorLeftfrontPower = Range.clip((driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightfrontPower = Range.clip((-driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorLeftbackPower = Range.clip((driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        armMotorPower = gamepad2.left_stick_y * armSpeedControl;
-
-        // If time is up, then the motor powers will be 0.
-        timeleft = 120 - getRuntime();
-        if (timeleft <= 0)
-        {
-            motorLeftfrontPower = 0;
-            motorRightfrontPower = 0;
-            motorLeftbackPower = 0;
-            motorRightbackPower = 0;
-            armMotorPower = 0;
-        }
-
-        // The calculated power is then applied to the motors.
-        motorLeftfront.setPower(motorLeftfrontPower);
-        motorRightfront.setPower(motorRightfrontPower);
-        motorLeftback.setPower(motorLeftbackPower);
-        motorRightback.setPower(motorRightbackPower);
-        armMotor.setPower(armMotorPower);
-        clawLeft.setPosition(leftposition);
-        rightposition = 1-leftposition;
-        clawRight.setPosition(rightposition);
-        leftposition = clawLeft.getPosition();
-        rightposition = clawRight.getPosition();
-
-        // This prints information on the screen.
-        telemetry.addData("Mode", "Teleop");
-        if (display)
-        {
-            telemetry.addData("SpeedMode", "Fast");
-        }
-        else
-        {
-            telemetry.addData("SpeedMode", "Slow");
-        }
-        //timeleft = 120 - getRuntime();
-        telemetry.addData("Status", "Time Left: " + timeleft);
-        telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
-        telemetry.addData("Motor", armMotorPower);
-        telemetry.addData("Left Servo Position", leftposition);
-        telemetry.addData("Right Servo Position", rightposition);
-
-        // If time is up, then the motors will stop.
-        if (timeleft <= 0)
-        {
-            motorLeftfront.setPower(0);
-            motorRightfront.setPower(0);
-            motorLeftback.setPower(0);
-            motorRightback.setPower(0);
-            armMotor.setPower(0);
-        }
+        chassis.loop();
+        arm.loop();
     }
 
-    // This code will run after the STOP button is pressed.
     @Override
     public void stop() {
     }

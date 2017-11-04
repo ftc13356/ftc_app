@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.teleopV2;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -15,6 +15,11 @@ public class Arm {
     private Servo clawLeft;
     private Servo clawRight;
 
+    double leftPosition = 0;
+    double rightPosition = 1;
+
+    double armSpeedControl = 0.5;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     private OpMode op;
@@ -25,7 +30,7 @@ public class Arm {
 
     public void init() {
         // Tell the driver that the initialization is starting.
-        op.telemetry.addData("Status", "Initializing");
+        op.telemetry.addData("Arm", "Initializing");
 
         // This is initializing the hardware variables.
         // The strings must be the same used when configuring the hardware using the FTC app.
@@ -37,7 +42,7 @@ public class Arm {
         armMotor.setDirection(DcMotor.Direction.REVERSE);
 
         // Tell the driver that initialization is complete.
-        op.telemetry.addData("Status", "Initialized");
+        op.telemetry.addData("Arm", "Initialized");
     }
 
     // This code is just waiting for the PLAY button to be pressed.
@@ -49,25 +54,23 @@ public class Arm {
         runtime.reset();
     }
 
-    // This code is just defining the variables needed for the loop.
-    private double leftposition = 0;
-    private double rightposition = 1;
-    private double armSpeedControl = 0.5;
 
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
         double armMotorPower;
-        double timeleft;
+        double timeLeft;
+
+        double startTime = runtime.seconds();
 
         // This closes the arm when the "A" button is pressed.
         if(op.gamepad2.a) {
-            leftposition = 0.6;
+            leftPosition = 0.6;
             op.telemetry.addData("Servo Status", "Closed");
         }
         // This opens the arm when the "B" button is pressed.
         else if(op.gamepad2.b) {
-            leftposition = 0;
+            leftPosition = 0;
             op.telemetry.addData("Servo Status", "Open");
         }
 
@@ -75,27 +78,31 @@ public class Arm {
         armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
 
         // If time is up, then the motor powers will be 0.
-        timeleft = 120 - op.getRuntime();
-        if (timeleft <= 0) {
+        timeLeft = 120 + startTime - op.getRuntime();
+        if (timeLeft <= 0) {
             armMotorPower = 0;
+            clawLeft.setPosition(0);
+            clawRight.setPosition(1);
         }
 
         // The calculated power is then applied to the motors.
         armMotor.setPower(armMotorPower);
-        clawLeft.setPosition(leftposition);
-        rightposition = 1-leftposition;
-        clawRight.setPosition(rightposition);
-        leftposition = clawLeft.getPosition();
-        rightposition = clawRight.getPosition();
+        clawLeft.setPosition(leftPosition);
+        rightPosition = 1 - leftPosition;
+        clawRight.setPosition(rightPosition);
+        leftPosition = clawLeft.getPosition();
+        rightPosition = clawRight.getPosition();
 
-        op.telemetry.addData("Status", "Time Left: " + timeleft);
+        op.telemetry.addData("Status", "Time Left: " + timeLeft);
         op.telemetry.addData("Motor", armMotorPower);
-        op.telemetry.addData("Left Servo Position", leftposition);
-        op.telemetry.addData("Right Servo Position", rightposition);
+        op.telemetry.addData("Left Servo Position", leftPosition);
+        op.telemetry.addData("Right Servo Position", rightPosition);
 
         // If time is up, then the motors will stop.
-        if (timeleft <= 0) {
+        if (timeLeft <= 0) {
             armMotor.setPower(0);
+            clawLeft.setPosition(0);
+            clawRight.setPosition(1);
         }
     }
 }

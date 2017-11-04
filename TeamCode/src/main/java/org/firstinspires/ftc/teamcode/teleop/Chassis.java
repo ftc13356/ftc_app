@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.teleopV2;
+package org.firstinspires.ftc.teamcode.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -16,6 +16,10 @@ public class Chassis {
     private DcMotor motorLeftback;
     private DcMotor motorRightback;
 
+    double speedControl = 0.25;
+
+    boolean display = false;
+
     private ElapsedTime runtime = new ElapsedTime();
 
     private OpMode op;
@@ -26,7 +30,7 @@ public class Chassis {
 
     public void init() {
         // Tell the driver that the initialization is starting.
-        op.telemetry.addData("Status", "Initializing");
+        op.telemetry.addData("Chassis", "Initializing");
 
         // This is initializing the hardware variables.
         // The strings must be the same used when configuring the hardware using the FTC app.
@@ -42,7 +46,7 @@ public class Chassis {
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
 
         // Tell the driver that initialization is complete.
-        op.telemetry.addData("Status", "Initialized");
+        op.telemetry.addData("Chassis", "Initialized");
     }
 
     // This code is just waiting for the PLAY button to be pressed.
@@ -56,10 +60,6 @@ public class Chassis {
         runtime.reset();
     }
 
-    // This code is just defining the variables needed for the loop.
-    double speedcontrol = 0.25;
-    boolean display = false;
-
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
@@ -67,7 +67,9 @@ public class Chassis {
         double motorRightfrontPower;
         double motorLeftbackPower;
         double motorRightbackPower;
-        double timeleft;
+
+        double startTime = runtime.seconds();
+        double timeLeft;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
         double driveFW = op.gamepad1.left_stick_y;
@@ -77,25 +79,25 @@ public class Chassis {
         // This sets the speed mode to fast when the "A" button is pressed.
         if (op.gamepad1.a)
         {
-            speedcontrol = 1;
+            speedControl = 1;
             display = true;
         }
         // This sets the speed mode to slow (default) when the "B" button is pressed.
         else if (op.gamepad1.b)
         {
-            speedcontrol = 0.25;
+            speedControl = 0.25;
             display = false;
         }
 
         // The speed values are calculated and stored in variables.
-        motorLeftfrontPower = Range.clip((driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightfrontPower = Range.clip((-driveFW - driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorLeftbackPower = Range.clip((driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
-        motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedcontrol, -1.0, 1.0) ;
+        motorLeftfrontPower = Range.clip((driveFW - driveS - turn)*speedControl, -1.0, 1.0) ;
+        motorRightfrontPower = Range.clip((-driveFW - driveS - turn)*speedControl, -1.0, 1.0) ;
+        motorLeftbackPower = Range.clip((driveFW + driveS - turn)*speedControl, -1.0, 1.0) ;
+        motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedControl, -1.0, 1.0) ;
 
         // If time is up, then the motor powers will be 0.
-        timeleft = 120 - op.getRuntime();
-        if (timeleft <= 0)
+        timeLeft = 120 + startTime - op.getRuntime();
+        if (timeLeft <= 0)
         {
             motorLeftfrontPower = 0;
             motorRightfrontPower = 0;
@@ -118,11 +120,11 @@ public class Chassis {
             op.telemetry.addData("SpeedMode", "Slow");
         }
 
-        op.telemetry.addData("Status", "Time Left: " + timeleft);
+        op.telemetry.addData("Status", "Time Left: " + timeLeft);
         op.telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
         // If time is up, then the motors will stop.
-        if (timeleft <= 0)
+        if (timeLeft <= 0)
         {
             motorLeftfront.setPower(0);
             motorRightfront.setPower(0);
