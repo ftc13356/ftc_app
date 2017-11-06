@@ -47,15 +47,6 @@ public class encoderArm extends OpMode {
     public Servo clawLeft;
     public Servo clawRight;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440;    // eg: TETRIX Motor Encoder
-
-    static final double     DRIVE_GEAR_REDUCTION    = 64;     // This is < 1.0 if geared UP
-
-    static final double     WHEEL_DIAMETER_INCHES   = 15.5;     // For figuring circumference
-    static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * Math.PI);
-    static final double     LIFT_SPEED             = 0.5;
-
     // This code will be runned when the INIT button is pressed.
     @Override
     public void init() {
@@ -92,7 +83,7 @@ public class encoderArm extends OpMode {
     private double rightposition = 1;
     private double armSpeed = 0.5;
 
-    int targetValue;
+    int targetValue = 0;
 
     // This code will run constantly after the previous part is runned.
     @Override
@@ -105,46 +96,54 @@ public class encoderArm extends OpMode {
             leftposition = 0;
             telemetry.addData("Servo Status", "Open");
         }
-
+        
         telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
+
+        //4 counts per degree
+        //all values should be negative
+        if (gamepad1.dpad_down) {
+            targetValue = -100;
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            telemetry.addData("Goal Position", "%7d",targetValue);
+        }
 
         if (gamepad1.a) {
             targetValue = -1900;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(armSpeed);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.b) {
             targetValue = -3000;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(armSpeed);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.x) {
             targetValue = -4400;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(armSpeed);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.y) {
             targetValue = -5700;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            armMotor.setPower(armSpeed);
             telemetry.addData("Goal Position", "%7d",targetValue);
+        }
+        if (targetValue!= 0) {
+            armMotor.setPower(armSpeed);
         }
 
         telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
-        double armSpeedControl = 0.5;
-        double armMotorPower;
-        armMotorPower = gamepad1.left_stick_y * armSpeedControl;
+        //double armSpeedControl = 0.5;
+        //double armMotorPower;
+        //armMotorPower = gamepad1.left_stick_y * armSpeedControl;
 
         // The calculated power is then applied to the motors.
-        armMotor.setPower(armMotorPower);
+        //armMotor.setPower(armMotorPower);
         clawLeft.setPosition(leftposition);
         rightposition = 1 - leftposition;
         clawRight.setPosition(rightposition);
@@ -154,41 +153,6 @@ public class encoderArm extends OpMode {
         telemetry.addData("Motor", armSpeed);
         telemetry.addData("Left Servo Position", leftposition);
         telemetry.addData("Right Servo Position", rightposition);
-    }
-
-    public void encoderDrive(double speed, double verticalInches, double timeoutSec) {
-        int newTarget;
-
-        // Determine new target position, and pass to motor controller
-        newTarget = armMotor.getCurrentPosition() + (int)(verticalInches * COUNTS_PER_INCH);
-        armMotor.setTargetPosition(newTarget);
-
-        // Turn On RUN_TO_POSITION
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-        // reset the timeout time and start motion.
-        runtime.reset();
-        armMotor.setPower(Math.abs(speed));
-
-        // keep looping if there is time left, and both motors are running.
-        // Note: We use isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
-        // its target position, the motion will stop.  This is "safer" in the event that the robot will
-        // always end the motion as soon as possible.
-        // However, if you require that BOTH motors have finished their moves before the robot continues
-        // onto the next step, use (isBusy() || isBusy()) in the loop test.
-        while (runtime.seconds() < timeoutSec && armMotor.isBusy()) {
-
-            // Display it for the driver.
-            telemetry.addData("Path 1",  "Running to %7d", newTarget);
-            telemetry.addData("Path 2",  "Running at %7d",
-                    armMotor.getCurrentPosition());
-        }
-
-        // Stop all motion;
-        armMotor.setPower(0);
-
-        // Turn off RUN_TO_POSITION
-        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
     }
 
     // This code will run after the STOP button is pressed.
