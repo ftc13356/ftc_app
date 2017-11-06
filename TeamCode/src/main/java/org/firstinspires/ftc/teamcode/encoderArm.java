@@ -47,15 +47,13 @@ public class encoderArm extends OpMode {
     public Servo clawLeft;
     public Servo clawRight;
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     COUNTS_PER_MOTOR_REV    = 1440;    // eg: TETRIX Motor Encoder
 
-    //Need to change for arm gear tower:
-    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
-    //
+    static final double     DRIVE_GEAR_REDUCTION    = 64;     // This is < 1.0 if geared UP
 
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
+    static final double     WHEEL_DIAMETER_INCHES   = 15.5;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                                      (WHEEL_DIAMETER_INCHES * 3.1415);
+                                                      (WHEEL_DIAMETER_INCHES * Math.PI);
     static final double     LIFT_SPEED             = 0.5;
 
     // This code will be runned when the INIT button is pressed.
@@ -86,19 +84,19 @@ public class encoderArm extends OpMode {
     @Override
     public void start() {
         runtime.reset();
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     // This code is just defining the variables needed for the loop.
     private double leftposition = 0;
     private double rightposition = 1;
-    private double armSpeedControl = 0.5;
+    private double armSpeed = 0.5;
+
+    int targetValue;
 
     // This code will run constantly after the previous part is runned.
     @Override
     public void loop() {
-        // Some variables are being defined.
-        double armMotorPower;
-
         if(gamepad1.left_bumper) {
             leftposition = 0.6;
             telemetry.addData("Servo Status", "Closed");
@@ -108,59 +106,57 @@ public class encoderArm extends OpMode {
             telemetry.addData("Servo Status", "Open");
         }
 
+        telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
         if (gamepad1.a) {
-            encoderInit();
-            encoderDrive(LIFT_SPEED, 0, 10.0);
-            telemetry.addData("arm Position", "Home");
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            targetValue = -1900;
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(armSpeed);
+            telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.b) {
-            encoderInit();
-            encoderDrive(LIFT_SPEED, 5, 10.0);
-            telemetry.addData("arm Position", "Height 1");
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            targetValue = -3000;
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(armSpeed);
+            telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.x) {
-            encoderInit();
-            encoderDrive(LIFT_SPEED, 10, 10.0);
-            telemetry.addData("arm Position", "Height 2");
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            targetValue = -4400;
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(armSpeed);
+            telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (gamepad1.y) {
-            encoderInit();
-            encoderDrive(LIFT_SPEED, 10, 10.0);
-            telemetry.addData("arm Position", "Height 3");
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            targetValue = -5700;
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            armMotor.setPower(armSpeed);
+            telemetry.addData("Goal Position", "%7d",targetValue);
         }
 
-        // The speed values are calculated and stored in variables.
-        armMotorPower = gamepad2.left_stick_y * armSpeedControl;
+        telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
+
+        double armSpeedControl = 0.5;
+        double armMotorPower;
+        armMotorPower = gamepad1.left_stick_y * armSpeedControl;
 
         // The calculated power is then applied to the motors.
         armMotor.setPower(armMotorPower);
         clawLeft.setPosition(leftposition);
-        rightposition = 1-leftposition;
+        rightposition = 1 - leftposition;
         clawRight.setPosition(rightposition);
         leftposition = clawLeft.getPosition();
         rightposition = clawRight.getPosition();
 
-        telemetry.addData("Motor", armMotorPower);
+        telemetry.addData("Motor", armSpeed);
         telemetry.addData("Left Servo Position", leftposition);
         telemetry.addData("Right Servo Position", rightposition);
     }
 
-    public void encoderInit(){
-        telemetry.addData("Status", "Resetting Encoders");
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-    }
-
-    public void encoderDrive(double speed,
-                             double verticalInches,
-                             double timeoutSec) {
+    public void encoderDrive(double speed, double verticalInches, double timeoutSec) {
         int newTarget;
 
         // Determine new target position, and pass to motor controller
@@ -193,9 +189,6 @@ public class encoderArm extends OpMode {
 
         // Turn off RUN_TO_POSITION
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-
-        sleep(500);
-
     }
 
     // This code will run after the STOP button is pressed.
