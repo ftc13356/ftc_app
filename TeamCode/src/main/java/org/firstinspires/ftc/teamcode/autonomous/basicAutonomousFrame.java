@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 
@@ -44,6 +45,55 @@ public abstract class basicAutonomousFrame extends LinearOpMode {
     public DcMotor motorRightfront;
     public DcMotor motorLeftback;
     public DcMotor motorRightback;
+    public DcMotor armMotor;
+
+    public Servo clawLeft;
+    public Servo clawRight;
+
+    double leftPosition = 0;
+    double rightPosition = 1;
+
+    int targetValue = 0;
+
+    public void armPosition(int position) {
+        if (position == 0){
+            targetValue = -100;
+        }
+        else if (position == 1){
+            targetValue = -1900;
+        }
+        else if (position == 2){
+            targetValue = -3000;
+        }
+        else if (position == 3){
+            targetValue = -4400;
+        }
+        else if (position == 4){
+            targetValue = -5700;
+        }
+        else {
+            targetValue = position;
+        }
+        armMotor.setTargetPosition(targetValue);
+        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        telemetry.addData("Goal Position", "%7d",targetValue);
+    }
+
+    public void closeClaw() {
+        leftPosition = 0.6;
+        telemetry.addData("Servo Status", "Closed");
+        clawLeft.setPosition(leftPosition);
+        rightPosition = 1 - leftPosition;
+        clawRight.setPosition(rightPosition);
+    }
+
+    public void openClaw() {
+        leftPosition = 0;
+        telemetry.addData("Servo Status", "Open");
+        clawLeft.setPosition(leftPosition);
+        rightPosition = 1 - leftPosition;
+        clawRight.setPosition(rightPosition);
+    }
 
     //Function 1
     public void moveForward(double power, long time) {
