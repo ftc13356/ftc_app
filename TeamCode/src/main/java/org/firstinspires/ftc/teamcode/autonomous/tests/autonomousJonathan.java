@@ -27,55 +27,37 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
-@Autonomous(name="Ansh Autonomous")
+import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
+
+@Autonomous(name="Jonathan Autonomous")
 // @Disabled
-public class autonomousAnsh extends basicAutonomousFrame
-{
-    // Defining Autonomous OpMode Members
-    private ElapsedTime runtime = new ElapsedTime();
+public class autonomousJonathan extends basicAutonomousFrame {
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
-        // Tells Driver Initialization is Starting
-        telemetry.addData("Status", "Initializing");
-        telemetry.update();
+    public void runOpMode() {
 
-        // Sets Variable Names to Hardware Map Names
         motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
         motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
         motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
 
-        // Sets Motor Directions to Forward
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
 
-        // Tells Driver Initialization is Conplete
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        // Wait For the Driver To Press the Start Button
         waitForStart();
-        runtime.reset();
 
-        // ALL CODE HERE!!!
-        drive(1,0,0,500,0.25);
-        drive(0,1,0,500,0.25);
-        drive(-1,0,0,500,0.25);
-        drive(0,-1,0,500,0.25);
-
-        // Tells Driver Time Left
-        telemetry.addData("Status", "Time Left: " + (30 - runtime.seconds()));
-        telemetry.update();
+        moveForward(0.5, 500);
+        moveLeft(0.5, 500);
+        moveBackward(0.5, 500);
+        moveRight(0.5, 500);
+        Stop();
     }
 }
+
