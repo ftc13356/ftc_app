@@ -16,9 +16,9 @@ public class Chassis {
     private DcMotor motorLeftback;
     private DcMotor motorRightback;
 
-    double speedControl = 0.25;
+    private double speedControl = 0.25;
 
-    boolean display = false;
+    private boolean display = false;
 
     private ElapsedTime runtime = new ElapsedTime();
 
