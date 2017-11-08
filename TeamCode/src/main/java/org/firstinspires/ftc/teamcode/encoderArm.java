@@ -96,7 +96,7 @@ public class encoderArm extends OpMode {
             leftposition = 0;
             telemetry.addData("Servo Status", "Open");
         }
-        
+
         telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
         //4 counts per degree
@@ -114,19 +114,19 @@ public class encoderArm extends OpMode {
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (gamepad1.b) {
+        if (gamepad1.x) {
             targetValue = -3000;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (gamepad1.x) {
+        if (gamepad1.y) {
             targetValue = -4400;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (gamepad1.y) {
+        if (gamepad1.b) {
             targetValue = -5700;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -138,12 +138,7 @@ public class encoderArm extends OpMode {
 
         telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
-        //double armSpeedControl = 0.5;
-        //double armMotorPower;
-        //armMotorPower = gamepad1.left_stick_y * armSpeedControl;
-
         // The calculated power is then applied to the motors.
-        //armMotor.setPower(armMotorPower);
         clawLeft.setPosition(leftposition);
         rightposition = 1 - leftposition;
         clawRight.setPosition(rightposition);
