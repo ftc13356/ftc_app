@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.teleop.Chassis;
 public class teleopDrivetrainATT extends OpMode {
 
     ChassisATT chassis_att = new ChassisATT(this);
+    ArmATT arm_att = new ArmATT(this);
 
     @Override
     public void init() {
