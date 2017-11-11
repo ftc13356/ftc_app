@@ -67,12 +67,12 @@ public class Arm {
 
         double startTime = runtime.seconds();
 
-        // This closes the arm when the "A" button is pressed.
+        // This closes the arm when the left bumper is pressed.
         if(op.gamepad2.left_bumper) {
             leftPosition = 0.6;
             op.telemetry.addData("Servo Status", "Closed");
         }
-        // This opens the arm when the "B" button is pressed.
+        // This opens the arm when the right bumper is pressed.
         else if(op.gamepad2.right_bumper) {
             leftPosition = 0;
             op.telemetry.addData("Servo Status", "Open");
@@ -82,7 +82,7 @@ public class Arm {
         armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
 
         //4 counts per degree
-        //all values should be negative
+        //All values should be negative
         if (op.gamepad1.dpad_down) {
             targetValue = -100;
             armMotor.setTargetPosition(targetValue);
@@ -134,9 +134,9 @@ public class Arm {
         leftPosition = clawLeft.getPosition();
         rightPosition = clawRight.getPosition();
 
-        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
         op.telemetry.addData("Status", "Time Left: " + timeLeft);
         op.telemetry.addData("Motor", armMotorPower);
+        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
         op.telemetry.addData("Left Servo Position", leftPosition);
         op.telemetry.addData("Right Servo Position", rightPosition);
 

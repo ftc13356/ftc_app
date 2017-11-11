@@ -31,11 +31,12 @@ package org.firstinspires.ftc.teamcode.teleop.teleop.att;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.teleop.Arm;
 import org.firstinspires.ftc.teamcode.teleop.Chassis;
 
-@TeleOp(name = "Teleop Drivetrain and Arm")
+@TeleOp(name = "Teleop Drivetrain and Arm ATT")
 // @Disabled
 public class teleopDrivetrainATT extends OpMode {
 
@@ -45,21 +46,26 @@ public class teleopDrivetrainATT extends OpMode {
     @Override
     public void init() {
        chassis_att.init();
+       arm_att.init();
     }
 
     @Override
     public void init_loop() {
         chassis_att.init_loop();
+        arm_att.init_loop();
     }
 
     @Override
     public void start() {
         chassis_att.start();
+        arm_att.start();
     }
 
     @Override
     public void loop() {
         chassis_att.loop();
+        arm_att.loop();
+
     }
 
     @Override

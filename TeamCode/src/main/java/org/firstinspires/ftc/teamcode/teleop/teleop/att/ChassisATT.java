@@ -57,6 +57,9 @@ public class ChassisATT {
         runtime.reset();
     }
 
+    double timeLeft;
+    double startTime = runtime.seconds();
+
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
@@ -64,9 +67,6 @@ public class ChassisATT {
         double motorRightfrontPower;
         double motorLeftbackPower;
         double motorRightbackPower;
-
-        double startTime = runtime.seconds();
-        double timeLeft;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
         double driveFW = op.gamepad1.left_stick_y;
@@ -97,7 +97,7 @@ public class ChassisATT {
 
         // This prints information on the screen.
         op.telemetry.addData("Mode", "Teleop");
-        op.telemetry.addData("Status", "Time Left: " + timeLeft);
+        op.telemetry.addData("Driving Status", "Time Left: " + timeLeft);
 
         // If time is up, then the motors will stop.
         if (timeLeft <= 0)
