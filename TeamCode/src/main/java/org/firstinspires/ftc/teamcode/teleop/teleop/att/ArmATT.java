@@ -47,22 +47,22 @@ public class ArmATT {
     double startTime = runtime.seconds();
 
     public void loop(){
-        if (op.gamepad2.a) {
+        if (op.gamepad1.a) {
            leftPosition = upPosition;
            op.telemetry.addData("Servo Status", "Left Up");
            op.telemetry.addData("Button Pressed", "A");
         }
-        if (op.gamepad2.b) {
+        if (op.gamepad1.b) {
             leftPosition = downPosition;
             op.telemetry.addData("Servo Status", "Left Down");
             op.telemetry.addData("Button Pressed", "B");
         }
-        if (op.gamepad2.x) {
+        if (op.gamepad1.x) {
             rightPosition = 1 - upPosition;
             op.telemetry.addData("Servo Status", "Right Up");
             op.telemetry.addData("Button Pressed", "X");
         }
-        if (op.gamepad2.y) {
+        if (op.gamepad1.y) {
             rightPosition = 1- downPosition;
             op.telemetry.addData("Servo Status", "Right Down");
             op.telemetry.addData("Button Pressed", "Y");
@@ -83,11 +83,6 @@ public class ArmATT {
 
         op.telemetry.addData("Left Servo Position", leftPosition);
         op.telemetry.addData("Right Servo Position", rightPosition);
-
-        if (timeLeft <= 0) {
-            leftDrummer.setPosition(0);
-            rightDrummer.setPosition(0.5);
-        }
 
     }
 }

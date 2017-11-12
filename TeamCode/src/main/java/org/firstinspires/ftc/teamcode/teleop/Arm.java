@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 @Disabled
 public class Arm {
 
+    //Encoder Is broken, will cause arm to not move.
+
     private DcMotor armMotor;
     private Servo clawLeft;
     private Servo clawRight;
@@ -55,7 +57,7 @@ public class Arm {
     // This code will do something once when the PLAY button is pressed.
     public void start() {
         runtime.reset();
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        //armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
@@ -83,7 +85,7 @@ public class Arm {
 
         //4 counts per degree
         //All values should be negative
-        if (op.gamepad1.dpad_down) {
+        /*if (op.gamepad1.dpad_down) {
             targetValue = -100;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -116,7 +118,7 @@ public class Arm {
         }
         if (targetValue!= 0) {
             armMotor.setPower(armSpeed);
-        }
+        }*/
 
         // If time is up, then the motor powers will be 0.
         timeLeft = 120 + startTime - op.getRuntime();
