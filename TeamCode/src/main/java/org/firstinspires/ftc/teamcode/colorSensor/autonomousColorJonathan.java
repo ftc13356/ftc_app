@@ -37,7 +37,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous(name="Jonathan Autonomous Color")
-//@Disabled
+@Disabled
 public class autonomousColorJonathan extends LinearOpMode {
 
     public DcMotor motorLeftfront;

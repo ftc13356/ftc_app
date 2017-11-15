@@ -30,13 +30,14 @@
 package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
 
 @Autonomous(name="Ansh Autonomous")
-// @Disabled
+@Disabled
 public class autonomousAnsh extends basicAutonomousFrame
 {
     // Defining Autonomous OpMode Members

@@ -30,12 +30,13 @@
 package org.firstinspires.ftc.teamcode.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
 
 @Autonomous(name="Jonathan Autonomous")
-// @Disabled
+@Disabled
 public class autonomousJonathan extends basicAutonomousFrame {
 
     @Override

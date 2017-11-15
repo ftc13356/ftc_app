@@ -63,7 +63,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Encoder 1 Wheel")
-//@Disabled
+@Disabled
 public class encoderOneWheel extends LinearOpMode {
 
     /* Declare OpMode members. */

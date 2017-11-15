@@ -37,7 +37,7 @@ import org.firstinspires.ftc.teamcode.teleop.Arm;
 import org.firstinspires.ftc.teamcode.teleop.Chassis;
 
 @TeleOp(name = "Teleop Drivetrain and Arm ATT")
-// @Disabled
+@Disabled
 public class teleopDrivetrainATT extends OpMode {
 
     ChassisATT chassis_att = new ChassisATT(this);

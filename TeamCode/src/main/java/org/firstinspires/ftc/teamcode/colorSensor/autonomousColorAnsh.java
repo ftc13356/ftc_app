@@ -34,6 +34,7 @@ import android.graphics.Color;
 import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -41,7 +42,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
-// @Disabled
+@Disabled
 public class autonomousColorAnsh extends basicAutonomousFrame
 {
     // Defining Autonomous OpMode Members
