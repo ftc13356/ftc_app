@@ -97,8 +97,6 @@ public class encoderArm extends OpMode {
             telemetry.addData("Servo Status", "Open");
         }
 
-        telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
-
         //4 counts per degree
         //all values should be negative
         if (gamepad1.dpad_down) {

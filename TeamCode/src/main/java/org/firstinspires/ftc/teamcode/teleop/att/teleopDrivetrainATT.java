@@ -27,14 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.teleop.teleop.att;
+package org.firstinspires.ftc.teamcode.teleop.att;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-import org.firstinspires.ftc.teamcode.teleop.Arm;
-import org.firstinspires.ftc.teamcode.teleop.Chassis;
 
 @TeleOp(name = "Teleop Drivetrain and Arm ATT")
 @Disabled

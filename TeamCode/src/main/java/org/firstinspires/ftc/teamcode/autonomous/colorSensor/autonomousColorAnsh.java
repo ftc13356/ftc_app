@@ -27,7 +27,7 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.colorSensor;
+package org.firstinspires.ftc.teamcode.autonomous.colorSensor;
 
 import android.app.Activity;
 import android.graphics.Color;
@@ -38,8 +38,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
 @Disabled
