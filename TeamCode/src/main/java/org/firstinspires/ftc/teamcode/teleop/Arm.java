@@ -67,6 +67,8 @@ public class Arm {
         double armMotorPower;
         double timeLeft;
 
+        boolean encoderMovement = false;
+
         double startTime = runtime.seconds();
 
         // This closes the arm when the left bumper is pressed.
@@ -75,9 +77,14 @@ public class Arm {
             op.telemetry.addData("Servo Status", "Closed");
         }
         // This opens the arm when the right bumper is pressed.
-        else if(op.gamepad2.right_bumper) {
+        if(op.gamepad2.right_bumper) {
             leftPosition = 0;
-            op.telemetry.addData("Servo Status", "Open");
+            op.telemetry.addData("Servo Status", "Open Completely");
+        }
+
+        if (op.gamepad2.left_bumper && op.gamepad2.right_bumper) {
+            leftPosition = 0.48;
+            op.telemetry.addData("Servo Status", "Open Slightly");
         }
 
         // The speed values are calculated and stored in variables.
@@ -85,8 +92,9 @@ public class Arm {
 
         //4 counts per degree
         //All values should be negative
-        /*if (op.gamepad1.dpad_down) {
+        if (op.gamepad1.dpad_down) {
             targetValue = -100;
+            encoderMovement = true;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
@@ -94,31 +102,35 @@ public class Arm {
 
         if (op.gamepad1.a) {
             targetValue = -1900;
+            encoderMovement = true;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (op.gamepad1.x) {
             targetValue = -3000;
+            encoderMovement = true;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (op.gamepad1.y) {
             targetValue = -4400;
+            encoderMovement = true;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
         if (op.gamepad1.b) {
             targetValue = -5700;
+            encoderMovement = true;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (targetValue!= 0) {
+        if (targetValue!= 0 && encoderMovement) {
             armMotor.setPower(armSpeed);
-        }*/
+        }
 
         // If time is up, then the motor powers will be 0.
         timeLeft = 120 + startTime - op.getRuntime();

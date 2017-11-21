@@ -37,30 +37,30 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 public class teleopDrivetrainArm extends OpMode {
 
     Chassis chassis = new Chassis(this);
-    Arm arm = new Arm(this);
+    // Arm arm = new Arm(this);
 
     @Override
     public void init() {
-       chassis.init();
-       arm.init();
+        chassis.init();
+        // arm.init();
     }
 
     @Override
     public void init_loop() {
         chassis.init_loop();
-        arm.init_loop();
+        // arm.init_loop();
     }
 
     @Override
     public void start() {
         chassis.start();
-        arm.start();
+        // arm.start();
     }
 
     @Override
     public void loop() {
         chassis.loop();
-        arm.loop();
+        // arm.loop();
     }
 
     @Override
