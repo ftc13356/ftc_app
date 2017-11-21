@@ -39,6 +39,8 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
+
 @Autonomous(name="Ansh Autonomous Color")
 @Disabled
 public class autonomousColorAnsh extends basicAutonomousFrame

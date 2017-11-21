@@ -63,7 +63,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  */
 
 @Autonomous(name="Encoder 1 Wheel")
-@Disabled
+// @Disabled
 public class encoderOneWheel extends LinearOpMode {
 
     /* Declare OpMode members. */
@@ -77,7 +77,8 @@ public class encoderOneWheel extends LinearOpMode {
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
-    public DcMotor encoderTest;
+    public DcMotor motorLeftback;
+    public DcMotor motorLeftfront;
 
     @Override
     public void runOpMode() {
@@ -87,20 +88,24 @@ public class encoderOneWheel extends LinearOpMode {
          * The init() method of the hardware class does all the work here
          */
 
-        encoderTest = hardwareMap.get(DcMotor.class, "encoderTest");
-        encoderTest.setDirection(DcMotor.Direction.FORWARD);
+        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
+        motorLeftback.setDirection(DcMotor.Direction.FORWARD);
+        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
+        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        encoderTest.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLeftback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
-        encoderTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        motorLeftback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path",  "Starting at %7d",
-                          encoderTest.getCurrentPosition());
+        telemetry.addData("Path",  "Starting at %7d, :%7d",
+                          motorLeftback.getCurrentPosition(), motorLeftfront.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -133,15 +138,20 @@ public class encoderOneWheel extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newTarget = encoderTest.getCurrentPosition() + (int)(inchesForward * COUNTS_PER_INCH);
-            encoderTest.setTargetPosition(newTarget);
+            newTarget = motorLeftback.getCurrentPosition() + (int)(inchesForward * COUNTS_PER_INCH);
+            motorLeftback.setTargetPosition(newTarget);
+
+            newTarget = motorLeftfront.getCurrentPosition() + (int)(inchesForward * COUNTS_PER_INCH);
+            motorLeftfront.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
-            encoderTest.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLeftback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLeftfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            encoderTest.setPower(Math.abs(speed));
+            motorLeftback.setPower(Math.abs(speed));
+            motorLeftfront.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -151,20 +161,22 @@ public class encoderOneWheel extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (encoderTest.isBusy())) {
+                   (motorLeftback.isBusy() && motorLeftfront.isBusy())) {
 
                 // Display it for the driver.
                 telemetry.addData("Path 1",  "Running to %7d", newTarget);
-                telemetry.addData("Path 2",  "Running at %7d",
-                                            encoderTest.getCurrentPosition());
+                telemetry.addData("Path 2",  "Running at %7d :%7d",
+                                            motorLeftback.getCurrentPosition(), motorLeftfront.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            encoderTest.setPower(0);
+            motorLeftback.setPower(0);
+            motorLeftfront.setPower(0);
 
             // Turn off RUN_TO_POSITION
-            encoderTest.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeftback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
             sleep(500);
         }
