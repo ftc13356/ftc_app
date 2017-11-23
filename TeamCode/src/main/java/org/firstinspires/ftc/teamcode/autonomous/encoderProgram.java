@@ -66,7 +66,7 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 @Autonomous(name="Encoder Program")
 //@Disabled
-public class encoderProgram extends LinearOpMode {
+public class encoderProgram extends basicAutonomousFrame {
 
     /* Declare OpMode members. */
     private ElapsedTime runtime = new ElapsedTime();
@@ -124,9 +124,12 @@ public class encoderProgram extends LinearOpMode {
 
         waitForStart();
 
-        encoderDrive(DRIVE_SPEED,  -12,  12, -12, 12);
+        /*encoderDrive(DRIVE_SPEED,  -12,  12, -12, 12);
         //encoderDrive(TURN_SPEED,   10, 10, 10, 10, 10.0);
-        encoderDrive(DRIVE_SPEED, 12, -12, 12, -12);
+        encoderDrive(DRIVE_SPEED, 12, -12, 12, -12);*/
+
+        driveEncoder(12,0,0,COUNTS_PER_INCH,1,DRIVE_SPEED);
+        driveEncoder(-12,0,0,COUNTS_PER_INCH,1,DRIVE_SPEED);
 
         telemetry.addData("Status", "All Done!");
         telemetry.update();
