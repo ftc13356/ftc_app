@@ -27,15 +27,13 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
 
 /**
  * This file illustrates the concept of driving a path based on encoder counts.
@@ -64,25 +62,23 @@ import org.firstinspires.ftc.robotcontroller.external.samples.HardwarePushbot;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list
  */
 
-@Autonomous(name="Encoder Program")
-//@Disabled
-public class encoderProgram extends LinearOpMode {
+@Autonomous(name="Encoder 1 Wheel")
+// @Disabled
+public class encoderOneWheel extends LinearOpMode {
 
     /* Declare OpMode members. */
     private ElapsedTime     runtime = new ElapsedTime();
 
-    static final double     COUNTS_PER_MOTOR_REV    = 1680 ;
-    static final double     DRIVE_GEAR_REDUCTION    = 60;
-    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;
+    static final double     COUNTS_PER_MOTOR_REV    = 1440 ;    // eg: TETRIX Motor Encoder
+    static final double     DRIVE_GEAR_REDUCTION    = 2.0 ;     // This is < 1.0 if geared UP
+    static final double     WHEEL_DIAMETER_INCHES   = 4.0 ;     // For figuring circumference
     static final double     COUNTS_PER_INCH         = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
                                                       (WHEEL_DIAMETER_INCHES * 3.1415);
     static final double     DRIVE_SPEED             = 0.6;
     static final double     TURN_SPEED              = 0.5;
 
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
+    public DcMotor motorLeftback;
+    public DcMotor motorLeftfront;
 
     @Override
     public void runOpMode() {
@@ -91,36 +87,25 @@ public class encoderProgram extends LinearOpMode {
          * Initialize the drive system variables.
          * The init() method of the hardware class does all the work here
          */
-        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
-        motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
-        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
-        motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
 
-        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
-        motorRightfront.setDirection(DcMotor.Direction.FORWARD);
+        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
-        motorRightback.setDirection(DcMotor.Direction.FORWARD);
+        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
+        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
 
         // Send telemetry message to signify robot waiting;
         telemetry.addData("Status", "Resetting Encoders");
         telemetry.update();
 
-        motorLeftfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightfront.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         motorLeftback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        motorRightback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
         motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRightfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorLeftback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        motorRightback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+        motorLeftback.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // Send telemetry message to indicate successful Encoder reset
-        telemetry.addData("Path0",  "Starting at %7d :%7d :%7d :%7d",
-                            motorLeftfront.getCurrentPosition(),
-                            motorRightfront.getCurrentPosition(),
-                            motorLeftback.getCurrentPosition(),
-                            motorRightback.getCurrentPosition());
+        telemetry.addData("Path",  "Starting at %7d, :%7d",
+                          motorLeftback.getCurrentPosition(), motorLeftfront.getCurrentPosition());
         telemetry.update();
 
         // Wait for the game to start (driver presses PLAY)
@@ -128,11 +113,11 @@ public class encoderProgram extends LinearOpMode {
 
         // Step through each leg of the path,
         // Note: Reverse movement is obtained by setting a negative distance (not speed)
-        encoderDrive(DRIVE_SPEED,  -12,  12, -12, 12, 10.0);
-        //encoderDrive(TURN_SPEED,   10, 10, 10, 10, 10.0);
-        encoderDrive(DRIVE_SPEED, 12, -12, 12, -12, 10.0);
+        encoderDrive(DRIVE_SPEED,  10, 10.0);  // S1: Forward 10 Inches with 5 Sec timeout
+        //encoderDrive(TURN_SPEED,   0, 4.0);  // S2: Turn Right 0 Inches with 4 Sec timeout
+        encoderDrive(DRIVE_SPEED, -10, 10.0);  // S3: Reverse 10 Inches with 4 Sec timeout
 
-        telemetry.addData("Path", "Complete");
+        telemetry.addData("Test Path", "Complete");
         telemetry.update();
     }
 
@@ -145,39 +130,28 @@ public class encoderProgram extends LinearOpMode {
      *  3) Driver stops the opmode running.
      */
     public void encoderDrive(double speed,
-                             double leftFrontinches, double rightFrontinches,
-                             double leftBackinches, double rightBackinches,
+                             double inchesForward,
                              double timeoutS) {
-        int newLeftfrontTarget;
-        int newRightfrontTarget;
-        int newLeftbackTarget;
-        int newRightbackTarget;
+        int newTarget;
 
         // Ensure that the opmode is still active
         if (opModeIsActive()) {
 
             // Determine new target position, and pass to motor controller
-            newLeftfrontTarget = motorLeftfront.getCurrentPosition() + (int)(leftFrontinches * COUNTS_PER_INCH);
-            newRightfrontTarget = motorRightfront.getCurrentPosition() + (int)(rightFrontinches * COUNTS_PER_INCH);
-            newLeftbackTarget = motorLeftback.getCurrentPosition() + (int)(leftBackinches * COUNTS_PER_INCH);
-            newRightbackTarget = motorRightback.getCurrentPosition() + (int)(rightBackinches * COUNTS_PER_INCH);
-            motorLeftfront.setTargetPosition(newLeftfrontTarget);
-            motorRightfront.setTargetPosition(newRightfrontTarget);
-            motorLeftback.setTargetPosition(newLeftbackTarget);
-            motorRightback.setTargetPosition(newRightbackTarget);
+            newTarget = motorLeftback.getCurrentPosition() + (int)(inchesForward * COUNTS_PER_INCH);
+            motorLeftback.setTargetPosition(newTarget);
+
+            newTarget = motorLeftfront.getCurrentPosition() + (int)(inchesForward * COUNTS_PER_INCH);
+            motorLeftfront.setTargetPosition(newTarget);
 
             // Turn On RUN_TO_POSITION
-            motorLeftfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorLeftback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightback.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLeftfront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             // reset the timeout time and start motion.
             runtime.reset();
-            motorLeftfront.setPower(Math.abs(speed));
-            motorRightfront.setPower(Math.abs(speed));
             motorLeftback.setPower(Math.abs(speed));
-            motorRightback.setPower(Math.abs(speed));
+            motorLeftfront.setPower(Math.abs(speed));
 
             // keep looping while we are still active, and there is time left, and both motors are running.
             // Note: We use (isBusy() && isBusy()) in the loop test, which means that when EITHER motor hits
@@ -187,31 +161,24 @@ public class encoderProgram extends LinearOpMode {
             // onto the next step, use (isBusy() || isBusy()) in the loop test.
             while (opModeIsActive() &&
                    (runtime.seconds() < timeoutS) &&
-                   (motorLeftfront.isBusy() && motorRightfront.isBusy() && motorLeftback.isBusy() && motorRightback.isBusy())) {
+                   (motorLeftback.isBusy() && motorLeftfront.isBusy())) {
 
                 // Display it for the driver.
-                telemetry.addData("Path1",  "Running to %7d :%7d :%7d :%7d", newLeftfrontTarget,  newRightfrontTarget, newLeftbackTarget, newRightbackTarget);
-                telemetry.addData("Path2",  "Running at %7d :%7d: %7d :%7d",
-                                              motorLeftfront.getCurrentPosition(),
-                                              motorRightfront.getCurrentPosition(),
-                                              motorLeftback.getCurrentPosition(), 
-                                              motorRightback.getCurrentPosition());
+                telemetry.addData("Path 1",  "Running to %7d", newTarget);
+                telemetry.addData("Path 2",  "Running at %7d :%7d",
+                                            motorLeftback.getCurrentPosition(), motorLeftfront.getCurrentPosition());
                 telemetry.update();
             }
 
             // Stop all motion;
-            motorLeftfront.setPower(0);
-            motorRightfront.setPower(0);
             motorLeftback.setPower(0);
-            motorRightback.setPower(0);
-            
-            // Turn off RUN_TO_POSITION
-            motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorLeftback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeftfront.setPower(0);
 
-            sleep(250);
+            // Turn off RUN_TO_POSITION
+            motorLeftback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeftfront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+
+            sleep(500);
         }
     }
 }
