@@ -9,9 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Arm")
 @Disabled
-public class Arm {
-
-    //Encoder Is broken, will cause arm to not move.
+public class arm {
 
     private DcMotor armMotor;
     private Servo clawLeft;
@@ -27,10 +25,11 @@ public class Arm {
     private int targetValue = 0;
 
     private ElapsedTime runtime = new ElapsedTime();
+    private double startTimeArm = runtime.seconds();
 
     private OpMode op;
 
-    Arm(OpMode opmode){
+    arm(OpMode opmode){
         op = opmode;
     }
 
@@ -58,7 +57,7 @@ public class Arm {
     // This code will do something once when the PLAY button is pressed.
     public void start() {
         runtime.reset();
-        //armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
 
@@ -66,79 +65,78 @@ public class Arm {
     public void loop() {
         // Some variables are being defined.
         double armMotorPower = 0;
-        double timeLeft;
+        double timeLeftArm;
 
-        boolean encoderMovement = true;
+        boolean armIsStill = true;
         boolean print = true;
 
-        double startTime = runtime.seconds();
-
         // This closes the arm when the left bumper is pressed.
-        if(op.gamepad2.left_bumper) {
+        if (op.gamepad2.left_bumper) {
             leftPosition = 0.6;
             op.telemetry.addData("Servo Status", "Closed");
         }
         // This opens the arm when the right bumper is pressed.
-        if(op.gamepad2.right_bumper) {
+        if (op.gamepad2.right_bumper) {
             leftPosition = 0;
             op.telemetry.addData("Servo Status", "Open Completely");
         }
 
-        if (op.gamepad2.left_bumper && op.gamepad2.right_bumper) {
+        if (op.gamepad2.dpad_up && leftPosition == 0.6) {
             leftPosition = 0.48;
             op.telemetry.addData("Servo Status", "Open Slightly");
         }
 
         //4 counts per degree
         //All values should be negative
-        if (op.gamepad1.dpad_down) {
+        if (op.gamepad2.dpad_down) {
             targetValue = -100;
-            encoderMovement = false;
+            armIsStill = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d",targetValue);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
         }
-        else if (op.gamepad1.a) {
+        else if (op.gamepad2.a) {
             targetValue = -1900;
-            encoderMovement = false;
+            armIsStill = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d",targetValue);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
         }
-        else if (op.gamepad1.x) {
+        else if (op.gamepad2.x) {
             targetValue = -3000;
-            encoderMovement = false;
+            armIsStill = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d",targetValue);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
         }
-        else if (op.gamepad1.y) {
+        else if (op.gamepad2.y) {
             targetValue = -4400;
-            encoderMovement = false;
+            armIsStill = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d",targetValue);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
         }
-        else if (op.gamepad1.b) {
+        else if (op.gamepad2.b) {
             targetValue = -5700;
-            encoderMovement = false;
+            armIsStill = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d",targetValue);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
         }
-        else if (targetValue!= 0 && encoderMovement) {
+
+        if (armMotor.isBusy() == false) {
             armMotorPower = op.gamepad2.left_trigger * triggerSpeedControl;
-        }
-        else if (targetValue!= 0 && encoderMovement) {
-            armMotorPower = -op.gamepad2.right_trigger * triggerSpeedControl;
-        }
-        else if (targetValue!= 0 && encoderMovement) {
-            armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+            if (armMotorPower == 0){
+                armMotorPower = -op.gamepad2.right_trigger * triggerSpeedControl;
+                if (armMotorPower == 0){
+                    armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+                }
+            }
         }
 
         // If time is up, then the motor powers will be 0.
-        timeLeft = 120 + startTime - op.getRuntime();
-        if (timeLeft <= 0) {
+        timeLeftArm = 120 + startTimeArm - op.getRuntime();
+        if (timeLeftArm <= 0) {
             armMotorPower = 0;
             clawLeft.setPosition(0);
             clawRight.setPosition(1);
@@ -159,7 +157,7 @@ public class Arm {
         leftPosition = clawLeft.getPosition();
         rightPosition = clawRight.getPosition();
 
-        op.telemetry.addData("Status", "Time Left: " + timeLeft);
+        op.telemetry.addData("Status", "Time Left: " + timeLeftArm);
         if (print) {
             op.telemetry.addData("Motor Speed", armSpeed);
         }
@@ -171,7 +169,7 @@ public class Arm {
         op.telemetry.addData("Right Servo Position", rightPosition);
 
         // If time is up, then the motors will stop.
-        if (timeLeft <= 0) {
+        if (timeLeftArm <= 0) {
             armMotor.setPower(0);
             clawLeft.setPosition(0);
             clawRight.setPosition(1);

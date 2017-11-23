@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Chassis")
 @Disabled
-public class Chassis {
+public class chassis {
 
     private DcMotor motorLeftfront;
     private DcMotor motorRightfront;
@@ -21,10 +21,11 @@ public class Chassis {
     private boolean display = false;
 
     private ElapsedTime runtime = new ElapsedTime();
+    private double startTimeChassis = runtime.seconds();
 
     private OpMode op;
 
-    Chassis(OpMode opmode){
+    chassis(OpMode opmode){
         op = opmode;
     }
 
@@ -55,8 +56,7 @@ public class Chassis {
     }
 
     // This code will do something once when the PLAY button is pressed.
-    public void start()
-    {
+    public void start() {
         runtime.reset();
     }
 
@@ -68,8 +68,7 @@ public class Chassis {
         double motorLeftbackPower;
         double motorRightbackPower;
 
-        double startTime = runtime.seconds();
-        double timeLeft;
+        double timeLeftChassis;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
         double driveFW = op.gamepad1.left_stick_y;
@@ -77,14 +76,12 @@ public class Chassis {
         double turn  = op.gamepad1.right_stick_x;
 
         // This sets the speed mode to fast when the "A" button is pressed.
-        if (op.gamepad1.a)
-        {
+        if (op.gamepad1.a) {
             speedControl = 1;
             display = true;
         }
         // This sets the speed mode to slow (default) when the "B" button is pressed.
-        else if (op.gamepad1.b)
-        {
+        else if (op.gamepad1.b) {
             speedControl = 0.25;
             display = false;
         }
@@ -96,9 +93,8 @@ public class Chassis {
         motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedControl, -1.0, 1.0) ;
 
         // If time is up, then the motor powers will be 0.
-        timeLeft = 120 + startTime - op.getRuntime();
-        if (timeLeft <= 0)
-        {
+        timeLeftChassis = 120 + startTimeChassis - op.getRuntime();
+        if (timeLeftChassis <= 0) {
             motorLeftfrontPower = 0;
             motorRightfrontPower = 0;
             motorLeftbackPower = 0;
@@ -120,12 +116,11 @@ public class Chassis {
             op.telemetry.addData("SpeedMode", "Slow");
         }
 
-        op.telemetry.addData("Status", "Time Left: " + timeLeft);
+        op.telemetry.addData("Status", "Time Left: " + timeLeftChassis);
         op.telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
         // If time is up, then the motors will stop.
-        if (timeLeft <= 0)
-        {
+        if (timeLeftChassis <= 0) {
             motorLeftfront.setPower(0);
             motorRightfront.setPower(0);
             motorLeftback.setPower(0);
