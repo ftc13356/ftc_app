@@ -33,11 +33,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 @Autonomous(name="Jonathan Autonomous")
 @Disabled
-public class autonomousJonathan extends basicAutonomousFrame {
+public class autonomousJonathan extends autonomousFrame {
 
     @Override
     public void runOpMode() {

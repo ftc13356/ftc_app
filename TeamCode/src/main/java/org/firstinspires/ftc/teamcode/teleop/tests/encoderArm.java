@@ -27,8 +27,9 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode;
+package org.firstinspires.ftc.teamcode.teleop.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -38,7 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import static android.os.SystemClock.sleep;
 
 @TeleOp(name = "Arm with Encoder")
-// @Disabled
+@Disabled
 public class encoderArm extends OpMode {
 
     // This is declaring the hardware.

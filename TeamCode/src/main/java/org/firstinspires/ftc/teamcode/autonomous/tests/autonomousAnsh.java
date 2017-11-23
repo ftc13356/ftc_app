@@ -34,11 +34,11 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.autonomous.basicAutonomousFrame;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 @Autonomous(name="Ansh Autonomous")
 @Disabled
-public class autonomousAnsh extends basicAutonomousFrame
+public class autonomousAnsh extends autonomousFrame
 {
     // Defining Autonomous OpMode Members
     private ElapsedTime runtime = new ElapsedTime();
