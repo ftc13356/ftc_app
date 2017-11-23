@@ -21,6 +21,7 @@ public class Arm {
     private double rightPosition = 1;
 
     private double armSpeedControl = 0.5;
+    private double triggerSpeedControl = 0.25;
     private double armSpeed = 0.5;
 
     private int targetValue = 0;
@@ -64,10 +65,11 @@ public class Arm {
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
-        double armMotorPower;
+        double armMotorPower = 0;
         double timeLeft;
 
-        boolean encoderMovement = false;
+        boolean encoderMovement = true;
+        boolean print = true;
 
         double startTime = runtime.seconds();
 
@@ -87,49 +89,51 @@ public class Arm {
             op.telemetry.addData("Servo Status", "Open Slightly");
         }
 
-        // The speed values are calculated and stored in variables.
-        armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
-
         //4 counts per degree
         //All values should be negative
         if (op.gamepad1.dpad_down) {
             targetValue = -100;
-            encoderMovement = true;
+            encoderMovement = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-
-        if (op.gamepad1.a) {
+        else if (op.gamepad1.a) {
             targetValue = -1900;
-            encoderMovement = true;
+            encoderMovement = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (op.gamepad1.x) {
+        else if (op.gamepad1.x) {
             targetValue = -3000;
-            encoderMovement = true;
+            encoderMovement = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (op.gamepad1.y) {
+        else if (op.gamepad1.y) {
             targetValue = -4400;
-            encoderMovement = true;
+            encoderMovement = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (op.gamepad1.b) {
+        else if (op.gamepad1.b) {
             targetValue = -5700;
-            encoderMovement = true;
+            encoderMovement = false;
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d",targetValue);
         }
-        if (targetValue!= 0 && encoderMovement) {
-            armMotor.setPower(armSpeed);
+        else if (targetValue!= 0 && encoderMovement) {
+            armMotorPower = op.gamepad2.left_trigger * triggerSpeedControl;
+        }
+        else if (targetValue!= 0 && encoderMovement) {
+            armMotorPower = -op.gamepad2.right_trigger * triggerSpeedControl;
+        }
+        else if (targetValue!= 0 && encoderMovement) {
+            armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
         }
 
         // If time is up, then the motor powers will be 0.
@@ -141,7 +145,14 @@ public class Arm {
         }
 
         // The calculated power is then applied to the motors.
-        armMotor.setPower(armMotorPower);
+        if (armMotorPower == 0) {
+            armMotor.setPower(armSpeed);
+            print = true;
+        }
+        else {
+            armMotor.setPower(armMotorPower);
+            print = false;
+        }
         clawLeft.setPosition(leftPosition);
         rightPosition = 1 - leftPosition;
         clawRight.setPosition(rightPosition);
@@ -149,7 +160,12 @@ public class Arm {
         rightPosition = clawRight.getPosition();
 
         op.telemetry.addData("Status", "Time Left: " + timeLeft);
-        op.telemetry.addData("Motor", armMotorPower);
+        if (print) {
+            op.telemetry.addData("Motor Speed", armSpeed);
+        }
+        else {
+            op.telemetry.addData("Motor Speed", armMotorPower);
+        }
         op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
         op.telemetry.addData("Left Servo Position", leftPosition);
         op.telemetry.addData("Right Servo Position", rightPosition);
