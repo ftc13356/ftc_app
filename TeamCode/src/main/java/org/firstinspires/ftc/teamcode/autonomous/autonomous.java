@@ -2,10 +2,9 @@ package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
 @Autonomous(name = "Autonomous 11/7")
-public class autonomous extends basicAutonomousFrame{
+public class autonomous extends autonomousFrame {
 
     @Override
     public void runOpMode() {
