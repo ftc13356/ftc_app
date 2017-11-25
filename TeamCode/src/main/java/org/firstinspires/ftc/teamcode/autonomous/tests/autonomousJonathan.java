@@ -58,7 +58,7 @@ public class autonomousJonathan extends autonomousFrame {
         moveLeft(0.5, 500);
         moveBackward(0.5, 500);
         moveRight(0.5, 500);
-        Stop();
+        stop();
     }
 }
 
