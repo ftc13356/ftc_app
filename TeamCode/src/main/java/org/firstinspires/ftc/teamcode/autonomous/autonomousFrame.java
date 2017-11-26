@@ -7,6 +7,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+
 @Autonomous(name="Basic Autonomous Frame")
 @Disabled
 public abstract class autonomousFrame extends LinearOpMode {
@@ -38,6 +45,11 @@ public abstract class autonomousFrame extends LinearOpMode {
                                           (WHEEL_DIAMETER_INCHES * Math.PI);
 
     static final double COUNTS_PER_DEGREE = COUNTS_PER_INCH * ROBOT_DIAMETER * Math.PI / 360;
+
+    // Vuforia Stuff
+    public static final String TAG = "Vuforia VuMark Sample";
+    OpenGLMatrix lastLocation = null;
+    VuforiaLocalizer vuforia;
 
     // Arm Position Function (Arm, Encoder)
     public void armPosition(int position) {
