@@ -6,13 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
-
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
 @Autonomous(name="Basic Autonomous Frame")
 @Disabled
@@ -46,14 +40,13 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     static final double COUNTS_PER_DEGREE = COUNTS_PER_INCH * ROBOT_DIAMETER * Math.PI / 360;
 
-    // Vuforia Stuff
-    public static final String TAG = "Vuforia VuMark Sample";
-    OpenGLMatrix lastLocation = null;
+    // Vuforia
     VuforiaLocalizer vuforia;
 
     // Arm Position Function (Arm, Encoder)
-    public void armPosition(int position) {
-        if (position == 0){
+    public void armPosition(int targetValue) {
+        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        /*if (position == 0){
             targetValue = -100;
         }
         else if (position == 1){
@@ -67,10 +60,10 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
         else if (position == 4){
             targetValue = -5700;
-        }
-        else {
-            targetValue = position;
-        }
+        }*/
+        //else {
+        //  targetValue = position;
+        //}
         armMotor.setTargetPosition(targetValue);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         telemetry.addData("Goal Position", "%7d",targetValue);
