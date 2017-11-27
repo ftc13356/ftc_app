@@ -58,26 +58,26 @@ public class arm {
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
-        double armMotorPower = 0;
+        double armMotorPower;
         double timeLeftArm;
 
-        // This closes the armOld when the left bumper is pressed.
+        // This closes the arm when the left bumper is pressed.
         if (op.gamepad2.left_bumper) {
             leftPosition = 0.6;
             op.telemetry.addData("Servo Status", "Closed");
         }
-        // This opens the armOld when the right bumper is pressed.
-        if (op.gamepad2.right_bumper) {
+        // This opens the arm when the right bumper is pressed.
+        else if (op.gamepad2.right_bumper) {
             leftPosition = 0;
             op.telemetry.addData("Servo Status", "Open Completely");
         }
-
-        if (op.gamepad2.a) {
+        // This opens the arm partially when the "A" button is pressed.
+        else if (op.gamepad2.a) {
             leftPosition = 0.48;
             op.telemetry.addData("Servo Status", "Open Slightly");
         }
 
-        armMotorPower = op.gamepad2.left_stick_y;
+        armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
 
         // If time is up, then the motor powers will be 0.
         timeLeftArm = 120 + startTimeArm - op.getRuntime();
@@ -87,6 +87,7 @@ public class arm {
             clawRight.setPosition(1);
         }
 
+        armMotor.setPower(armMotorPower);
         clawLeft.setPosition(leftPosition);
         rightPosition = 1 - leftPosition;
         clawRight.setPosition(rightPosition);
