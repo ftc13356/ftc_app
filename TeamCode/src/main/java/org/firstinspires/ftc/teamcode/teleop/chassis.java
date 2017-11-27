@@ -40,7 +40,7 @@ public class chassis {
         motorLeftback = op.hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = op.hardwareMap.get(DcMotor.class, "motorRightback");
 
-        // This is just telling the direction of the motors.
+        // This is just telling the direction of the motor.
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
@@ -116,7 +116,7 @@ public class chassis {
             op.telemetry.addData("SpeedMode", "Slow");
         }
 
-        op.telemetry.addData("Status", "Time Left: " + timeLeftChassis);
+        op.telemetry.addData("Chassis", "Time Left: " + timeLeftChassis);
         op.telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
         // If time is up, then the motors will stop.

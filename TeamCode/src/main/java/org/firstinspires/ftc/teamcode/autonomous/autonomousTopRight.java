@@ -31,7 +31,7 @@ public class autonomousTopRight extends autonomousFrame {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        // parameters.vuforiaLicenseKey = "Put Vuforia License Key Here";
+        // parameters.vuforiaLicenseKey = "Put License Key Here";
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
@@ -60,17 +60,17 @@ public class autonomousTopRight extends autonomousFrame {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 telemetry.addData("VuMark Identified:", "Left");
-                encoderDrive(-10, 0, 0, 0.5);
+                encoderDrive(-16, 0, 0, 0.5);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 telemetry.addData("VuMark Identified:", "Center");
-                encoderDrive(-16, 0, 0, 0.5);
+                encoderDrive(-22, 0, 0, 0.5);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 telemetry.addData("VuMark Identified:", "Right");
-                encoderDrive(-22, 0, 0, 0.5);
+                encoderDrive(-2, 0, 0, 0.5);
                 detect = true;
             }
 
