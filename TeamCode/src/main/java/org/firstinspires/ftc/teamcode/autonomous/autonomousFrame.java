@@ -41,12 +41,12 @@ public abstract class autonomousFrame extends LinearOpMode {
     static final double COUNTS_PER_DEGREE = COUNTS_PER_INCH * ROBOT_DIAMETER * Math.PI / 360;
 
     // Vuforia
-    VuforiaLocalizer vuforia;
+    public VuforiaLocalizer vuforia;
 
     // Arm Position Function (Arm, Encoder)
-    public void armPosition(int targetValue) {
+    public void armPosition(int position) {
         armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        /*if (position == 0){
+        if (position == 0){
             targetValue = -100;
         }
         else if (position == 1){
@@ -60,12 +60,10 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
         else if (position == 4){
             targetValue = -5700;
-        }*/
-        //else {
-        //  targetValue = position;
-        //}
+        }
         armMotor.setTargetPosition(targetValue);
         armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        armMotor.setPower(Math.abs(0.5));
         telemetry.addData("Goal Position", "%7d",targetValue);
     }
 
