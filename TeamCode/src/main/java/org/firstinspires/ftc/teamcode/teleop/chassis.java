@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Chassis")
@@ -19,9 +18,6 @@ public class chassis {
     private double speedControl = 0.25;
 
     private boolean display = false;
-
-    private ElapsedTime runtime = new ElapsedTime();
-    private double startTimeChassis = runtime.seconds();
 
     private OpMode op;
 
@@ -57,7 +53,6 @@ public class chassis {
 
     // This code will do something once when the PLAY button is pressed.
     public void start() {
-        runtime.reset();
     }
 
     // This code will run constantly after the previous part is runned.
@@ -67,8 +62,6 @@ public class chassis {
         double motorRightfrontPower;
         double motorLeftbackPower;
         double motorRightbackPower;
-
-        double timeLeftChassis;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
         double driveFW = op.gamepad1.left_stick_y;
@@ -92,15 +85,6 @@ public class chassis {
         motorLeftbackPower = Range.clip((driveFW + driveS - turn)*speedControl, -1.0, 1.0) ;
         motorRightbackPower = Range.clip((-driveFW + driveS - turn)*speedControl, -1.0, 1.0) ;
 
-        // If time is up, then the motor powers will be 0.
-        timeLeftChassis = 120 + startTimeChassis - op.getRuntime();
-        if (timeLeftChassis <= 0) {
-            motorLeftfrontPower = 0;
-            motorRightfrontPower = 0;
-            motorLeftbackPower = 0;
-            motorRightbackPower = 0;
-        }
-
         // The calculated power is then applied to the motors.
         motorLeftfront.setPower(motorLeftfrontPower);
         motorRightfront.setPower(motorRightfrontPower);
@@ -116,15 +100,7 @@ public class chassis {
             op.telemetry.addData("SpeedMode", "Slow");
         }
 
-        op.telemetry.addData("Chassis", "Time Left: " + timeLeftChassis);
         op.telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
 
-        // If time is up, then the motors will stop.
-        if (timeLeftChassis <= 0) {
-            motorLeftfront.setPower(0);
-            motorRightfront.setPower(0);
-            motorLeftback.setPower(0);
-            motorRightback.setPower(0);
-        }
     }
 }

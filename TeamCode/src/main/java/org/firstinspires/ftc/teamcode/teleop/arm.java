@@ -5,7 +5,6 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Arm")
 @Disabled
@@ -19,9 +18,6 @@ public class arm {
     private double rightPosition = 1;
 
     private double armSpeedControl = 0.5;
-
-    private ElapsedTime runtime = new ElapsedTime();
-    private double startTimeArm = runtime.seconds();
 
     private OpMode op;
 
@@ -51,15 +47,12 @@ public class arm {
 
     // This code will do something once when the PLAY button is pressed.
     public void start() {
-        runtime.reset();
     }
-
 
     // This code will run constantly after the previous part is runned.
     public void loop() {
         // Some variables are being defined.
         double armMotorPower;
-        double timeLeftArm;
 
         // This closes the arm when the left bumper is pressed.
         if (op.gamepad2.left_bumper) {
@@ -79,14 +72,6 @@ public class arm {
 
         armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
 
-        // If time is up, then the motor powers will be 0.
-        timeLeftArm = 120 + startTimeArm - op.getRuntime();
-        if (timeLeftArm <= 0) {
-            armMotorPower = 0;
-            clawLeft.setPosition(0);
-            clawRight.setPosition(1);
-        }
-
         armMotor.setPower(armMotorPower);
         clawLeft.setPosition(leftPosition);
         rightPosition = 1 - leftPosition;
@@ -94,16 +79,8 @@ public class arm {
         leftPosition = clawLeft.getPosition();
         rightPosition = clawRight.getPosition();
 
-        op.telemetry.addData("Arm", "Time Left: " + timeLeftArm);
         op.telemetry.addData("Arm Motor Speed", armMotorPower);
         op.telemetry.addData("Left Servo Position", leftPosition);
         op.telemetry.addData("Right Servo Position", rightPosition);
-
-        // If time is up, then the motors will stop.
-        if (timeLeftArm <= 0) {
-            armMotor.setPower(0);
-            clawLeft.setPosition(0);
-            clawRight.setPosition(1);
-        }
     }
 }
