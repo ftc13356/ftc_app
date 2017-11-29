@@ -28,29 +28,13 @@ public class autonomousTopLeft extends autonomousFrame {
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
         armMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        // parameters.vuforiaLicenseKey = "Put License Key Here";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-        telemetry.addData("Vuforia Status", "Initialized");
-        telemetry.update();
-
-        boolean detect = false;
-
         waitForStart();
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //To safe zone
         encoderDrive(32, 0, 0, 0.5);
         encoderDrive(0, 12, 0, 0.5);
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
-        sleep(500);
 
         stop();
 

@@ -29,22 +29,7 @@ public class autonomousTopRight extends autonomousFrame {
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
         armMotor.setDirection(DcMotor.Direction.REVERSE);
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        // parameters.vuforiaLicenseKey = "Put License Key Here";
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
-        telemetry.addData("Vuforia Status", "Initialized");
-        telemetry.update();
-
-        boolean detect = false;
-
         waitForStart();
-
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         //Motor powers per encoderDrive();
         //forward -+-+
@@ -53,32 +38,8 @@ public class autonomousTopRight extends autonomousFrame {
         //right--++ (-)
 
         //To safe zone - facing balancing stone
-        encoderDrive(-12, 0, 0, 0.5);
-
-        relicTrackables.activate();
-        while (opModeIsActive() && detect == false) {
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
-            if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("VuMark Identified:", "Left");
-                encoderDrive(-16, 0, 0, 0.5);
-                detect = true;
-            }
-            if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("VuMark Identified:", "Center");
-                encoderDrive(-22, 0, 0, 0.5);
-                detect = true;
-            }
-            if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("VuMark Identified:", "Right");
-                encoderDrive(-2, 0, 0, 0.5);
-                detect = true;
-            }
-
-            telemetry.update();
-        }
-
-        encoderDrive(0, 0, -90, 0.5);
-        encoderDrive(10, 0, 0, 0.5);
+        encoderDrive(33, 0, 0, 0.5);
+        encoderDrive(0, 12, 0, 0.5);
 
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
