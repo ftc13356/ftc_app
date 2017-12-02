@@ -32,7 +32,7 @@ public class autonomousTopLeft extends autonomousFrame {
 
         //To safe zone
         encoderDrive(32, 0, 0, 0.5);
-        encoderDrive(0, 12, 0, 0.5);
+        encoderDrive(0, -12, 0, 0.5);
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
