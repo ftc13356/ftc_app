@@ -15,9 +15,9 @@ public class chassis {
     private DcMotor motorLeftback;
     private DcMotor motorRightback;
 
-    private double speedControl = 0.25;
+    private double speedControl = 0.5;
 
-    private boolean display = false;
+    private int display = 0;
 
     private OpMode op;
 
@@ -68,15 +68,20 @@ public class chassis {
         double driveS = op.gamepad1.left_stick_x;
         double turn  = op.gamepad1.right_stick_x;
 
-        // This sets the speed mode to fast when the "A" button is pressed.
+        // This sets the speed mode to fast when the "A" button is pressed. (Full Speed)
         if (op.gamepad1.a) {
             speedControl = 1;
-            display = true;
+            display = 0;
         }
-        // This sets the speed mode to slow (default) when the "B" button is pressed.
+        // This sets the speed mode to slow (default) when the "B" button is pressed. (Slow Speed)
         else if (op.gamepad1.b) {
             speedControl = 0.25;
-            display = false;
+            display = 1;
+        }
+        // This sets the speed mode to "Tetrix" when the "X" button is pressed. (Tetrix speed represents 0.25 speed of the Tetrix motors.)
+        else if (op.gamepad1.x) {
+            speedControl = 0.5;
+            display = 2;
         }
 
         // The speed values are calculated and stored in variables.
@@ -93,11 +98,14 @@ public class chassis {
 
         // This prints information on the screen.
         op.telemetry.addData("Mode", "Teleop");
-        if (display) {
+        if (display == 0) {
             op.telemetry.addData("SpeedMode", "Fast");
         }
-        else {
+        else if (display == 1) {
             op.telemetry.addData("SpeedMode", "Slow");
+        }
+        else if (display == 2) {
+            op.telemetry.addData("SpeedMode", "Tetrix");
         }
 
         op.telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
