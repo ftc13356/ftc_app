@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Class for controlling the drivetrain for the 4 omni-wheel drivetrain (Holonomic)
-// Developers: RoboTech Inc. Software Development Team
+// Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "Chassis")
