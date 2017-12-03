@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Class for controlling the arm and claw
-// Author: Jonathan Ma, Ansh Gandhi
+// Developers: RoboTech Inc. Software Development Team
 ///////////////////////////////////////////////////////////////////////////////
 @TeleOp(name = "Arm")
 @Disabled
