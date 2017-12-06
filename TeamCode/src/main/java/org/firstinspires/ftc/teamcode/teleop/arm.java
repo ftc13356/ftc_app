@@ -60,7 +60,7 @@ public class arm {
 
         // This closes the arm when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
-            leftPosition = 0.6;
+            leftPosition = 0.7;
             op.telemetry.addData("Servo Status", "Closed");
         }
         // This opens the arm completely when the right bumper is pressed
@@ -70,7 +70,7 @@ public class arm {
         }
         // This opens the arm partially when the "A" button is pressed
         else if (op.gamepad2.a) {
-            leftPosition = 0.48;
+            leftPosition = 0.5;
             op.telemetry.addData("Servo Status", "Open Slightly");
         }
 
