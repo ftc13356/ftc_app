@@ -4,8 +4,8 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-@TeleOp(name = "Arm Move")
-public class armMove extends OpMode{
+@TeleOp(name = "Arm Move for Debug")
+public class armMoveDebug extends OpMode{
 
     private DcMotor armMotor;
     private double armSpeedControl = 0.5;
