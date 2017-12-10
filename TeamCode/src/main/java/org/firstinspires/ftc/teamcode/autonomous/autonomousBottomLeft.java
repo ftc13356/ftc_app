@@ -15,15 +15,8 @@ public class autonomousBottomLeft extends autonomousFrame {
     @Override
     public void runOpMode() {
 
-        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
-        motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
-        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
-        motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-
-        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
-        motorRightfront.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftback.setDirection(DcMotor.Direction.FORWARD);
-        motorRightback.setDirection(DcMotor.Direction.FORWARD);
+        initializeHardwareMap();
+        setMotorDirection();
 
         waitForStart();
 

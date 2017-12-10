@@ -28,6 +28,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     
     double leftPosition = 0;
     double rightPosition = 1;
+
+    public VuforiaLocalizer vuforia;
     
     int targetValue = 0;
     static final double counts_per_motor_rev = 1680 ;
@@ -36,10 +38,31 @@ public abstract class autonomousFrame extends LinearOpMode {
     static final double wheel_diameter_inches = 4.0 ;
     static final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
                                           (wheel_diameter_inches * Math.PI);
-
     static final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
 
-    public VuforiaLocalizer vuforia;
+    public void initializeHardwareMap() {
+        motorLeftfront = hardwareMap.dcMotor.get("motorLeftfront");
+        motorRightfront = hardwareMap.dcMotor.get("motorRightfront");
+        motorLeftback = hardwareMap.dcMotor.get("motorLeftback");
+        motorRightback = hardwareMap.dcMotor.get("motorRightback");
+        armMotor = hardwareMap.dcMotor.get("armMotor");
+        armClawLeft = hardwareMap.servo.get("clawLeft");
+        armClawRight = hardwareMap.servo.get("claRight");
+        glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
+        glyphClawRight = hardwareMap.servo.get("glyphClawRight");
+    }
+
+    public void setMotorDirection() {
+        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
+        motorRightfront.setDirection(DcMotor.Direction.FORWARD);
+        motorLeftback.setDirection(DcMotor.Direction.FORWARD);
+        motorRightback.setDirection(DcMotor.Direction.FORWARD);
+        armMotor.setDirection(DcMotor.Direction.REVERSE);
+    }
+
+    /*
+
+    Following Functions are NOT OPERATIONAL (yet) - Jonathan
 
     // Arm Position Function (Arm, Encoder)
     public void armPosition(int position) {
@@ -114,6 +137,8 @@ public abstract class autonomousFrame extends LinearOpMode {
         glyphClawRight.setPosition(rightPosition);
         telemetry.addData("Glyph Servo Status", "Partially Open");
     }
+
+    */
 
     // Basic Drive Functions (Drivetrain)
     public void moveForward (double power, long time) {
