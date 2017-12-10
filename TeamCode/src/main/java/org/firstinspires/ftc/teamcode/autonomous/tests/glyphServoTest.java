@@ -3,21 +3,17 @@ package org.firstinspires.ftc.teamcode.autonomous.tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Autonomous(name = "Glyph Servo Test")
-// @Disabled
+@Disabled
 public class glyphServoTest extends LinearOpMode {
 
     private Servo glyphClawRight;
     private Servo glyphClawLeft;
 
-    private static final double ARM_RETRACTED = 0;
-    private static final double ARM_EXTENDED = 1;
-
-    private double glyphLeftPosition;
-    private double glyphRightPosition;
+    private double leftPosition = 0.3;
+    private double rightPosition = 0.7;
 
     @Override
     public void  runOpMode() throws InterruptedException
@@ -26,18 +22,20 @@ public class glyphServoTest extends LinearOpMode {
         glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
 
-        glyphClawLeft.setPosition(ARM_RETRACTED);
-        glyphClawRight.setPosition(ARM_EXTENDED);
+        glyphClawLeft.setPosition(1);
+        glyphClawRight.setPosition(0);
 
         waitForStart();
 
-        glyphLeftPosition = 0.75;
+        glyphClawLeft.setPosition(leftPosition);
+        glyphClawRight.setPosition(rightPosition);
+        glyphClawLeft.getPosition();
+        glyphClawRight.getPosition();
 
-        glyphClawLeft.setPosition(glyphLeftPosition);
-        glyphRightPosition = 1 - glyphLeftPosition;
-        glyphClawRight.setPosition(glyphRightPosition);
-
-        telemetry.addData("Servo", "%2f");
+        telemetry.addData("Claw Left", glyphClawLeft.getPosition());
+        telemetry.addData("Claw Right", glyphClawRight.getPosition());
         telemetry.update();
+
+
     }
 }
