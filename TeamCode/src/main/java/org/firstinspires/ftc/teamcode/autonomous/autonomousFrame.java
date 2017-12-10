@@ -12,35 +12,33 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 @Disabled
 public abstract class autonomousFrame extends LinearOpMode {
 
-    // Defining Motors (Drivetrain)
+    // Initialize variables
     public DcMotor motorLeftfront;
     public DcMotor motorRightfront;
     public DcMotor motorLeftback;
     public DcMotor motorRightback;
-
-    // Defining Motor (Arm)
+    
     public DcMotor armMotor;
-
-    // Defining Servos (Arm)
-    public Servo clawLeft;
-    public Servo clawRight;
-
-    // Defining Variables (Claw)
+    
+    public Servo armClawLeft;
+    public Servo armClawRight;
+    
+    public Servo glyphClawLeft;
+    public Servo glyphClawRight;
+    
     double leftPosition = 0;
     double rightPosition = 1;
-
-    // Defining Variables (Drivetrain, Encoder)
+    
     int targetValue = 0;
-    static final double COUNTS_PER_MOTOR_REV = 1680 ;
-    static final double ROBOT_DIAMETER = 23.0;
-    static final double DRIVE_GEAR_REDUCTION = 0.75;
-    static final double WHEEL_DIAMETER_INCHES = 4.0 ;
-    static final double COUNTS_PER_INCH = (COUNTS_PER_MOTOR_REV * DRIVE_GEAR_REDUCTION) /
-                                          (WHEEL_DIAMETER_INCHES * Math.PI);
+    static final double counts_per_motor_rev = 1680 ;
+    static final double robot_diameter = 23.0;
+    static final double drive_gear_reduction = 0.75;
+    static final double wheel_diameter_inches = 4.0 ;
+    static final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
+                                          (wheel_diameter_inches * Math.PI);
 
-    static final double COUNTS_PER_DEGREE = COUNTS_PER_INCH * ROBOT_DIAMETER * Math.PI / 360;
+    static final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
 
-    // Vuforia
     public VuforiaLocalizer vuforia;
 
     // Arm Position Function (Arm, Encoder)
@@ -69,31 +67,56 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // Claw Functions (Arm)
     public void closeClaw() {
-        leftPosition = 0.6;
-        telemetry.addData("Servo Status", "Closed");
-        clawLeft.setPosition(leftPosition);
-        rightPosition = 1 - leftPosition;
-        clawRight.setPosition(rightPosition);
+        leftPosition = 0.7;
+        rightPosition = 0.3;
+        armClawLeft.setPosition(leftPosition);
+        armClawRight.setPosition(rightPosition);
+        telemetry.addData("Arm Servo Status", "Closed");
     }
 
     public void partialClaw() {
-        leftPosition = 0.48;
-        telemetry.addData("Servo Status", "Partially Open");
-        clawLeft.setPosition(leftPosition);
-        rightPosition = 1 - leftPosition;
-        clawRight.setPosition(rightPosition);
+        leftPosition = 0.5;
+        rightPosition = 0.5;
+        armClawLeft.setPosition(leftPosition);
+        armClawRight.setPosition(rightPosition);
+        telemetry.addData("Arm Servo Status", "Partially Open");
     }
 
     public void openClaw() {
-        leftPosition = 0;
-        telemetry.addData("Servo Status", "Open");
-        clawLeft.setPosition(leftPosition);
-        rightPosition = 1 - leftPosition;
-        clawRight.setPosition(rightPosition);
+        leftPosition = 0.0;
+        rightPosition = 1.0;
+        armClawLeft.setPosition(leftPosition);
+        armClawRight.setPosition(rightPosition);
+        telemetry.addData("Arm Servo Status", "Open");
+    }
+
+    // Claw Functions (Glyph Claw)
+    public void openGlyphClaw(){
+        leftPosition = 1.0;
+        rightPosition = 0.0;
+        glyphClawLeft.setPosition(leftPosition);
+        glyphClawRight.setPosition(rightPosition);
+        telemetry.addData("Glyph Servo Status", "Open");
+    }
+
+    public void closeGlyphClaw(){
+        leftPosition = 0.3;
+        rightPosition = 0.7;
+        glyphClawLeft.setPosition(leftPosition);
+        glyphClawRight.setPosition(rightPosition);
+        telemetry.addData("Glyph Servo Status", "Closed");
+    }
+
+    public void partialGlyphClaw(){
+        leftPosition = 0.4;
+        rightPosition = 0.6;
+        glyphClawLeft.setPosition(leftPosition);
+        glyphClawRight.setPosition(rightPosition);
+        telemetry.addData("Glyph Servo Status", "Partially Open");
     }
 
     // Basic Drive Functions (Drivetrain)
-    public void moveForward(double power, long time) {
+    public void moveForward (double power, long time) {
         motorLeftfront.setPower(-power);
         motorRightfront.setPower(power);
         motorLeftback.setPower(-power);
@@ -153,13 +176,13 @@ public abstract class autonomousFrame extends LinearOpMode {
         int newLeftbackTarget;
         int newRightbackTarget;
 
-        turnDegrees = turnDegrees * COUNTS_PER_DEGREE / COUNTS_PER_INCH;
+        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
 
         // Calculates Target Position
-        double motorLeftfrontEncoder = (-driveFB + driveS + turnDegrees) * COUNTS_PER_INCH;
-        double motorRightfrontEncoder = (driveFB + driveS + turnDegrees) * COUNTS_PER_INCH;
-        double motorLeftbackEncoder = (-driveFB - driveS + turnDegrees) * COUNTS_PER_INCH;
-        double motorRightbackEncoder = (driveFB - driveS + turnDegrees) * COUNTS_PER_INCH;
+        double motorLeftfrontEncoder = (-driveFB + driveS + turnDegrees) * counts_per_inch;
+        double motorRightfrontEncoder = (driveFB + driveS + turnDegrees) * counts_per_inch;
+        double motorLeftbackEncoder = (-driveFB - driveS + turnDegrees) * counts_per_inch;
+        double motorRightbackEncoder = (driveFB - driveS + turnDegrees) * counts_per_inch;
 
         // Ensures OpMode is Active
         if (opModeIsActive()) {
@@ -228,10 +251,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         if (opModeIsActive()) {
 
             // Calculates Target Position Based on Current Position
-            newLeftfrontTarget = motorLeftfront.getCurrentPosition() + (int)(leftFrontinches * COUNTS_PER_INCH);
-            newRightfrontTarget = motorRightfront.getCurrentPosition() + (int)(rightFrontinches * COUNTS_PER_INCH);
-            newLeftbackTarget = motorLeftback.getCurrentPosition() + (int)(leftBackinches * COUNTS_PER_INCH);
-            newRightbackTarget = motorRightback.getCurrentPosition() + (int)(rightBackinches * COUNTS_PER_INCH);
+            newLeftfrontTarget = motorLeftfront.getCurrentPosition() + (int)(leftFrontinches * counts_per_inch);
+            newRightfrontTarget = motorRightfront.getCurrentPosition() + (int)(rightFrontinches * counts_per_inch);
+            newLeftbackTarget = motorLeftback.getCurrentPosition() + (int)(leftBackinches * counts_per_inch);
+            newRightbackTarget = motorRightback.getCurrentPosition() + (int)(rightBackinches * counts_per_inch);
+
             motorLeftfront.setTargetPosition(newLeftfrontTarget);
             motorRightfront.setTargetPosition(newRightfrontTarget);
             motorLeftback.setTargetPosition(newLeftbackTarget);

@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.december10;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
-@Autonomous(name = "Autonomous Top Right (HouseT)")
-public class autonomousTopRight extends autonomousFrame {
+@Autonomous(name = "Autonomous Top Right BASIC (HouseT)")
+@Disabled
+public class autonomousTopRightBasic extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -19,16 +17,11 @@ public class autonomousTopRight extends autonomousFrame {
         motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
         motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-        glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
-        glyphClawRight = hardwareMap.servo.get("glyphClawRight");
 
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
-
-        glyphClawLeft.setPosition(0.3);
-        glyphClawRight.setPosition(0.7);
 
         waitForStart();
 
@@ -40,13 +33,8 @@ public class autonomousTopRight extends autonomousFrame {
 
         //To safe zone - facing balancing stone
         encoderDrive(33, 0, 0, 0.5);
-        encoderDrive(0, 0, -91, 0.4);
-        encoderDrive(-9.75, 0, 0, 0.5);
-        glyphClawLeft.setPosition(1);
-        glyphClawRight.setPosition(0);
-        telemetry.addData("Task", "Glyph In");
-        telemetry.update();
-        encoderDrive(3, 0, 0, 0.3);
+        encoderDrive(0, 12, 0, 0.5);
+
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 

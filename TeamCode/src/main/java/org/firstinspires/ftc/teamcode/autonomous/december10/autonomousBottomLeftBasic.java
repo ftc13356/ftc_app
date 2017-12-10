@@ -1,16 +1,14 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.december10;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
-import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
-@Autonomous(name = "Autonomous Bottom Left (HouseB)")
-public class autonomousBottomLeft extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Left BASIC(HouseB)")
+@Disabled
+public class autonomousBottomLeftBasic extends autonomousFrame {
 
     @Override
     public void runOpMode() {
