@@ -22,15 +22,11 @@ public class autonomousBottomLeftOLD extends autonomousFrame {
         motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
         motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
-        clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight = hardwareMap.servo.get("clawRight");
 
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);

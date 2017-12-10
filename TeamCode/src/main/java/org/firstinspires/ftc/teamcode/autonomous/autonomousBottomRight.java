@@ -18,17 +18,19 @@ public class autonomousBottomRight extends autonomousFrame {
         motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
         motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
         motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-        armMotor = hardwareMap.get(DcMotor.class, "armMotor");
-        clawLeft = hardwareMap.servo.get("clawLeft");
-        clawRight = hardwareMap.servo.get("clawRight");
 
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
-        armMotor.setDirection(DcMotor.Direction.REVERSE);
 
         waitForStart();
+
+        //Motor powers per encoderDrive();
+        //forward -+-+
+        //backward +-+-
+        //left ++-- (+)
+        //right--++ (-)
 
         //To safe zone
         encoderDrive(-34, 0, 0, 0.5);
