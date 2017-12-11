@@ -30,7 +30,7 @@ public class autonomousTopRight extends autonomousFrame {
         //right--++ (-)
 
         //To safe zone - facing balancing stone
-        encoderDrive(33, 0, 0, 0.5);
+        encoderDrive(33.5, 0, 0, 0.5);
         encoderDrive(0, 0, -91, 0.4);
         encoderDrive(-9.75, 0, 0, 0.5);
         glyphClawLeft.setPosition(1);

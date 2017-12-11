@@ -47,7 +47,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorRightback = hardwareMap.dcMotor.get("motorRightback");
         armMotor = hardwareMap.dcMotor.get("armMotor");
         armClawLeft = hardwareMap.servo.get("clawLeft");
-        armClawRight = hardwareMap.servo.get("claRight");
+        armClawRight = hardwareMap.servo.get("clawRight");
         glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
     }

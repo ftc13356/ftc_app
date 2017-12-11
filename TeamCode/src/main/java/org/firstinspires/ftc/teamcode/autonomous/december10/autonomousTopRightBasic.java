@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
-@Autonomous(name = "Autonomous Top Right BASIC (HouseT)")
+@Autonomous(name = "Autonomous Top Right Basic (HouseT)")
 @Disabled
 public class autonomousTopRightBasic extends autonomousFrame {
 
