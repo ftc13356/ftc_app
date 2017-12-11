@@ -36,10 +36,10 @@ public class chassis {
         op.telemetry.addData("Chassis", "Initializing");
 
         // Initializing the hardware variables
-        motorLeftfront = op.hardwareMap.get(DcMotor.class, "motorLeftfront");
-        motorRightfront = op.hardwareMap.get(DcMotor.class, "motorRightfront");
-        motorLeftback = op.hardwareMap.get(DcMotor.class, "motorLeftback");
-        motorRightback = op.hardwareMap.get(DcMotor.class, "motorRightback");
+        motorLeftfront = op.hardwareMap.dcMotor.get("motorLeftfront");
+        motorRightfront = op.hardwareMap.dcMotor.get("motorRightfront");
+        motorLeftback = op.hardwareMap.dcMotor.get("motorLeftback");
+        motorRightback = op.hardwareMap.dcMotor.get("motorRightback");
 
         // This tells the direction of the motor
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
@@ -76,15 +76,20 @@ public class chassis {
             speedControl = 1;
             display = 0;
         }
+        // This sets the speed mode to medium when the "X" button is pressed (Medium Speed)
+        else if (op.gamepad1.x) {
+            speedControl = 0.5;
+            display = 1;
+        }
         // This sets the speed mode to slow when the "B" button is pressed (Slow Speed)
         else if (op.gamepad1.b) {
             speedControl = 0.25;
-            display = 1;
-        }
-        // This sets the speed mode to "Tetrix" when the "X" button is pressed (Mid Speed)
-        else if (op.gamepad1.x) {
-            speedControl = 0.5;
             display = 2;
+        }
+        // This sets the speed mode to micro-adjustment speed when the left trigger is held down
+        else if(op.gamepad1.left_trigger != 0) {
+            speedControl = 0.1;
+            display = 3;
         }
 
         // Forward:  +LF -RF +LB -RB
@@ -113,10 +118,13 @@ public class chassis {
             op.telemetry.addData("SpeedMode", "Fast");
         }
         else if (display == 1) {
-            op.telemetry.addData("SpeedMode", "Slow");
+            op.telemetry.addData("SpeedMode", "Medium");
         }
         else if (display == 2) {
-            op.telemetry.addData("SpeedMode", "Tetrix");
+            op.telemetry.addData("SpeedMode", "Slow");
+        }
+        else if (display == 3) {
+            op.telemetry.addData("SpeedMode", "Micro-Adjustment");
         }
 
     }
