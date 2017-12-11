@@ -89,8 +89,8 @@ public class arm {
 
         // This closes the glyph claw when the "X" button is pressed
         if (op.gamepad2.x) {
-            glyphLeftPosition = 0.3;
-            glyphRightPosition = 0.7;
+            glyphLeftPosition = 0.2;
+            glyphRightPosition = 0.8;
             op.telemetry.addData("Glyph Servo Status", "Closed");
         }
         // This closes the glyph claw when the "A" button is pressed
@@ -129,6 +129,6 @@ public class arm {
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
 
         op.telemetry.addData("Left Glyph Servo Position", glyphLeftPosition);
-        op.telemetry.addData("Right Glyph Servo Position", glyphClawRight);
+        op.telemetry.addData("Right Glyph Servo Position", glyphRightPosition);
     }
 }

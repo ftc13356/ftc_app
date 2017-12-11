@@ -88,7 +88,7 @@ public class chassis {
         }
         // This sets the speed mode to micro-adjustment speed when the left trigger is held down
         else if(op.gamepad1.left_trigger != 0) {
-            speedControl = 0.1;
+            speedControl = 0.15;
             display = 3;
         }
 
@@ -113,7 +113,6 @@ public class chassis {
         motorRightback.setPower(motorRightbackPower);
 
         // This prints speed mode on the screen
-        op.telemetry.addData("Mode", "Teleop");
         if (display == 0) {
             op.telemetry.addData("SpeedMode", "Fast");
         }
