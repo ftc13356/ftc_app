@@ -80,8 +80,8 @@ public class arm {
             armRightPosition = 1;
             op.telemetry.addData("Arm Servo Status", "Open Completely");
         }
-        // This opens the arm claw partially when the "Y" button is pressed
-        else if (op.gamepad2.y) {
+        // This opens the arm claw partially when the "A" button is pressed
+        else if (op.gamepad2.a) {
             armLeftPosition = 0.5;
             armRightPosition = 0.5;
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
@@ -93,14 +93,14 @@ public class arm {
             glyphRightPosition = 0.8;
             op.telemetry.addData("Glyph Servo Status", "Closed");
         }
-        // This closes the glyph claw when the "A" button is pressed
-        else if (op.gamepad2.a) {
+        // This closes the glyph claw when the "B" button is pressed
+        else if (op.gamepad2.b) {
             glyphLeftPosition = 1;
             glyphRightPosition = 0;
             op.telemetry.addData("Glyph Servo Status", "Open Completely");
         }
-        // This closes the glyph claw when the "B" button is pressed
-        else if (op.gamepad2.b) {
+        // This closes the glyph claw partially when the "Y" button is pressed
+        else if (op.gamepad2.y) {
             glyphLeftPosition = 0.4;
             glyphRightPosition = 0.6;
             op.telemetry.addData("Glyph Servo Status", "Open Slightly");
