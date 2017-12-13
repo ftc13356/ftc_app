@@ -25,9 +25,12 @@ public class autonomousBottomRight extends autonomousFrame {
         //right--++ (-)
 
         //To safe zone - facing balancing stone
+        armMotor.setPower(-0.25);
+        sleep(1500);
+        armMotor.setPower(0);
         encoderDrive(-26, 0, 0, 0.5);
-        encoderDrive(0, 11.35, 0, 0.4);
-        encoderDrive(-7, 0, 0, 0.5);
+        encoderDrive(0, 12, 0, 0.4);
+        encoderDrive(-7.25, 0, 0, 0.5);
         glyphClawLeft.setPosition(1);
         glyphClawRight.setPosition(0);
         telemetry.addData("Task", "Glyph In");
