@@ -25,6 +25,8 @@ public class chassis {
 
     private int display = 0;
 
+    private int hold = 0;
+
     // Creates OpMode
     private OpMode op;
     chassis(OpMode opmode){
@@ -75,21 +77,35 @@ public class chassis {
         if (op.gamepad1.a) {
             speedControl = 1;
             display = 0;
+            hold = 0;
         }
         // This sets the speed mode to medium when the "X" button is pressed (Medium Speed)
         else if (op.gamepad1.x) {
             speedControl = 0.5;
             display = 1;
+            hold = 1;
         }
         // This sets the speed mode to slow when the "B" button is pressed (Slow Speed)
         else if (op.gamepad1.b) {
             speedControl = 0.25;
             display = 2;
+            hold = 2;
         }
         // This sets the speed mode to micro-adjustment speed when the left trigger is held down
         else if(op.gamepad1.left_trigger != 0) {
             speedControl = 0.15;
             display = 3;
+        }
+        else if(op.gamepad1.left_trigger != 0) {
+            if (hold == 0) {
+                speedControl = 1;
+            }
+            if (hold == 1) {
+                speedControl = 0.5;
+            }
+            if (hold == 2) {
+                speedControl = 0.25;
+            }
         }
 
         // Forward:  +LF -RF +LB -RB
