@@ -96,15 +96,18 @@ public class chassis {
             speedControl = 0.15;
             display = 3;
         }
-        else if(op.gamepad1.left_trigger != 0) {
+        else if(op.gamepad1.left_trigger == 0) {
             if (hold == 0) {
                 speedControl = 1;
+                display = 0;
             }
             if (hold == 1) {
                 speedControl = 0.5;
+                display = 1;
             }
             if (hold == 2) {
                 speedControl = 0.25;
+                display = 2;
             }
         }
 
