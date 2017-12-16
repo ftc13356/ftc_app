@@ -8,6 +8,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 
+///////////////////////////////////////////////////////////////////////////////
+// Purpose: Basic Autonomous Frame
+// Author: Jonathan Ma, Ansh Gandhi
+///////////////////////////////////////////////////////////////////////////////
+
 @Autonomous(name="Basic Autonomous Frame")
 @Disabled
 public abstract class autonomousFrame extends LinearOpMode {
@@ -40,6 +45,7 @@ public abstract class autonomousFrame extends LinearOpMode {
                                           (wheel_diameter_inches * Math.PI);
     static final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
 
+    // Initialize Hardware Map
     public void initializeHardwareMap() {
         motorLeftfront = hardwareMap.dcMotor.get("motorLeftfront");
         motorRightfront = hardwareMap.dcMotor.get("motorRightfront");
@@ -52,6 +58,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
     }
 
+    // Set Motor Direction
     public void setMotorDirection() {
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
         motorRightfront.setDirection(DcMotor.Direction.FORWARD);
@@ -62,7 +69,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     /*
 
-    Following Functions are NOT OPERATIONAL (yet) - Jonathan
+    Following Functions are NOT OPERATIONAL (12/15/17) - Jonathan
 
     // Arm Position Function (Arm, Encoder)
     public void armPosition(int position) {
