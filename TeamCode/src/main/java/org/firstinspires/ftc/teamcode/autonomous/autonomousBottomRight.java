@@ -37,9 +37,8 @@ public class autonomousBottomRight extends autonomousFrame {
 
         // Drive to cryptobox
         encoderDrive(-26, 0, 0, 0.5);
-
-        encoderDrive(0, 12.5, 0, 0.4);
-        encoderDrive(-7.5, 0, 0, 0.5);
+        encoderDrive(0, 12.75, 0, 0.4);
+        encoderDrive(-8, 0, 0, 0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
