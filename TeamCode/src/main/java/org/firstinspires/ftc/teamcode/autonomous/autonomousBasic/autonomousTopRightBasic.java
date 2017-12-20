@@ -1,19 +1,19 @@
-package org.firstinspires.ftc.teamcode.autonomous.december10;
+package org.firstinspires.ftc.teamcode.autonomous.autonomousBasic;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
-@Autonomous(name = "Autonomous Bottom Right Basic")
+@Autonomous(name = "Autonomous Top Right Basic (HouseT)")
 @Disabled
-public class autonomousBottomRightBasic extends autonomousFrame {
+public class autonomousTopRightBasic extends autonomousFrame {
 
     @Override
     public void runOpMode() {
 
-        initializeHardwareMap();
-        setMotorDirection();
+       initializeHardwareMap();
+       setMotorDirection();
 
         waitForStart();
 
@@ -23,9 +23,10 @@ public class autonomousBottomRightBasic extends autonomousFrame {
         //left ++-- (+)
         //right--++ (-)
 
-        //To safe zone
-        encoderDrive(-34, 0, 0, 0.5);
-        encoderDrive(0, 11, 0, 0.5);
+        //To safe zone - facing balancing stone
+        encoderDrive(33, 0, 0, 0.5);
+        encoderDrive(0, 12, 0, 0.5);
+
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 

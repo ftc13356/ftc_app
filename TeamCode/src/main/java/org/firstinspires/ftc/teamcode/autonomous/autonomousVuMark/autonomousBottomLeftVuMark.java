@@ -1,6 +1,8 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.autonomousVuMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program for Bottom Left
@@ -13,8 +15,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Left (HouseB)")
-public class autonomousBottomLeft extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Left VuMark (HouseB)")
+public class autonomousBottomLeftVuMark extends autonomousFrame {
 
     @Override
     public void runOpMode() {

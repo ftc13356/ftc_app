@@ -1,6 +1,9 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.autonomousGlyph;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program for Top Left
@@ -13,8 +16,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Top Left")
-public class autonomousTopLeft extends autonomousFrame {
+@Autonomous(name = "Autonomous Top Left Glyph")
+@Disabled
+public class autonomousTopLeftGlyph extends autonomousFrame {
 
     @Override
     public void runOpMode() {

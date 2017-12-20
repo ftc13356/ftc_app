@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.autonomousVuMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
+
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Top Right
+// Purpose: Autonomous Program for Bottom Right
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -13,8 +15,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Top Right (HouseT)")
-public class autonomousTopRight extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Right VuMark")
+public class autonomousBottomRightVuMark extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -36,9 +38,9 @@ public class autonomousTopRight extends autonomousFrame {
         armMotor.setPower(0);
 
         // Drive to cryptobox
-        encoderDrive(35, 0, 0, 0.5);
-        encoderDrive(0, 0, -91, 0.4);
-        encoderDrive(-9.75, 0, 0, 0.5);
+        encoderDrive(-26, 0, 0, 0.5);
+        encoderDrive(0, 12.75, 0, 0.4);
+        encoderDrive(-8, 0, 0, 0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
