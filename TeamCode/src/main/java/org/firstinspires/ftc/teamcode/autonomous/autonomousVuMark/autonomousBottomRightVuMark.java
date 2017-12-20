@@ -1,7 +1,14 @@
 package org.firstinspires.ftc.teamcode.autonomous.autonomousVuMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
+import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -24,6 +31,22 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         // Initialization
         initializeHardwareMap();
         setMotorDirection();
+        ElapsedTime runtime = new ElapsedTime();
+
+        // Vuforia Initialization
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+        parameters.vuforiaLicenseKey = "Play License Key Here";
+        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
+        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
+        VuforiaTrackable relicTemplate = relicTrackables.get(0);
+        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+        telemetry.addData("Vuforia Status", "Initialized");
+        telemetry.update();
+
+        // Defining Variables
+        boolean detect = false;
 
         // Set glyph claw to hold glyph
         glyphClawLeft.setPosition(0.3);
@@ -38,9 +61,37 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         armMotor.setPower(0);
 
         // Drive to cryptobox
-        encoderDrive(-26, 0, 0, 0.5);
-        encoderDrive(0, 12.75, 0, 0.4);
-        encoderDrive(-8, 0, 0, 0.5);
+        encoderDrive(-26,0,0,0.5);
+
+        // Changes distance depending on VuMark
+        relicTrackables.activate();
+        while (opModeIsActive() && detect == false && getRuntime()<=5) {
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark == RelicRecoveryVuMark.LEFT) {
+                telemetry.addData("VuMark Identified:", "Left");
+                encoderDrive(0,18.75,0,0.4);
+                detect = true;
+            }
+            if (vuMark == RelicRecoveryVuMark.CENTER) {
+                telemetry.addData("VuMark Identified:", "Center");
+                encoderDrive(0,12.75,0,0.4);
+                detect = true;
+            }
+            if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                telemetry.addData("VuMark Identified:", "Right");
+                encoderDrive(0,6.75,0,0.4);
+                detect = true;
+            }
+
+            telemetry.update();
+        }
+
+        if (detect == false) {
+            telemetry.addData("VuMark Identified:", "Unknown");
+            encoderDrive(35,0,0,0.4);
+        }
+
+        encoderDrive(-8,0,0,0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
