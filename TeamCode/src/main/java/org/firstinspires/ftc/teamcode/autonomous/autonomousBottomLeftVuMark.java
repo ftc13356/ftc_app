@@ -1,7 +1,6 @@
-package org.firstinspires.ftc.teamcode.autonomous.autonomousVuMark;
+package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -9,10 +8,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Bottom Right
+// Purpose: Autonomous Program for reading VuMark (Bottom Left)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -22,8 +20,8 @@ import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Right VuMark")
-public class autonomousBottomRightVuMark extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Left VuMark (HouseB)")
+public class autonomousBottomLeftVuMark extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -41,7 +39,7 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
         VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate"); // can help in debugging; otherwise not necessary
+        relicTemplate.setName("relicVuMarkTemplate");
         telemetry.addData("Vuforia Status", "Initialized");
         telemetry.update();
 
@@ -69,17 +67,17 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 telemetry.addData("VuMark Identified:", "Left");
-                encoderDrive(0,18.75,0,0.4);
+                encoderDrive(0,-17.5,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 telemetry.addData("VuMark Identified:", "Center");
-                encoderDrive(0,12.75,0,0.4);
+                encoderDrive(0,-11.5,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 telemetry.addData("VuMark Identified:", "Right");
-                encoderDrive(0,6.75,0,0.4);
+                encoderDrive(0,-5.5,0,0.4);
                 detect = true;
             }
 
@@ -91,7 +89,7 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
             encoderDrive(35,0,0,0.4);
         }
 
-        encoderDrive(-8,0,0,0.5);
+        encoderDrive(-7,0,0,0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

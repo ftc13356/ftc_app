@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.autonomousGlyph;
+package org.firstinspires.ftc.teamcode.autonomous.previousAutonomous.autonomousGlyph;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Top Right
+// Purpose: Autonomous Program to score 1 glyph in cryptobox center column (Top Right)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 

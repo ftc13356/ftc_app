@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.autonomous.autonomousGlyph;
+package org.firstinspires.ftc.teamcode.autonomous.previousAutonomous.autonomousGlyph;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Top Left
+// Purpose: Autonomous Program to score 1 glyph in cryptobox center column (Bottom Left)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,9 +16,9 @@ import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Top Left Glyph")
+@Autonomous(name = "Autonomous Bottom Left Glyph (HouseB)")
 @Disabled
-public class autonomousTopLeftGlyph extends autonomousFrame {
+public class autonomousBottomLeftGlyph extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -40,9 +40,9 @@ public class autonomousTopLeftGlyph extends autonomousFrame {
         armMotor.setPower(0);
 
         // Drive to cryptobox
-        encoderDrive(35, 0, 0, 0.5);
-        encoderDrive(0, 0, 91, 0.4);
-        encoderDrive(-9.75, 0, 0, 0.5);
+        encoderDrive(-26, 0, 0, 0.5);
+        encoderDrive(0, -11.5, 0, 0.4);
+        encoderDrive(-7, 0, 0, 0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
