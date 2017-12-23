@@ -11,6 +11,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
+import static org.firstinspires.ftc.teamcode.key.key;
+
 @Autonomous(name = "Autonomous Bottom Left OLD (HouseB)")
 @Disabled
 public class autonomousBottomLeftOLD extends autonomousFrame {
@@ -23,7 +25,7 @@ public class autonomousBottomLeftOLD extends autonomousFrame {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = "Put License Key Here";
+        parameters.vuforiaLicenseKey = key;
         parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
         this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
         VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");

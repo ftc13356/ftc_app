@@ -5,6 +5,9 @@
 # Java class files
 *.class
 
+# Sensitive info
+key.java
+
 # generated files
 bin/
 gen/
