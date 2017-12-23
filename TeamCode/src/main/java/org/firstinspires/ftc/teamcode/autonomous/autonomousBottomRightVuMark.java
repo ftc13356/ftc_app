@@ -58,47 +58,39 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
 
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        // while (opModeIsActive() && detect == false && getRuntime()<=5) {
         while (opModeIsActive() && detect == false) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 telemetry.addData("VuMark Identified:", "Left");
                 telemetry.update();
-
                 encoderDrive(26,0,0,0.4);
                 encoderDrive(0,0,181,0.4);
                 encoderDrive(-6,0,0,0.4);
                 encoderDrive(0,6.5,0,0.4);
+                encoderDrive(-6,0,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 telemetry.addData("VuMark Identified:", "Center");
                 telemetry.update();
-
                 encoderDrive(26,0,0,0.4);
                 encoderDrive(0,0,181,0.4);
                 encoderDrive(-6,0,0,0.4);
                 encoderDrive(0,12.5,0,0.4);
+                encoderDrive(-6,0,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 telemetry.addData("VuMark Identified:", "Right");
                 telemetry.update();
-
                 encoderDrive(26,0,0,0.4);
                 encoderDrive(0,0,181,0.4);
                 encoderDrive(-6,0,0,0.4);
                 encoderDrive(0,18.5,0,0.4);
+                encoderDrive(-6,0,0,0.4);
                 detect = true;
             }
-
-            // telemetry.update();
         }
-
-        /*if (detect == false) {
-            telemetry.addData("VuMark Identified:", "Unknown");
-            encoderDrive(35,0,0,0.4);
-        }*/
 
         // Release glyph
         glyphClawLeft.setPosition(1);
