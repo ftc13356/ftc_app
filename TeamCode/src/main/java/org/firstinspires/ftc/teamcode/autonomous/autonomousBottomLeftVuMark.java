@@ -56,6 +56,7 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
 
         runtime.reset();
 
+        // Pushing glyph, facing away from audience
         // Move arm up
         armMotor.setPower(-0.25);
         sleep(1500);
@@ -70,7 +71,6 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
                 telemetry.update();
                 encoderDrive(-28,0,0,0.4);
                 encoderDrive(0,-18.75,0,0.3);
-                encoderDrive(-5.25,0,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
@@ -78,7 +78,6 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
                 telemetry.update();
                 encoderDrive(-28,0,0,0.4);
                 encoderDrive(0,-11.5,0,0.3);
-                encoderDrive(-5.25,0,0,0.4);
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
@@ -86,10 +85,11 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
                 telemetry.update();
                 encoderDrive(-28,0,0,0.4);
                 encoderDrive(0,-3.75,0,0.3);
-                encoderDrive(-5.25,0,0,0.4);
                 detect = true;
             }
         }
+
+        encoderDrive(-5.25,0,0,0.4);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
@@ -102,6 +102,7 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
+        // Move arm back down
         armMotor.setPower(0.15);
         sleep(1300);
         armMotor.setPower(0);
