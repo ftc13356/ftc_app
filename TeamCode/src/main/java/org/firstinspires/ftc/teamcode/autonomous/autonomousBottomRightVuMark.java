@@ -47,6 +47,8 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
 
         // Defining Variables
         boolean detect = false;
+        double distance = 0;
+        String displayText = "";
 
         // Set glyph claw to hold glyph
         glyphClawLeft.setPosition(0.3);
@@ -58,39 +60,35 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
 
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        while (opModeIsActive() && detect == false) {
+        while (opModeIsActive() && detect == false && getRuntime()<5) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("VuMark Identified:", "Left");
-                telemetry.update();
-                encoderDrive(26,0,0,0.4);
-                encoderDrive(0,0,181,0.4);
-                encoderDrive(-6,0,0,0.4);
-                encoderDrive(0,6.5,0,0.4);
-                encoderDrive(-6,0,0,0.4);
+                displayText = "Left";
+                distance = 6.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("VuMark Identified:", "Center");
-                telemetry.update();
-                encoderDrive(26,0,0,0.4);
-                encoderDrive(0,0,181,0.4);
-                encoderDrive(-6,0,0,0.4);
-                encoderDrive(0,12.5,0,0.4);
-                encoderDrive(-6,0,0,0.4);
+                displayText = "Center";
+                distance = 12.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("VuMark Identified:", "Right");
-                telemetry.update();
-                encoderDrive(26,0,0,0.4);
-                encoderDrive(0,0,181,0.4);
-                encoderDrive(-6,0,0,0.4);
-                encoderDrive(0,18.5,0,0.4);
-                encoderDrive(-6,0,0,0.4);
+                displayText = "Right";
+                distance = 18.5;
                 detect = true;
             }
         }
+        if (detect == false){
+            displayText = "Unknown";
+            distance = 12.5;
+        }
+        telemetry.addData("VuMark Identified:", displayText);
+        telemetry.update();
+        encoderDrive(26,0,0,0.4);
+        encoderDrive(0,0,181,0.4);
+        encoderDrive(-6,0,0,0.4);
+        encoderDrive(0,distance,0,0.4);
+        encoderDrive(-6,0,0,0.4);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

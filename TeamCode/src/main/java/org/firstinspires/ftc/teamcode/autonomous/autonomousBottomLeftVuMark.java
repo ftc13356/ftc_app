@@ -47,6 +47,8 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
 
         // Defining Variables
         boolean detect = false;
+        double distance = 0;
+        String displayText = "";
 
         // Set glyph claw to hold glyph
         glyphClawLeft.setPosition(0.3);
@@ -64,31 +66,32 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
 
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        while (opModeIsActive() && detect == false) {
+        while (opModeIsActive() && detect == false && getRuntime()<5) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("VuMark Identified:", "Left");
-                telemetry.update();
-                encoderDrive(-28,0,0,0.4);
-                encoderDrive(0,-18.75,0,0.3);
+                displayText = "Left";
+                distance = -18.75;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("VuMark Identified:", "Center");
-                telemetry.update();
-                encoderDrive(-28,0,0,0.4);
-                encoderDrive(0,-11.5,0,0.3);
+                displayText = "Left";
+                distance = -11.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("VuMark Identified:", "Right");
-                telemetry.update();
-                encoderDrive(-28,0,0,0.4);
-                encoderDrive(0,-3.75,0,0.3);
+                displayText = "Left";
+                distance = -3.75;
                 detect = true;
             }
         }
-
+        if (detect == false){
+            displayText = "Unknown";
+            distance = -11.5;
+        }
+        telemetry.addData("VuMark Identified:", displayText);
+        telemetry.update();
+        encoderDrive(-28,0,0,0.4);
+        encoderDrive(0,distance,0,0.3);
         encoderDrive(-5.25,0,0,0.4);
 
         // Release glyph
