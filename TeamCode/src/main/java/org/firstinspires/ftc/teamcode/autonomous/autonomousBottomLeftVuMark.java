@@ -31,7 +31,6 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
         // Initialization
         initializeHardwareMap();
         setMotorDirection();
-        ElapsedTime runtime = new ElapsedTime();
 
         // Vuforia Initialization
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -49,6 +48,7 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
         boolean detect = false;
         double distance = 0;
         String displayText = "";
+        ElapsedTime runtime = new ElapsedTime();
 
         // Set glyph claw to hold glyph
         glyphClawLeft.setPosition(0.3);
