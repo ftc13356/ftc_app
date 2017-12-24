@@ -53,7 +53,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
  */
 
 @Autonomous(name = "colorSensorTest")
-@Disabled
+// @Disabled
 public class colorSensorTest extends LinearOpMode {
 
     ColorSensor sensorColor;
