@@ -66,7 +66,7 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
 
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        while (opModeIsActive() && detect == false && getRuntime()<5) {
+        while (opModeIsActive() && detect == false && runtime.milliseconds() <= 5000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";

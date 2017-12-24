@@ -61,7 +61,7 @@ public class autonomousTopRightVuMark extends autonomousFrame {
         // Pulling glyph, facing away from audience - align 1 inch back
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        while (opModeIsActive() && detect == false && getRuntime()<5) {
+        while (opModeIsActive() && detect == false && runtime.milliseconds() <= 5000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";
