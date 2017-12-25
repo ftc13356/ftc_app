@@ -19,6 +19,7 @@ public class arm {
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
+    // private Servo ???;
 
     private Servo glyphClawLeft;
     private Servo glyphClawRight;
@@ -50,6 +51,8 @@ public class arm {
 
         // This tells the direction of the motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         op.telemetry.addData("Arm", "Initialized");
     }
@@ -104,6 +107,18 @@ public class arm {
             glyphLeftPosition = 0.4;
             glyphRightPosition = 0.6;
             op.telemetry.addData("Glyph Servo Status", "Open Slightly");
+        }
+
+        if (op.gamepad2.dpad_down) {
+            armMotor.setTargetPosition(-1900);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            op.telemetry.addData("Goal Position", "%7d", -1900);
+            armMotor.setPower(0.4);
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            armLeftPosition = 0.7;
+            armRightPosition = 0.3;
+            op.telemetry.addData("Arm Servo Status", "Closed");
         }
 
         // The left stick is used to raise and lower the arm
