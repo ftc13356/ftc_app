@@ -19,7 +19,7 @@ public class arm {
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
-    // private Servo ???;
+    private Servo rotateServo;
 
     private Servo glyphClawLeft;
     private Servo glyphClawRight;
@@ -32,6 +32,8 @@ public class arm {
 
     private double armSpeedControl = 0.5;
 
+    private double armMotorPower = 0;
+
     // Creates OpMode
     private OpMode op;
     arm(OpMode opmode){
@@ -42,10 +44,11 @@ public class arm {
 
         op.telemetry.addData("Arm", "Initializing");
 
-        // This is initializing the hardware variables
-        armMotor = op.hardwareMap.get(DcMotor.class, "armMotor");
+        // Initializing the hardware variables
+        armMotor = op.hardwareMap.dcMotor.get("armMotor");
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
+        rotateServo = op.hardwareMap.servo.get("rotateServo");
         glyphClawLeft = op.hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = op.hardwareMap.servo.get("glyphClawRight");
 
@@ -67,9 +70,6 @@ public class arm {
 
     // This code will run constantly after the previous part is ran
     public void loop() {
-
-        // Some variables are being defined
-        double armMotorPower;
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
@@ -112,20 +112,19 @@ public class arm {
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(-1900);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", "%7d", -1900);
-            armMotor.setPower(0.4);
-            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-
-            armLeftPosition = 0.7;
-            armRightPosition = 0.3;
-            op.telemetry.addData("Arm Servo Status", "Closed");
+            op.telemetry.addData("Goal Position", -1900);
+            armMotorPower = 0.4;
         }
 
         // The left stick is used to raise and lower the arm
-        armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+        if ((-1950 <= armMotor.getCurrentPosition() && armMotor.getCurrentPosition() <= -1850) || !armMotor.isBusy()) {
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+        }
 
         // The calculated power is then applied to the motors
         armMotor.setPower(armMotorPower);
+        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
         // Sets Left Position and Right Position
         // Reads Left Position and Reads Right Position
