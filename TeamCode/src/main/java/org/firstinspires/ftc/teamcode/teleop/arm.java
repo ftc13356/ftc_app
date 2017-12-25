@@ -31,8 +31,10 @@ public class arm {
     private double glyphRightPosition = 0;
 
     private double armSpeedControl = 0.5;
-
     private double armMotorPower = 0;
+
+    private final int targetValue = 1900;
+    private final int encoderPositionError = 50;
 
     // Creates OpMode
     private OpMode op;
@@ -110,14 +112,16 @@ public class arm {
         }
 
         if (op.gamepad2.dpad_down) {
-            armMotor.setTargetPosition(-1900);
+            armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            op.telemetry.addData("Goal Position", -1900);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
             armMotorPower = 0.4;
         }
 
         // The left stick is used to raise and lower the arm
-        if ((-1950 <= armMotor.getCurrentPosition() && armMotor.getCurrentPosition() <= -1850) || !armMotor.isBusy()) {
+        if ((targetValue - encoderPositionError <= armMotor.getCurrentPosition() &&
+                armMotor.getCurrentPosition() <= targetValue + encoderPositionError)
+                || !armMotor.isBusy()) {
             armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
         }
