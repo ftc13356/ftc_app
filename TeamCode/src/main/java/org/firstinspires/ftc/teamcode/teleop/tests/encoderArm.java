@@ -37,6 +37,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Arm with Encoder")
+@Disabled
 public class encoderArm extends OpMode {
 
     // This is declaring the hardware.
