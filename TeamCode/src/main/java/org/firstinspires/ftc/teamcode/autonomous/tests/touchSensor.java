@@ -34,13 +34,15 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
+
 /*
  * This is an example LinearOpMode that shows how to use
  * a REV Robotics Touch Sensor.
  */
 @Autonomous(name = "Touch Sensor")
 // @Disabled
-public class touchSensor extends LinearOpMode {
+public class touchSensor extends autonomousFrame {
     /**
      * The REV Robotics Touch Sensor
      * is treated as a digital channel.  It is HIGH if the button is unpressed.
@@ -51,30 +53,34 @@ public class touchSensor extends LinearOpMode {
      * The lower (first) pin stays unconnected.*
      */
 
-    private DigitalChannel touch;
+    private DigitalChannel touchSensor;
 
     @Override
     public void runOpMode() {
 
-        // get a reference to our digitalTouch object.
-        touch = hardwareMap.digitalChannel.get("touch");
+        // Get a reference to our touchSensor object.
+        touchSensor = hardwareMap.digitalChannel.get("touchSensor");
+        initializeHardwareMap();
+        setMotorDirection();
 
-        // set the digital channel to input.
-        touch.setMode(DigitalChannel.Mode.INPUT);
+        // Set the digital channel to input.
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
-        // wait for the start button to be pressed.
+        // Wait for the start button to be pressed.
         waitForStart();
 
-        // while the op mode is active, loop and read the light levels.
+        // While the op mode is active, loop and read the light levels.
         // Note we use opModeIsActive() as our loop condition because it is an interruptible method.
         while (opModeIsActive()) {
 
-            // send the info back to driver station using telemetry function.
-            // if the digital channel returns true it's HIGH and the button is unpressed.
-            if (touch.getState()) {
+            // Send the info back to driver station using telemetry function
+            // If the digital channel returns true it's HIGH and the button is unpressed.
+            if (touchSensor.getState()) {
+                encoderDrive(12,0,0,0.25);
                 telemetry.addData("Touch Sensor", "Is Not Pressed");
                 telemetry.update();
             } else {
+                encoderDrive(-12,0,0,0.25);
                 telemetry.addData("Touch Sensor", "Is Pressed");
                 telemetry.update();
             }
