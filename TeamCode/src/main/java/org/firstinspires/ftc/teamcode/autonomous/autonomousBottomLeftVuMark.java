@@ -31,18 +31,7 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
         // Initialization
         initializeHardwareMap();
         setMotorDirection();
-
-        // Vuforia Initialization
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = key;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate");
-        telemetry.addData("Vuforia Status", "Initialized");
-        telemetry.update();
+        initializeVuforia();
 
         // Defining Variables
         boolean detect = false;
