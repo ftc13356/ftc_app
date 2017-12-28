@@ -35,7 +35,7 @@ public class arm {
 
     // Creates OpMode
     private OpMode op;
-    arm(OpMode opmode){
+    arm(OpMode opmode) {
         op = opmode;
     }
 
@@ -57,6 +57,7 @@ public class arm {
         // This tells the direction of the motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
 
+        // Reset encoder
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         op.telemetry.addData("Arm", "Initialized");
@@ -92,6 +93,7 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
+        // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -107,8 +109,8 @@ public class arm {
             armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
         }
 
-        // if arm's motion is downward(+) and hit touch sensor, stop its movement
-        //  otherwise (motion is upward(-)), allow it to move
+        // If arm's motion is downward(+) and it hits touch sensor, stop its movement,
+        // otherwise (motion is upward(-)), allow it to move
         if (touchSensor.getState() == false && armMotorPower > 0) {
             armMotorPower = 0;
             op.telemetry.addData("Touch Sensor", "Is Pressed, Arm Stopping");
@@ -116,7 +118,6 @@ public class arm {
 
         // The calculated power is then applied to the motors
         armMotor.setPower(armMotorPower);
-        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
 
         // Sets Left Position and Right Position
         // Reads Left Position and Reads Right Position
@@ -129,5 +130,6 @@ public class arm {
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
 
+        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
     }
 }

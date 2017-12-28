@@ -29,7 +29,7 @@ public class chassis {
 
     // Creates OpMode
     private OpMode op;
-    chassis(OpMode opmode){
+    chassis(OpMode opmode) {
         op = opmode;
     }
 
@@ -96,6 +96,8 @@ public class chassis {
             speedControl = 0.15;
             display = 3;
         }
+
+        // Allows micro-adjustment mode to work only when left trigger is held down
         else if(op.gamepad1.left_trigger == 0) {
             if (hold == 0) {
                 speedControl = 1;
