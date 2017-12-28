@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -21,6 +22,7 @@ public class arm {
     private Servo armClawRight;
     private Servo rotateServo;
 
+    private DigitalChannel touchSensor;
 
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
@@ -46,6 +48,11 @@ public class arm {
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
         rotateServo = op.hardwareMap.servo.get("rotateServo");
+
+        touchSensor = op.hardwareMap.digitalChannel.get("touchSensor");
+
+        // Set the digital channel to input
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // This tells the direction of the motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -98,6 +105,13 @@ public class arm {
                 || !armMotor.isBusy()) {
             armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+        }
+
+        // if arm's motion is downward(+) and hit touch sensor, stop its movement
+        //  otherwise (motion is upward(-)), allow it to move
+        if (touchSensor.getState() == false && armMotorPower > 0) {
+            armMotorPower = 0;
+            op.telemetry.addData("Touch Sensor", "Is Pressed, Arm Stopping");
         }
 
         // The calculated power is then applied to the motors
