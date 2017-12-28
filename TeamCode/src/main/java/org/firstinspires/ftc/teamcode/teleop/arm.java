@@ -21,14 +21,9 @@ public class arm {
     private Servo armClawRight;
     private Servo rotateServo;
 
-    private Servo glyphClawLeft;
-    private Servo glyphClawRight;
 
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
-
-    private double glyphLeftPosition = 1;
-    private double glyphRightPosition = 0;
 
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
@@ -51,8 +46,6 @@ public class arm {
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
         rotateServo = op.hardwareMap.servo.get("rotateServo");
-        glyphClawLeft = op.hardwareMap.servo.get("glyphClawLeft");
-        glyphClawRight = op.hardwareMap.servo.get("glyphClawRight");
 
         // This tells the direction of the motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -92,25 +85,6 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
-        // This closes the glyph claw when the "X" button is pressed
-        if (op.gamepad2.x) {
-            glyphLeftPosition = 0.2;
-            glyphRightPosition = 0.8;
-            op.telemetry.addData("Glyph Servo Status", "Closed");
-        }
-        // This closes the glyph claw when the "B" button is pressed
-        else if (op.gamepad2.b) {
-            glyphLeftPosition = 1;
-            glyphRightPosition = 0;
-            op.telemetry.addData("Glyph Servo Status", "Open Completely");
-        }
-        // This closes the glyph claw partially when the "Y" button is pressed
-        else if (op.gamepad2.y) {
-            glyphLeftPosition = 0.4;
-            glyphRightPosition = 0.6;
-            op.telemetry.addData("Glyph Servo Status", "Open Slightly");
-        }
-
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -137,16 +111,9 @@ public class arm {
         armLeftPosition = armClawLeft.getPosition();
         armRightPosition = armClawRight.getPosition();
 
-        glyphClawLeft.setPosition(glyphLeftPosition);
-        glyphClawRight.setPosition(glyphRightPosition);
-        glyphLeftPosition = glyphClawLeft.getPosition();
-        glyphRightPosition = glyphClawRight.getPosition();
-
         //This prints servo positions on the screen
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
 
-        op.telemetry.addData("Left Glyph Servo Position", glyphLeftPosition);
-        op.telemetry.addData("Right Glyph Servo Position", glyphRightPosition);
     }
 }
