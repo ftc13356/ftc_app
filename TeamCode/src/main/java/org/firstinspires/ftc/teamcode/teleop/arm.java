@@ -30,7 +30,7 @@ public class arm {
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
 
-    private final int targetValue = 1900;
+    private final int targetValue = -1500;
     private final int encoderPositionError = 50;
 
     // Creates OpMode
