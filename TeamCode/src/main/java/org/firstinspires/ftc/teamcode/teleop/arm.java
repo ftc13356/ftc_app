@@ -95,13 +95,20 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
+        //
         if (op.gamepad2.dpad_left) {
             rotatePosition = 0.75;
             op.telemetry.addData("Rotate Servo Status", "Down");
         }
+        //
         if (op.gamepad2.dpad_right) {
             rotatePosition = 0;
             op.telemetry.addData("Rotate Servo Status", "Up");
+        }
+        //
+        if (op.gamepad2.dpad_up) {
+            rotatePosition = 37.5;
+            op.telemetry.addData("Rotate Servo Status", "Middle");
         }
 
         // Moves arm to height needed to pick up glyph on the ground
