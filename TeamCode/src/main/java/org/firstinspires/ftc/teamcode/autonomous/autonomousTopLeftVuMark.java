@@ -95,6 +95,11 @@ public class autonomousTopLeftVuMark extends autonomousFrame {
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
+        // Move arm back down
+        armMotor.setPower(0.15);
+        sleep(1300);
+        armMotor.setPower(0);
+
         stop();
 
     }

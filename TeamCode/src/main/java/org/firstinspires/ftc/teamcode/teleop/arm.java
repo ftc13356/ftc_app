@@ -27,6 +27,8 @@ public class arm {
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
 
+    private double rotatePosition = 0.75;
+
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
 
@@ -76,8 +78,8 @@ public class arm {
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
-            armLeftPosition = 0.45;
-            armRightPosition = 0.55;
+            armLeftPosition = 0.7;
+            armRightPosition = 0.3;
             op.telemetry.addData("Arm Servo Status", "Closed");
         }
         // This opens the arm claw completely when the right bumper is pressed
@@ -88,10 +90,20 @@ public class arm {
         }
         // This opens the arm claw partially when the "A" button is pressed
         else if (op.gamepad2.a) {
-            armLeftPosition = 0.35;
-            armRightPosition = 0.65;
+            armLeftPosition = 0.5;
+            armRightPosition = 0.5;
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
+
+        if (op.gamepad2.dpad_left) {
+            rotatePosition = 0.75;
+            op.telemetry.addData("Rotate Servo Status", "Down");
+        }
+        if (op.gamepad2.dpad_right) {
+            rotatePosition = 0;
+            op.telemetry.addData("Rotate Servo Status", "Up");
+        }
+
         // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(targetValue);
@@ -110,9 +122,13 @@ public class arm {
 
         // If arm's motion is downward(+) and it hits touch sensor, stop its movement,
         // otherwise (motion is upward(-)), allow it to move
-        if (touchSensor.getState() == false && armMotorPower > 0) {
-            armMotorPower = 0;
-            op.telemetry.addData("Touch Sensor", "Is Pressed, Arm Stopping");
+        if (!touchSensor.getState()) {
+            op.telemetry.addData("Touch Sensor", "Is Pressed");
+
+            if (armMotorPower > 0) {
+                armMotorPower = 0;
+                op.telemetry.addData("Arm", "Is Stopped");
+            }
         }
 
         // The calculated power is then applied to the motors
@@ -125,9 +141,13 @@ public class arm {
         armLeftPosition = armClawLeft.getPosition();
         armRightPosition = armClawRight.getPosition();
 
-        //This prints servo positions on the screen
+        rotateServo.setPosition(rotatePosition);
+        rotatePosition = rotateServo.getPosition();
+
+        //This prints servo and encoder positions on the screen
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
+        op.telemetry.addData("Rotate Servo Position", rotateServo.getPosition()); //for now, then uses position
 
         op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
     }

@@ -29,13 +29,13 @@ public class glyphC {
 
     public void init() {
 
-        op.telemetry.addData("Arm", "Initializing");
+        op.telemetry.addData("Glyph Claw", "Initializing");
 
         // Initializing the hardware variables
         glyphClawLeft = op.hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = op.hardwareMap.servo.get("glyphClawRight");
 
-        op.telemetry.addData("Arm", "Initialized");
+        op.telemetry.addData("Glyph Claw", "Initialized");
     }
 
     // This code is just waiting for the Play button to be pressed
