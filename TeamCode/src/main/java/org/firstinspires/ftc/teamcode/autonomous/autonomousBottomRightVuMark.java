@@ -90,6 +90,16 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
+        // Move arm up
+        armMotor.setPower(-0.15);
+        sleep(500);
+        armMotor.setPower(0);
+        // Move arm back down
+        armMotor.setPower(0.15);
+        if (!touchSensor.getState()) {
+            armMotor.setPower(0.15);
+        }
+
         stop();
 
     }

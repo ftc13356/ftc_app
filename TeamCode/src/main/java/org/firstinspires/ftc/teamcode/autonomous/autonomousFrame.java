@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
@@ -37,6 +38,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     
     public Servo glyphClawLeft;
     public Servo glyphClawRight;
+
+    public DigitalChannel touchSensor;
     
     double leftPosition = 0;
     double rightPosition = 1;
@@ -65,6 +68,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         armClawRight = hardwareMap.servo.get("clawRight");
         glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
+        touchSensor = hardwareMap.digitalChannel.get("touchSensor");
     }
 
     // Set Motor Direction
@@ -74,6 +78,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorLeftback.setDirection(DcMotor.Direction.FORWARD);
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
         armMotor.setDirection(DcMotor.Direction.REVERSE);
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
     }
 
     // Vuforia Initialization
