@@ -53,18 +53,18 @@ public class touchSensor extends autonomousFrame {
      * The lower (first) pin stays unconnected.*
      */
 
-    private DigitalChannel touchSensor;
+    // private DigitalChannel touchSensor;
 
     @Override
     public void runOpMode() {
 
         // Get a reference to our touchSensor object.
-        touchSensor = hardwareMap.digitalChannel.get("touchSensor");
+        // touchSensor = hardwareMap.digitalChannel.get("touchSensor");
         initializeHardwareMap();
         setMotorDirection();
 
         // Set the digital channel to input.
-        touchSensor.setMode(DigitalChannel.Mode.INPUT);
+        // touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // Wait for the start button to be pressed.
         waitForStart();
