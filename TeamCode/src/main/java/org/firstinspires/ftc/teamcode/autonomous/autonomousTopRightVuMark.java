@@ -31,22 +31,13 @@ public class autonomousTopRightVuMark extends autonomousFrame {
         // Initialization
         initializeHardwareMap();
         setMotorDirection();
-        ElapsedTime runtime = new ElapsedTime();
-
-        // Vuforia Initialization
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = key;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.FRONT;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        VuforiaTrackables relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        VuforiaTrackable relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate");
-        telemetry.addData("Vuforia Status", "Initialized");
-        telemetry.update();
+        initializeVuforia();
 
         // Defining Variables
         boolean detect = false;
+        double distance = 0;
+        String displayText = "";
+        ElapsedTime runtime = new ElapsedTime();
 
         // Set glyph claw to hold glyph
         glyphClawLeft.setPosition(0.3);
@@ -54,45 +45,40 @@ public class autonomousTopRightVuMark extends autonomousFrame {
 
         waitForStart();
 
-        // To cryptobox - facing balancing stone
-        // Move arm up
-        armMotor.setPower(-0.25);
-        sleep(1500);
-        armMotor.setPower(0);
-
-        // Reset Timer
         runtime.reset();
 
+        // Pulling glyph, facing away from audience - align 1 inch back
         // Changes distance depending on VuMark
         relicTrackables.activate();
-        while (opModeIsActive() && detect == false && getRuntime()<=5) {
+        while (opModeIsActive() && detect == false && runtime.milliseconds() <= 5000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("VuMark Identified:", "Left");
-                encoderDrive(41,0,0,0.4);
+                displayText = "Left";
+                distance = 27;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("VuMark Identified:", "Center");
-                encoderDrive(35,0,0,0.4);
+                displayText = "Center";
+                distance = 33;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("VuMark Identified:", "Right");
-                encoderDrive(29,0,0,0.4);
+                displayText = "Right";
+                distance = 41;
                 detect = true;
             }
-
-            telemetry.update();
         }
-
-        if (detect == false) {
-            telemetry.addData("VuMark Identified:", "Unknown");
-            encoderDrive(35,0,0,0.4);
+        if (detect == false){
+            displayText = "Unknown";
+            distance = 33;
         }
+        telemetry.addData("VuMark Identified:", displayText);
+        telemetry.update();
+        encoderDrive(distance,0,0,0.4);
 
-        encoderDrive(0,0,-91,0.4);
-        encoderDrive(-9.75,0,0,0.5);
+        sleep(500);
+        encoderDrive(0,0,-91,0.3);
+        encoderDrive(-9.75,0,0,0.3);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

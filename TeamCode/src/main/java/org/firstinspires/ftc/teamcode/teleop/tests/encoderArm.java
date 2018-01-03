@@ -36,8 +36,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import static android.os.SystemClock.sleep;
-
 @TeleOp(name = "Arm with Encoder")
 @Disabled
 public class encoderArm extends OpMode {

@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -19,21 +20,22 @@ public class arm {
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
+    private Servo rotateServo;
 
-    private Servo glyphClawLeft;
-    private Servo glyphClawRight;
+    private DigitalChannel touchSensor;
 
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
 
-    private double glyphLeftPosition = 1;
-    private double glyphRightPosition = 0;
-
     private double armSpeedControl = 0.5;
+    private double armMotorPower = 0;
+
+    private final int targetValue = -1500;
+    private final int encoderPositionError = 50;
 
     // Creates OpMode
     private OpMode op;
-    arm(OpMode opmode){
+    arm(OpMode opmode) {
         op = opmode;
     }
 
@@ -41,15 +43,22 @@ public class arm {
 
         op.telemetry.addData("Arm", "Initializing");
 
-        // This is initializing the hardware variables
-        armMotor = op.hardwareMap.get(DcMotor.class, "armMotor");
+        // Initializing the hardware variables
+        armMotor = op.hardwareMap.dcMotor.get("armMotor");
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
-        glyphClawLeft = op.hardwareMap.servo.get("glyphClawLeft");
-        glyphClawRight = op.hardwareMap.servo.get("glyphClawRight");
+        rotateServo = op.hardwareMap.servo.get("rotateServo");
+
+        touchSensor = op.hardwareMap.digitalChannel.get("touchSensor");
+
+        // Set the digital channel to input
+        touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         // This tells the direction of the motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
+
+        // Reset encoder
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         op.telemetry.addData("Arm", "Initialized");
     }
@@ -64,9 +73,6 @@ public class arm {
 
     // This code will run constantly after the previous part is ran
     public void loop() {
-
-        // Some variables are being defined
-        double armMotorPower;
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
@@ -87,6 +93,7 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
+<<<<<<< HEAD
         // This closes the glyph claw when the "X" button is pressed
         if (op.gamepad2.x) {
             glyphLeftPosition = 0.2;
@@ -104,10 +111,30 @@ public class arm {
             glyphLeftPosition = 0.4;
             glyphRightPosition = 0.6;
             op.telemetry.addData("Glyph Servo Status", "Open Slightly");
+=======
+        // Moves arm to height needed to pick up glyph on the ground
+        if (op.gamepad2.dpad_down) {
+            armMotor.setTargetPosition(targetValue);
+            armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            op.telemetry.addData("Goal Position", "%7d", targetValue);
+            armMotorPower = 0.4;
+>>>>>>> 02d13288494ffa573b3f86e9d945a21aa6568ad0
         }
 
         // The left stick is used to raise and lower the arm
-        armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+        if ((targetValue - encoderPositionError <= armMotor.getCurrentPosition() &&
+                armMotor.getCurrentPosition() <= targetValue + encoderPositionError)
+                || !armMotor.isBusy()) {
+            armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            armMotorPower = op.gamepad2.left_stick_y * armSpeedControl;
+        }
+
+        // If arm's motion is downward(+) and it hits touch sensor, stop its movement,
+        // otherwise (motion is upward(-)), allow it to move
+        if (touchSensor.getState() == false && armMotorPower > 0) {
+            armMotorPower = 0;
+            op.telemetry.addData("Touch Sensor", "Is Pressed, Arm Stopping");
+        }
 
         // The calculated power is then applied to the motors
         armMotor.setPower(armMotorPower);
@@ -119,16 +146,10 @@ public class arm {
         armLeftPosition = armClawLeft.getPosition();
         armRightPosition = armClawRight.getPosition();
 
-        glyphClawLeft.setPosition(glyphLeftPosition);
-        glyphClawRight.setPosition(glyphRightPosition);
-        glyphLeftPosition = glyphClawLeft.getPosition();
-        glyphRightPosition = glyphClawRight.getPosition();
-
         //This prints servo positions on the screen
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
 
-        op.telemetry.addData("Left Glyph Servo Position", glyphLeftPosition);
-        op.telemetry.addData("Right Glyph Servo Position", glyphRightPosition);
+        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
     }
 }
