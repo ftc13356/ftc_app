@@ -66,6 +66,7 @@ public class colorSensorTest extends LinearOpMode {
         int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
         final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         waitForStart();
+
         while (opModeIsActive()) {
             Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
             telemetry.addData("Alpha", sensorColor.alpha());

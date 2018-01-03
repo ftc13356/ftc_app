@@ -93,7 +93,7 @@ public class arm {
             glyphRightPosition = 0.8;
             op.telemetry.addData("Glyph Servo Status", "Closed");
         }
-        // This closes the glyph claw when the "B" button is pressed
+        // This opens the glyph claw when the "B" button is pressed
         else if (op.gamepad2.b) {
             glyphLeftPosition = 1;
             glyphRightPosition = 0;

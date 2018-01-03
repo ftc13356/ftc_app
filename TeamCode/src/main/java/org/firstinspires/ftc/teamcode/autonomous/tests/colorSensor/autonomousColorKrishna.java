@@ -41,96 +41,37 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @Autonomous(name="Krishna Autonomous Color")
-// @Disabled
+ @Disabled
 public class autonomousColorKrishna extends LinearOpMode {
 
-    public DcMotor motorLeftfront;
-    public DcMotor motorRightfront;
-    public DcMotor motorLeftback;
-    public DcMotor motorRightback;
+
 
     ColorSensor sensorColor;
 
-    boolean colorRed = false;
-    boolean colorBlue = false;
-    boolean colorGreen = false;
-
-    // @Override
+    @Override
     public void runOpMode() {
-
-       // motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
-        // motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
-       //  motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
-        //  motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-
         sensorColor = hardwareMap.get(ColorSensor.class, "color");
         float hsvValues[] = {0F, 0F, 0F};
-
-        //  motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
-        //  motorRightfront.setDirection(DcMotor.Direction.FORWARD);
-        //  motorLeftback.setDirection(DcMotor.Direction.FORWARD);
-        // motorRightback.setDirection(DcMotor.Direction.FORWARD);
-
+        final float values[] = hsvValues;
+        int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
+        final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
         waitForStart();
 
         while (opModeIsActive()) {
             Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
-           //  moveForward(.1,5000);
-
-            if (hsvValues[0] >= 340 && hsvValues[0] <= 20) {
-                telemetry.addData("Color", "Red");
-                telemetry.update();
-                colorRed = true;
-            }
-            if (hsvValues[0] >= 100 && hsvValues[0] <= 140) {
-                telemetry.addData("Color", "Blue");
-                telemetry.update();
-                colorBlue = true;
-            }
-            if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
-                telemetry.addData("Color", "Green");
-                telemetry.update();
-                colorGreen = true;
-            }
-            if (colorRed) {
-                Stop();
-            }
+            telemetry.addData("Alpha", sensorColor.alpha());
+            telemetry.addData("Red  ", sensorColor.red());
+            telemetry.addData("Green", sensorColor.green());
+            telemetry.addData("Blue ", sensorColor.blue());
+            telemetry.addData("Hue", hsvValues[0]);
+            if (hsvValues[0]>=340 && hsvValues[0]<=360 || hsvValues[0]>=0 && hsvValues[0]<=20) {telemetry.addData("Color", "Red");}
+            else if (hsvValues[0]>=210 && hsvValues[0]<=275) {telemetry.addData("Color", "Blue");}
+            else {telemetry.addData("Color", "None");}
+            telemetry.update();
+            relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));}});
         }
+        relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.WHITE);}});
 
-
+        }
     }
-
-    public void moveForward(double power, long time) {
-        motorLeftfront.setPower(-power);
-        motorRightfront.setPower(power);
-        motorLeftback.setPower(-power);
-        motorRightback.setPower(power);
-        sleep(time);
-    }
-
-    public void moveLeft(double power, long time) {
-        motorLeftfront.setPower(power);
-        motorRightfront.setPower(power);
-        motorLeftback.setPower(-power);
-        motorRightback.setPower(-power);
-        sleep(time);
-    }
-
-    public void moveRight(double power, long time) {
-        moveLeft(-power, time);
-    }
-
-    public void moveBackward(double power, long time) {
-        moveForward(-power, time);
-    }
-
-    public void Stop() {
-        stop();
-    }
-
-    public void checkColor () {
-
-    }
-
-
 }
