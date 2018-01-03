@@ -92,24 +92,6 @@ public class arm {
             armRightPosition = 0.65;
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
-
-        // This closes the glyph claw when the "X" button is pressed
-        if (op.gamepad2.x) {
-            glyphLeftPosition = 0.2;
-            glyphRightPosition = 0.8;
-            op.telemetry.addData("Glyph Servo Status", "Closed");
-        }
-        // This opens the glyph claw when the "B" button is pressed
-        else if (op.gamepad2.b) {
-            glyphLeftPosition = 1;
-            glyphRightPosition = 0;
-            op.telemetry.addData("Glyph Servo Status", "Open Completely");
-        }
-        // This closes the glyph claw partially when the "Y" button is pressed
-        else if (op.gamepad2.y) {
-            glyphLeftPosition = 0.4;
-            glyphRightPosition = 0.6;
-            op.telemetry.addData("Glyph Servo Status", "Open Slightly");
         // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(targetValue);
