@@ -93,7 +93,6 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
-<<<<<<< HEAD
         // This closes the glyph claw when the "X" button is pressed
         if (op.gamepad2.x) {
             glyphLeftPosition = 0.2;
@@ -111,14 +110,12 @@ public class arm {
             glyphLeftPosition = 0.4;
             glyphRightPosition = 0.6;
             op.telemetry.addData("Glyph Servo Status", "Open Slightly");
-=======
         // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d", targetValue);
             armMotorPower = 0.4;
->>>>>>> 02d13288494ffa573b3f86e9d945a21aa6568ad0
         }
 
         // The left stick is used to raise and lower the arm
