@@ -97,9 +97,11 @@ public class autonomousTopLeftVuMark extends autonomousFrame {
 
         // Move arm back down
         armMotor.setPower(0.15);
-        if (!touchSensor.getState()) {
-            armMotor.setPower(0);
+        while (touchSensor.getState()) {
+            telemetry.addData("Touch Sensor", touchSensor.getState());
+            telemetry.update();
         }
+        armMotor.setPower(0);
 
         stop();
 
