@@ -16,26 +16,25 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Disabled
 public class arm {
 
-    // Initialize the variables
+    // Initialize motor/servo variables
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
     private Servo rotateServo;
-
     private DigitalChannel touchSensor;
 
+    // Initialize arm claw variables
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
+    private double rotatePosition = 0;
 
-    private double rotatePosition = 0.75;
-
+    // Initialize arm motor variables
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
-
     private final int targetValue = -1500;
     private final int encoderPositionError = 50;
 
-    // Creates OpMode
+    // Create OpMode
     private OpMode op;
     arm(OpMode opmode) {
         op = opmode;
@@ -45,19 +44,35 @@ public class arm {
 
         op.telemetry.addData("Arm", "Initializing");
 
-        // Initializing the hardware variables
+        // Initialize hardware variables
         armMotor = op.hardwareMap.dcMotor.get("armMotor");
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
         rotateServo = op.hardwareMap.servo.get("rotateServo");
-
         touchSensor = op.hardwareMap.digitalChannel.get("touchSensor");
 
         // Set the digital channel to input
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
-        // This tells the direction of the motor
+        // Sets direction/zero power behavior of motor
         armMotor.setDirection(DcMotor.Direction.REVERSE);
+        armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        // Make arm go down if touch sensor isn't already pressed
+        if (touchSensor.getState()) {
+            armMotor.setPower(0.1);
+            while (touchSensor.getState()) {
+                // The while loop is like a wait
+                // It will let the arm go down and will proceed once the touch sensor is pressed
+            }
+            armMotor.setPower(0);
+
+            armMotor.setPower(-0.05);
+            while (!touchSensor.getState()) {
+                // This reduces the inaccuracy due to inertia
+            }
+            armMotor.setPower(0);
+        }
 
         // Reset encoder
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -75,6 +90,9 @@ public class arm {
 
     // This code will run constantly after the previous part is ran
     public void loop() {
+
+        // Re-define variable
+        rotatePosition = 0;
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
@@ -95,21 +113,20 @@ public class arm {
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
-        //
+        // This moves the rotational servo such that no rod sticks out
         if (op.gamepad2.dpad_left) {
-            rotatePosition = 0.75;
-            op.telemetry.addData("Rotate Servo Status", "Down");
+            rotatePosition = 1;
+            op.telemetry.addData("Rotate Servo Status", "Back");
         }
-        //
+
+        // This moves the rotational servo such that the top rod sticks out
         if (op.gamepad2.dpad_right) {
-            rotatePosition = 0;
+            rotatePosition = 0.5;
             op.telemetry.addData("Rotate Servo Status", "Up");
         }
-        //
-        if (op.gamepad2.dpad_up) {
-            rotatePosition = 37.5;
-            op.telemetry.addData("Rotate Servo Status", "Middle");
-        }
+
+        // The stick can also fine tune the rotational servo
+        rotatePosition = op.gamepad2.right_stick_x*0.2;
 
         // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
@@ -141,21 +158,19 @@ public class arm {
         // The calculated power is then applied to the motors
         armMotor.setPower(armMotorPower);
 
-        // Sets Left Position and Right Position
-        // Reads Left Position and Reads Right Position
+        // Sets/Reads Servo Positions
         armClawLeft.setPosition(armLeftPosition);
         armClawRight.setPosition(armRightPosition);
+        rotateServo.setPosition(rotatePosition);
         armLeftPosition = armClawLeft.getPosition();
         armRightPosition = armClawRight.getPosition();
-
-        rotateServo.setPosition(rotatePosition);
         rotatePosition = rotateServo.getPosition();
 
-        //This prints servo and encoder positions on the screen
+        //Prints servo/encoder positions
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
-        op.telemetry.addData("Rotate Servo Position", rotateServo.getPosition()); //for now, then uses position
+        op.telemetry.addData("Rotate Servo Position", rotatePosition);
 
-        op.telemetry.addData("Current Position", "%7d", armMotor.getCurrentPosition());
+        op.telemetry.addData("Arm Position", "%7d", armMotor.getCurrentPosition());
     }
 }
