@@ -26,13 +26,14 @@ public class arm {
     // Initialize arm claw variables
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
-    private double rotatePosition = 0;
+    private double rotatePosition = 0.5;
 
     // Initialize arm motor variables
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
     private final int targetValue = -1500;
     private final int encoderPositionError = 50;
+    private boolean cali = true;
 
     // Create OpMode
     private OpMode op;
@@ -58,22 +59,6 @@ public class arm {
         armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        // Make arm go down if touch sensor isn't already pressed
-        if (touchSensor.getState()) {
-            armMotor.setPower(0.1);
-            while (touchSensor.getState()) {
-                // The while loop is like a wait
-                // It will let the arm go down and will proceed once the touch sensor is pressed
-            }
-            armMotor.setPower(0);
-
-            armMotor.setPower(-0.05);
-            while (!touchSensor.getState()) {
-                // This reduces the inaccuracy due to inertia
-            }
-            armMotor.setPower(0);
-        }
-
         // Reset encoder
         armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -88,11 +73,11 @@ public class arm {
     public void start() {
     }
 
-    // This code will run constantly after the previous part is ran
+    // This code will run constantly after the previous part has been run
     public void loop() {
 
         // Re-define variable
-        rotatePosition = 0;
+        rotatePosition = 0.5;
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
@@ -108,12 +93,12 @@ public class arm {
         }
         // This opens the arm claw partially when the "A" button is pressed
         else if (op.gamepad2.a) {
-            armLeftPosition = 0.5;
-            armRightPosition = 0.5;
+            armLeftPosition = 0.35;
+            armRightPosition = 0.65;
             op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
-        // This moves the rotational servo such that no rod sticks out
+        /*// This moves the rotational servo such that no rod sticks out
         if (op.gamepad2.dpad_left) {
             rotatePosition = 1;
             op.telemetry.addData("Rotate Servo Status", "Back");
@@ -121,20 +106,37 @@ public class arm {
 
         // This moves the rotational servo such that the top rod sticks out
         if (op.gamepad2.dpad_right) {
-            rotatePosition = 0.5;
+            rotatePosition = 0;
             op.telemetry.addData("Rotate Servo Status", "Up");
-        }
+        }*/
 
         // The stick can also fine tune the rotational servo
-        rotatePosition = op.gamepad2.right_stick_x*0.2;
+        rotatePosition = (op.gamepad2.right_stick_x/2) + 0.5;
 
-        // Moves arm to height needed to pick up glyph on the ground
+        /*// Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
+            // This makes sure that it will only happen the first time
+            if (cali) {
+                // Make arm go down if touch sensor isn't already pressed
+                if (touchSensor.getState()) {
+                    armMotor.setPower(0.1);
+                    while (touchSensor.getState()) {
+                        Thread.yield();
+                        // The while loop is like a wait
+                        // It will let the arm go down and will proceed once the touch sensor is pressed
+                    }
+                    armMotor.setPower(0);
+                    // Reset encoder
+                    armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+                }
+                cali = false;
+            }
+
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d", targetValue);
             armMotorPower = 0.4;
-        }
+        }*/
 
         // The left stick is used to raise and lower the arm
         if ((targetValue - encoderPositionError <= armMotor.getCurrentPosition() &&
