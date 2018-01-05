@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.outreach.F5_RobotGarden;
+package org.firstinspires.ftc.teamcode.teleop.outreach;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
@@ -12,9 +12,9 @@ import com.qualcomm.robotcore.util.Range;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = "Chassis F5/Robot Garden Edition")
+@TeleOp(name = "Chassis for Outreach")
 @Disabled
-public class chassisF5RobotGarden {
+public class chassis {
 
     // Initialize the variables
     private DcMotor motorLeftfront;
@@ -28,7 +28,7 @@ public class chassisF5RobotGarden {
 
     // Creates OpMode
     private OpMode op;
-    chassisF5RobotGarden(OpMode opmode) {
+    chassis(OpMode opmode) {
         op = opmode;
     }
 

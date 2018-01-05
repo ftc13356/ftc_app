@@ -9,7 +9,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "Teleop Drivetrain and Arm")
-// @Disabled
 public class teleop extends OpMode {
 
     // Creates instances of chassis, glyph claw, and arm
