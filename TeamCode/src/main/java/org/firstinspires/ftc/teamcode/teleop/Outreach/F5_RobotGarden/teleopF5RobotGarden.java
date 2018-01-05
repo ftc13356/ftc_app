@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop;
+package org.firstinspires.ftc.teamcode.teleop.Outreach.F5_RobotGarden;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -8,42 +8,32 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = "Teleop Drivetrain and Arm")
+@TeleOp(name = "Drivetrain F5/Robot Garden Edition")
 // @Disabled
-public class teleop extends OpMode {
+public class teleopF5RobotGarden extends OpMode {
 
-    // Creates instances of chassis, glyph claw, and arm
-    private chassis chassis = new chassis(this);
-    private glyphC glyphC = new glyphC(this);
-    private arm arm = new arm(this);
+    // Creates instances of chassis
+    private chassisF5RobotGarden chassisF5RobotGarden = new chassisF5RobotGarden(this);
 
     // Calls methods in chassis and arm
     @Override
     public void init() {
-        chassis.init();
-        glyphC.init();
-        arm.init();
+        chassisF5RobotGarden.init();
     }
 
     @Override
     public void init_loop() {
-        chassis.init_loop();
-        glyphC.init_loop();
-        arm.init_loop();
+        chassisF5RobotGarden.init_loop();
     }
 
     @Override
     public void start() {
-        chassis.start();
-        glyphC.start();
-        arm.start();
+        chassisF5RobotGarden.start();
     }
 
     @Override
     public void loop() {
-        chassis.loop();
-        glyphC.loop();
-        arm.loop();
+        chassisF5RobotGarden.loop();
     }
 
     @Override
