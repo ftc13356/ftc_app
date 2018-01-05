@@ -41,7 +41,7 @@ import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
  * a REV Robotics Touch Sensor.
  */
 @Autonomous(name = "Touch Sensor")
-// @Disabled
+@Disabled
 public class touchSensor extends autonomousFrame {
     /**
      * The REV Robotics Touch Sensor
