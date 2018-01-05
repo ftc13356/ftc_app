@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.Outreach.att;
+package org.firstinspires.ftc.teamcode.teleop.outreach.att;
 
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;

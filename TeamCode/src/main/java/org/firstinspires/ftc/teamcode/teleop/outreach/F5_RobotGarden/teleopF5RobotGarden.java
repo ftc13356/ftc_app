@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.teleop.Outreach.F5_RobotGarden;
+package org.firstinspires.ftc.teamcode.teleop.outreach.F5_RobotGarden;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
