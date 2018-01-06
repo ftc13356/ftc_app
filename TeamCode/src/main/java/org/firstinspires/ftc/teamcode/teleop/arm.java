@@ -31,6 +31,7 @@ public class arm {
     // Initialize arm motor variables
     private double armSpeedControl = 0.5;
     private double armMotorPower = 0;
+    private double currentArmPosition = 0;
     private final int targetValue = -1500;
     private final int encoderPositionError = 50;
     private boolean cali = true;
@@ -77,6 +78,11 @@ public class arm {
     public void loop() {
 
         // Re-define variable
+        // -1150, -5900
+        currentArmPosition = armMotor.getCurrentPosition();
+        /*if ((currentArmPosition <= -1152) && (currentArmPosition >= -5888)) {
+            rotatePosition = 0.5+ Math.abs(currentArmPosition);
+        }*/
         rotatePosition = 0.5;
 
         // This closes the arm claw when the left bumper is pressed
@@ -167,12 +173,13 @@ public class arm {
         armLeftPosition = armClawLeft.getPosition();
         armRightPosition = armClawRight.getPosition();
         rotatePosition = rotateServo.getPosition();
+        currentArmPosition = armMotor.getCurrentPosition();
 
         //Prints servo/encoder positions
         op.telemetry.addData("Left Arm Servo Position", armLeftPosition);
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
         op.telemetry.addData("Rotate Servo Position", rotatePosition);
 
-        op.telemetry.addData("Arm Position", "%7d", armMotor.getCurrentPosition());
+        op.telemetry.addData("Arm Position", "%7d", currentArmPosition);
     }
 }
