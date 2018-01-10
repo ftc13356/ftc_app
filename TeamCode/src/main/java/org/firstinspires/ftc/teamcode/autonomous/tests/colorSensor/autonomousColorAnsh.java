@@ -29,9 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.autonomous.tests.colorSensor;
 
-import android.app.Activity;
 import android.graphics.Color;
-import android.view.View;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -42,88 +40,86 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
-@Disabled
+// @Disabled
 public class autonomousColorAnsh extends autonomousFrame
 {
-    // Defining Autonomous OpMode Members
-    private ElapsedTime runtime = new ElapsedTime();
-    private DcMotor motorLeftfront;
-    private DcMotor motorRightfront;
-    private DcMotor motorLeftback;
-    private DcMotor motorRightback;
     ColorSensor sensorColor;
 
     @Override
     public void runOpMode() throws InterruptedException
     {
-        // Tells Driver Initialization is Starting
-        telemetry.addData("Status", "Initializing");
-        telemetry.update();
+        // Initialization
+        initializeHardwareMap();
+        setMotorDirection();
 
-        // Sets Variable Names to Hardware Map Names
-        motorLeftfront = hardwareMap.get(DcMotor.class, "motorLeftfront");
-        motorRightfront = hardwareMap.get(DcMotor.class, "motorRightfront");
-        motorLeftback = hardwareMap.get(DcMotor.class, "motorLeftback");
-        motorRightback = hardwareMap.get(DcMotor.class, "motorRightback");
-        sensorColor = hardwareMap.get(ColorSensor.class, "color");
+        // Defining Variables
+        boolean detect = false;
+        float allianceColor;
+        String displayText = "";
+        ElapsedTime runtime = new ElapsedTime();
 
-        // Sets Motor Directions to Forward
-        motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
-        motorRightfront.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftback.setDirection(DcMotor.Direction.FORWARD);
-        motorRightback.setDirection(DcMotor.Direction.FORWARD);
-
-        // Tells Driver Initialization is Complete
-        telemetry.addData("Status", "Initialized");
-        telemetry.update();
-
-        // Wait For the Driver To Press the Start Button
         waitForStart();
+
         runtime.reset();
 
-        // ALL CODE HERE!!!
-        float huevalue = CheckColor();
-        drive(0,1,0,500,0.25);
-        if (runtime.milliseconds() >= 500 || huevalue >= 340 && huevalue <= 360 || huevalue >= 0 && huevalue <= 20 || huevalue >= 210 && huevalue <= 275)
-        {
-            stop();
-        }
-        // Put Glyph into Cryptobox
-        // drive(1,0,0,1500,0.25);
-        // drive(0,0,1,1000,0.25);
-        // drive(1,0,0,750,0.25);
-        // drive(-1,0,0,1000,0.25);
-        // drive(0,0,1,2000,0.25);
-        // drive(1,0,0,1500,0.25);
+        allianceColor = 1;
 
-        // Tells Driver Time Left
-        telemetry.addData("Status", "Time Left: " + (30 - runtime.seconds()));
-        telemetry.update();
+        reactToDetect(5000, 3, allianceColor, detect, displayText, runtime);
     }
-    // Defining CheckColor, It prints if the color checked is red or blue.
-    public float CheckColor() {
+
+    // Defining checkColor, Prints color (red/blue) and returns value
+    public float checkColor() {
         float mastervalue=0;
-        while (opModeIsActive()) {
-            float hsvValues[] = {0F, 0F, 0F};
-            final float values[] = hsvValues;
-            int relativeLayoutId = hardwareMap.appContext.getResources().getIdentifier("RelativeLayout", "id", hardwareMap.appContext.getPackageName());
-            final View relativeLayout = ((Activity) hardwareMap.appContext).findViewById(relativeLayoutId);
-            telemetry.addData("Hue", hsvValues[0]);
-            if (hsvValues[0] >= 340 && hsvValues[0] <= 360 || hsvValues[0] >= 0 && hsvValues[0] <= 20) {
-                telemetry.addData("Color", "Red");
-                break;
-            }
-            else if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
-                telemetry.addData("Color", "Blue");
-                break;
-            }
-            else {telemetry.addData("Color", "None");}
-            telemetry.update();
-            Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
-            relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.HSVToColor(0xff, values));}});
-            relativeLayout.post(new Runnable() {public void run() {relativeLayout.setBackgroundColor(Color.WHITE);}});
-            mastervalue = hsvValues[0];
+        float hsvValues[] = {0F, 0F, 0F};
+        final float values[] = hsvValues;
+        Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
+        telemetry.addData("Hue", hsvValues[0]);
+        if (hsvValues[0] >= 340 && hsvValues[0] <= 360 || hsvValues[0] >= 0 && hsvValues[0] <= 20) {
+            mastervalue=1;
         }
+        if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
+            mastervalue=2;
+        }
+        else {
+            mastervalue=0;
+        }
+        telemetry.update();
+
         return mastervalue;
+    }
+
+    // Defining reactToDetect, Moves depending on relationship between jewel and alliance color, detects color again if red/blue not detected
+    public void reactToDetect(double checkTime, double distance, float allianceColor, boolean detect, String displayText, ElapsedTime runtime) {
+        float colorValue = checkColor();
+        while (opModeIsActive() && detect == false && runtime.milliseconds() <= checkTime) {
+            colorValue = checkColor();
+            if (colorValue == 1) {
+                displayText = "Red";
+                detect = true;
+
+                if (colorValue == allianceColor) {
+                    encoderDrive(-distance,0,0,0.3);
+                }
+                else {
+                    encoderDrive(distance,0,0,0.3);
+                }
+            }
+            if (colorValue == 2) {
+                displayText = "Blue";
+                detect = true;
+
+                if (colorValue == allianceColor) {
+                    encoderDrive(-distance,0,0,0.3);
+                }
+                else {
+                    encoderDrive(distance,0,0,0.3);
+                }
+            }
+        }
+        if (colorValue == 0) {
+            displayText = "Unknown";
+        }
+        telemetry.addData("VuMark Identified:", displayText);
+        telemetry.update();
     }
 }
