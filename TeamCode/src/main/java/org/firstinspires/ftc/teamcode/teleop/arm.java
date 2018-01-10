@@ -180,6 +180,6 @@ public class arm {
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
         op.telemetry.addData("Rotate Servo Position", rotatePosition);
 
-        op.telemetry.addData("Arm Position", "%7d", currentArmPosition);
+        op.telemetry.addData("Arm Position", "%7d", armMotor.getCurrentPosition());
     }
 }

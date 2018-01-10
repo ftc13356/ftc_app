@@ -72,7 +72,7 @@ public class autonomousTopRightVuMark extends autonomousFrame {
 
         sleep(500);
         encoderDrive(0,0,-91,0.3);
-        encoderDrive(-9.75,0,0,0.3);
+        encoderDrive(-10,0,0,0.3);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
