@@ -87,8 +87,8 @@ public class arm {
 
         // This closes the arm claw when the left bumper is pressed
         if (op.gamepad2.left_bumper) {
-            armLeftPosition = 0.6;
-            armRightPosition = 0.4;
+            armLeftPosition = 0.7;
+            armRightPosition = 0.3;
             op.telemetry.addData("Arm Servo Status", "Closed");
         }
         // This opens the arm claw completely when the right bumper is pressed
@@ -180,6 +180,6 @@ public class arm {
         op.telemetry.addData("Right Arm Servo Position", armRightPosition);
         op.telemetry.addData("Rotate Servo Position", rotatePosition);
 
-        op.telemetry.addData("Arm Position", currentArmPosition);
+        op.telemetry.addData("Arm Position", "%7d", currentArmPosition);
     }
 }
