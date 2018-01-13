@@ -117,11 +117,11 @@ public class arm {
         }*/
 
         // The stick can also fine tune the rotational servo
-        rotatePosition = (op.gamepad2.right_stick_x/2) + 0.5;
+        rotatePosition = (op.gamepad2.right_stick_x / 2) + 0.5;
 
-        /*// Moves arm to height needed to pick up glyph on the ground
+        // Moves arm to height needed to pick up glyph on the ground
         if (op.gamepad2.dpad_down) {
-            // This makes sure that it will only happen the first time
+           /* // This makes sure that it will only happen the first time
             if (cali) {
                 // Make arm go down if touch sensor isn't already pressed
                 if (touchSensor.getState()) {
@@ -136,13 +136,13 @@ public class arm {
                     armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                 }
                 cali = false;
-            }
+            }*/
 
             armMotor.setTargetPosition(targetValue);
             armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             op.telemetry.addData("Goal Position", "%7d", targetValue);
             armMotorPower = 0.4;
-        }*/
+        }
 
         // The left stick is used to raise and lower the arm
         if ((targetValue - encoderPositionError <= armMotor.getCurrentPosition() &&
