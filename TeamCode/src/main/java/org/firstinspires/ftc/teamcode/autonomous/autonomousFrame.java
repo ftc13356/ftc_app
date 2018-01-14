@@ -24,6 +24,10 @@ import static org.firstinspires.ftc.teamcode.key.key;
 @Disabled
 public abstract class autonomousFrame extends LinearOpMode {
 
+    // VERSION NUMBER(MAJOR.MINOR) - DATE
+    // DO BEFORE EVERY COMMIT!
+    public final String autonomousVersionNumber = "12.5 - 1/9/18 ";
+
     // Initialize variables
     public DcMotor motorLeftfront;
     public DcMotor motorRightfront;

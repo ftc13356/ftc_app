@@ -22,6 +22,14 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
     @Override
     public void runOpMode() {
 
+        // GO TO
+        // autonomousFrame.JAVA TO
+        // UPDATE VERSION NUMBER
+        // BEFORE EVERY COMMIT
+
+        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
+        telemetry.update();
+
         // Initialization
         initializeHardwareMap();
         setMotorDirection();
