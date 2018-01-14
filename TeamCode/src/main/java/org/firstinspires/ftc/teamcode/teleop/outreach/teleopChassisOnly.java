@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop.outreach;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "Teleop for Outreach")
+@Disabled
 public class teleopChassisOnly extends OpMode {
 
     // Creates instances of chassis
