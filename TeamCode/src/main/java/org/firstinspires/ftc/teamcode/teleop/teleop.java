@@ -11,6 +11,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 @TeleOp(name = "Teleop Drivetrain and Arm")
 public class teleop extends OpMode {
 
+    // VERSION NUMBER(MAJOR.MINOR) - DATE
+    // DO BEFORE EVERY COMMIT!
+     private final String teleopVersionNumber = "8.12 - 1/13/18 ";
+
     // Creates instances of chassis, glyph claw, and arm
     private chassis chassis = new chassis(this);
     private glyphC glyphC = new glyphC(this);
@@ -19,6 +23,9 @@ public class teleop extends OpMode {
     // Calls methods in chassis and arm
     @Override
     public void init() {
+
+        telemetry.addData("Teleop Program Version", teleopVersionNumber);
+
         chassis.init();
         glyphC.init();
         arm.init();

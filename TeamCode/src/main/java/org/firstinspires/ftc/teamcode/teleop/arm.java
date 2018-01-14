@@ -16,6 +16,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Disabled
 public class arm {
 
+    // GO TO
+    // teleop.JAVA TO
+    // UPDATE VERSION NUMBER
+    // BEFORE EVERY COMMIT
+
     // Initialize motor/servo variables
     private DcMotor armMotor;
     private Servo armClawLeft;

@@ -15,6 +15,11 @@ import com.qualcomm.robotcore.util.Range;
 @Disabled
 public class chassis {
 
+    // GO TO
+    // teleop.JAVA TO
+    // UPDATE VERSION NUMBER
+    // BEFORE EVERY COMMIT
+
     // Initialize the variables
     private DcMotor motorLeftfront;
     private DcMotor motorRightfront;

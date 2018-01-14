@@ -14,6 +14,11 @@ import com.qualcomm.robotcore.hardware.Servo;
 @Disabled
 public class glyphC {
 
+    // GO TO
+    // teleop.JAVA TO
+    // UPDATE VERSION NUMBER
+    // BEFORE EVERY COMMIT
+
     // Initialize the variables
     private Servo glyphClawLeft;
     private Servo glyphClawRight;
