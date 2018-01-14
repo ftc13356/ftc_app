@@ -9,6 +9,9 @@ import com.qualcomm.robotcore.hardware.Servo;
 @TeleOp(name = "Arm Move for Debug")
 public class armMoveDebug extends OpMode{
 
+    // VERSION NUMBER(MAJOR.MINOR) - DATE
+    // DO BEFORE EVERY COMMIT!
+    private final String teleopVersionNumber = "3.2 - 1/13/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -24,6 +27,7 @@ public class armMoveDebug extends OpMode{
     @Override
     public void init() {
 
+        telemetry.addData("Teleop Program Version", teleopVersionNumber);
         telemetry.addData("Arm", "Initializing");
 
         // Initialize hardware variables
