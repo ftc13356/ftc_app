@@ -11,7 +11,7 @@ public class armMoveDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String teleopVersionNumber = "3.2 - 1/13/18 ";
+    private final String armDebugVersionNumber = "3.3 - 1/19/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -20,14 +20,16 @@ public class armMoveDebug extends OpMode{
     private DigitalChannel touchSensor;
 
     private final double armSpeedControl = 0.5;
+
     private double armMotorPower = 0;
+
     private double armLeftPosition = 0;
     private double armRightPosition = 1;
 
     @Override
     public void init() {
 
-        telemetry.addData("Teleop Program Version", teleopVersionNumber);
+        telemetry.addData("Teleop Program Version", armDebugVersionNumber);
         telemetry.addData("Arm", "Initializing");
 
         // Initialize hardware variables
@@ -39,16 +41,12 @@ public class armMoveDebug extends OpMode{
 
         armMotor.setDirection(DcMotor.Direction.REVERSE);
         armMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
         telemetry.addData("Arm", "Initialized");
     }
 
     @Override
     public void loop() {
-
-        // Left stick is used to raise/lower arm
-        armMotorPower = gamepad1.left_stick_y * armSpeedControl;
 
         // Right bumper opens claw, Left bumper closes claw
         if (gamepad1.right_bumper) {
@@ -62,6 +60,9 @@ public class armMoveDebug extends OpMode{
             armRightPosition = 0.3;
             telemetry.addData("Arm Servo Status", "Closed");
         }
+
+        // Left stick is used to raise/lower arm
+        armMotorPower = gamepad1.left_stick_y * armSpeedControl;
 
         // If arm hits sensor and power is negative, it stops, if positive, it continues
         if (!touchSensor.getState()) {
@@ -82,5 +83,6 @@ public class armMoveDebug extends OpMode{
         telemetry.addData("Left Arm Servo Position", armClawLeft.getPosition());
         telemetry.addData("Right Arm Servo Position", armClawRight.getPosition());
         telemetry.addData("Arm Position", armMotor.getCurrentPosition());
+
     }
 }
