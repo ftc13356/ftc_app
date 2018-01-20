@@ -34,20 +34,19 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
 // @Disabled
-public class autonomousColorAnsh extends autonomousFrame
-{
+public class autonomousColorAnsh extends autonomousFrame {
+
     ColorSensor sensorColor;
 
     @Override
-    public void runOpMode() throws InterruptedException
-    {
+    public void runOpMode() throws InterruptedException {
+
         // Initialization
         initializeHardwareMap();
         sensorColor = hardwareMap.get(ColorSensor.class, "color");
@@ -65,32 +64,31 @@ public class autonomousColorAnsh extends autonomousFrame
 
         allianceColor = 1;
 
-        reactToDetect(5000, 3, allianceColor, detect, displayText, runtime);
+        reactToDetect(5000, 6, allianceColor, detect, displayText, runtime);
     }
 
     // Defining checkColor, Prints color (red/blue) and returns value
     public float checkColor() {
-        float mastervalue=0;
+
+        float masterValue = 0;
         float hsvValues[] = {0F, 0F, 0F};
-        final float values[] = hsvValues;
         Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
         telemetry.addData("Hue", hsvValues[0]);
-        if (hsvValues[0] >= 340 && hsvValues[0] <= 360 || hsvValues[0] >= 0 && hsvValues[0] <= 20) {
-            mastervalue=1;
+        if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
+            masterValue = 1;
         }
         if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
-            mastervalue=2;
+            masterValue = 2;
         }
-        else {
-            mastervalue=0;
-        }
+
         telemetry.update();
 
-        return mastervalue;
+        return masterValue;
     }
 
     // Defining reactToDetect, Moves depending on relationship between jewel and alliance color, detects color again if red/blue not detected
     public void reactToDetect(double checkTime, double distance, float allianceColor, boolean detect, String displayText, ElapsedTime runtime) {
+
         float colorValue = checkColor();
         while (opModeIsActive() && detect == false && runtime.milliseconds() <= checkTime) {
             colorValue = checkColor();
@@ -120,7 +118,7 @@ public class autonomousColorAnsh extends autonomousFrame
         if (colorValue == 0) {
             displayText = "Unknown";
         }
-        telemetry.addData("VuMark Identified:", displayText);
+        telemetry.addData("Color Identified:", displayText);
         telemetry.update();
     }
 }
