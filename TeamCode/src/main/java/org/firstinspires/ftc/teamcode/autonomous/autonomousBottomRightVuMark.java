@@ -55,17 +55,17 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";
-                distance = 6.5;
+                distance = 3.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 displayText = "Center";
-                distance = 12.5;
+                distance = 13;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 displayText = "Right";
-                distance = 18.5;
+                distance = 19;
                 detect = true;
             }
         }
@@ -77,9 +77,8 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         telemetry.update();
         encoderDrive(26,0,0,0.4);
         encoderDrive(0,0,181,0.4);
-        encoderDrive(-6,0,0,0.4);
-        encoderDrive(0,distance,0,0.4);
-        encoderDrive(-6,0,0,0.4);
+        encoderDrive(0, distance,0,0.4);
+        encoderDrive(-11.5,0,0,0.4);
 
         // Release glyph
         glyphClawLeft.setPosition(1);
