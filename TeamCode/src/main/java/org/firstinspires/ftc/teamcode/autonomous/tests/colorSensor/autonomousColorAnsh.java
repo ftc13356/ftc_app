@@ -50,6 +50,7 @@ public class autonomousColorAnsh extends autonomousFrame
     {
         // Initialization
         initializeHardwareMap();
+        sensorColor = hardwareMap.get(ColorSensor.class, "color");
         setMotorDirection();
 
         // Defining Variables
