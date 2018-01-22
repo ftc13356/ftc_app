@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for reading VuMark (Bottom Left)
+// Purpose: Autonomous Program for knocking jewel and reading VuMark (Bottom Left)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Left VuMark (HouseB)")
-public class autonomousBottomLeftVuMark extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Left Jewel (HouseB)")
+public class autonomousBottomLeftJewel extends autonomousFrame {
 
     @Override
     public void runOpMode() {

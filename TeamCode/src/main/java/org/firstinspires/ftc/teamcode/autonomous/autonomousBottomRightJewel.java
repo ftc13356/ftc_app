@@ -6,7 +6,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for reading VuMark (Top Right)
+// Purpose: Autonomous Program for knocking jewel and reading VuMark (Bottom Right)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,8 +16,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Top Right VuMark (HouseT)")
-public class autonomousTopRightVuMark extends autonomousFrame {
+@Autonomous(name = "Autonomous Bottom Right Jewel")
+public class autonomousBottomRightJewel extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -49,38 +49,36 @@ public class autonomousTopRightVuMark extends autonomousFrame {
 
         runtime.reset();
 
-        // Pulling glyph, facing away from audience - align 1 inch back
         // Changes distance depending on VuMark
         relicTrackables.activate();
         while (opModeIsActive() && detect == false && runtime.milliseconds() <= 5000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";
-                distance = 27;
+                distance = 3.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 displayText = "Center";
-                distance = 33;
+                distance = 13;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 displayText = "Right";
-                distance = 41;
+                distance = 19;
                 detect = true;
             }
         }
         if (detect == false){
             displayText = "Unknown";
-            distance = 33;
+            distance = 12.5;
         }
         telemetry.addData("VuMark Identified:", displayText);
         telemetry.update();
-        encoderDrive(distance,0,0,0.4);
-
-        sleep(500);
-        encoderDrive(0,0,-91,0.3);
-        encoderDrive(-10,0,0,0.3);
+        encoderDrive(26,0,0,0.4);
+        encoderDrive(0,0,181,0.4);
+        encoderDrive(0, distance,0,0.4);
+        encoderDrive(-11.5,0,0,0.4);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

@@ -1,12 +1,14 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.previousAutonomous.autonomousVuMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for reading VuMark (Bottom Right)
+// Purpose: Autonomous Program for reading VuMark (Top Right)
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,8 +18,9 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Right VuMark")
-public class autonomousBottomRightVuMark extends autonomousFrame {
+@Autonomous(name = "Autonomous Top Right VuMark (HouseT)")
+@Disabled
+public class autonomousTopRightVuMark extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -49,36 +52,38 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
 
         runtime.reset();
 
+        // Pulling glyph, facing away from audience - align 1 inch back
         // Changes distance depending on VuMark
         relicTrackables.activate();
         while (opModeIsActive() && detect == false && runtime.milliseconds() <= 5000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";
-                distance = 3.5;
+                distance = 27;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 displayText = "Center";
-                distance = 13;
+                distance = 33;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 displayText = "Right";
-                distance = 19;
+                distance = 41;
                 detect = true;
             }
         }
         if (detect == false){
             displayText = "Unknown";
-            distance = 12.5;
+            distance = 33;
         }
         telemetry.addData("VuMark Identified:", displayText);
         telemetry.update();
-        encoderDrive(26,0,0,0.4);
-        encoderDrive(0,0,181,0.4);
-        encoderDrive(0, distance,0,0.4);
-        encoderDrive(-11.5,0,0,0.4);
+        encoderDrive(distance,0,0,0.4);
+
+        sleep(500);
+        encoderDrive(0,0,-91,0.3);
+        encoderDrive(-10,0,0,0.3);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

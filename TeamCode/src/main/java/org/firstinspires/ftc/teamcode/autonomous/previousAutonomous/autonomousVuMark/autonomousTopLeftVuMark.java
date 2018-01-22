@@ -1,9 +1,11 @@
-package org.firstinspires.ftc.teamcode.autonomous;
+package org.firstinspires.ftc.teamcode.autonomous.previousAutonomous.autonomousVuMark;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
+import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program for reading VuMark (Top Left)
@@ -17,6 +19,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 //right--++ (-)
 
 @Autonomous(name = "Autonomous Top Left VuMark")
+@Disabled
 public class autonomousTopLeftVuMark extends autonomousFrame {
 
     @Override
