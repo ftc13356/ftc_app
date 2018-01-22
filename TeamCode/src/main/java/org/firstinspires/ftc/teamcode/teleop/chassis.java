@@ -57,15 +57,15 @@ public class chassis {
         op.telemetry.addData("Chassis", "Initialized");
     }
 
-    // This code is just waiting for the Play button to be pressed
+    // Waiting for Play button to be pressed
     public void init_loop() {
     }
 
-    // This code will do something once when the Play button is pressed
+    // When Play button is pressed
     public void start() {
     }
 
-    // This code will run constantly after the previous part is ran
+    // Main Loop
     public void loop() {
         // Some variables are being defined
         double motorLeftfrontPower;

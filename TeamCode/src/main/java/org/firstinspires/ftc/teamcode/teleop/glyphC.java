@@ -43,15 +43,15 @@ public class glyphC {
         op.telemetry.addData("Glyph Claw", "Initialized");
     }
 
-    // This code is just waiting for the Play button to be pressed
+    // Waiting for Play button to be pressed
     public void init_loop() {
     }
 
-    // This code will do something once when the Play button is pressed
+    // When Play button is pressed
     public void start() {
     }
 
-    // This code will run constantly after the previous part is ran
+    // Main Loop
     public void loop() {
 
         // This closes the glyph claw when the "X" button is pressed
