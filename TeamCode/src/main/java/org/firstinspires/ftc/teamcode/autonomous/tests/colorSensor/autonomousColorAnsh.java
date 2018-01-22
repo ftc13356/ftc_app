@@ -33,23 +33,19 @@ import android.graphics.Color;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
 @Autonomous(name="Ansh Autonomous Color")
-// @Disabled
+@Disabled
 public class autonomousColorAnsh extends autonomousFrame {
-
-    ColorSensor sensorColor;
 
     @Override
     public void runOpMode() throws InterruptedException {
 
         // Initialization
         initializeHardwareMap();
-        sensorColor = hardwareMap.get(ColorSensor.class, "color");
         setMotorDirection();
 
         // Defining Variables
@@ -72,7 +68,7 @@ public class autonomousColorAnsh extends autonomousFrame {
 
         float masterValue = 0;
         float hsvValues[] = {0F, 0F, 0F};
-        Color.RGBToHSV((int) (sensorColor.red()), (int) (sensorColor.green()), (int) (sensorColor.blue()), hsvValues);
+        Color.RGBToHSV((int) (colorSensor.red()), (int) (colorSensor.green()), (int) (colorSensor.blue()), hsvValues);
         telemetry.addData("Hue", hsvValues[0]);
         if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
             masterValue = 1;
