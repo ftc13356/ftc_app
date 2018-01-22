@@ -11,7 +11,7 @@ public class armMoveDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String armDebugVersionNumber = "3.3 - 1/19/18 ";
+    private final String armDebugVersionNumber = "3.4 - 1/21/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -23,8 +23,10 @@ public class armMoveDebug extends OpMode{
 
     private double armMotorPower = 0;
 
-    private double armLeftPosition = 0;
-    private double armRightPosition = 1;
+    private int currentArmPosition = 0;
+
+    private double clawLeftPosition = 0.35;
+    private double clawRightPosition = 0.65;
 
     @Override
     public void init() {
@@ -50,21 +52,28 @@ public class armMoveDebug extends OpMode{
 
         // Right bumper opens claw, Left bumper closes claw
         if (gamepad1.right_bumper) {
-            armLeftPosition = 0;
-            armRightPosition = 1;
+            clawLeftPosition = 0;
+            clawRightPosition = 1;
             telemetry.addData("Arm Servo Status", "Open Completely");
         }
 
         if (gamepad1.left_bumper) {
-            armLeftPosition = 0.7;
-            armRightPosition = 0.3;
+            clawLeftPosition = 0.7;
+            clawRightPosition = 0.3;
             telemetry.addData("Arm Servo Status", "Closed");
         }
 
+        // Reset encoder
+        if (gamepad1.a) {
+            armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
         // Left stick is used to raise/lower arm
         armMotorPower = gamepad1.left_stick_y * armSpeedControl;
 
-        // If arm hits sensor and power is negative, it stops, if positive, it continues
+        currentArmPosition = armMotor.getCurrentPosition();
+
+        // Stop arm's motion if it hits touch sensor and moving downward
         if (!touchSensor.getState()) {
             telemetry.addData("Touch Sensor", "Is Pressed");
 
@@ -74,11 +83,17 @@ public class armMoveDebug extends OpMode{
             }
         }
 
+        // Stop arm's motion if it goes above upper limit and moving upward
+        if (currentArmPosition < -5900 && armMotorPower < 0) {
+            armMotorPower = 0;
+            telemetry.addData("Arm Status", "Upper Limit Reached");
+        }
+
         // Set arm power, servo position
         armMotor.setPower(armMotorPower);
 
-        armClawLeft.setPosition(armLeftPosition);
-        armClawRight.setPosition(armRightPosition);
+        armClawLeft.setPosition(clawLeftPosition);
+        armClawRight.setPosition(clawRightPosition);
 
         telemetry.addData("Left Arm Servo Position", armClawLeft.getPosition());
         telemetry.addData("Right Arm Servo Position", armClawRight.getPosition());
