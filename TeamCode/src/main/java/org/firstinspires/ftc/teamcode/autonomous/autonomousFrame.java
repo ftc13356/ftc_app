@@ -1,14 +1,19 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
@@ -26,9 +31,9 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    public final String autonomousVersionNumber = "12.6 - 1/19/18 ";
+    public final String autonomousVersionNumber = "13.0- 1/23/18 ";
 
-    // Initialize variables
+    // Initialize Hardware variables
     public DcMotor motorLeftfront;
     public DcMotor motorRightfront;
     public DcMotor motorLeftback;
@@ -43,22 +48,33 @@ public abstract class autonomousFrame extends LinearOpMode {
     public Servo glyphClawRight;
 
     public DigitalChannel touchSensor;
-    
-    double leftPosition = 0;
-    double rightPosition = 1;
+    public ColorSensor colorSensor;
 
     public VuforiaLocalizer vuforia;
     public VuforiaTrackables relicTrackables;
     public VuforiaTrackable relicTemplate;
-    
-    int targetValue = 0;
-    static final double counts_per_motor_rev = 1680 ;
-    static final double robot_diameter = 23.0;
-    static final double drive_gear_reduction = 0.75;
-    static final double wheel_diameter_inches = 4.0 ;
-    static final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
+
+    // Initialize Drive Variables
+    final double counts_per_motor_rev = 1680 ;
+    final double robot_diameter = 23.0;
+    final double drive_gear_reduction = 0.75;
+    final double wheel_diameter_inches = 4.0 ;
+    final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
                                           (wheel_diameter_inches * Math.PI);
-    static final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
+    final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
+
+    // Initialize Jewel Variables
+    boolean detectJewel = false;
+    float allianceColor;
+    double distanceJewel;
+    String displayJewel = "";
+    ElapsedTime jewelTime = new ElapsedTime();
+
+    // Initialize VuMark Variables
+    boolean detectVuMark = false;
+    double distanceVuMark = 0;
+    String displayVuMark = "";
+    ElapsedTime vuMarkTime = new ElapsedTime();
 
     // Initialize Hardware Map
     public void initializeHardwareMap() {
@@ -72,6 +88,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
         touchSensor = hardwareMap.digitalChannel.get("touchSensor");
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
 
     // Set Motor Direction
@@ -97,86 +114,6 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.addData("Vuforia Status", "Initialized");
         telemetry.update();
     }
-
-    /*
-
-    Following Functions are NOT OPERATIONAL (12/15/17) - Jonathan
-
-    // Arm Position Function (Arm, Encoder)
-    public void armPosition(int position) {
-        armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        if (position == 0){
-            targetValue = -100;
-        }
-        else if (position == 1){
-            targetValue = -1900;
-        }
-        else if (position == 2){
-            targetValue = -3000;
-        }
-        else if (position == 3){
-            targetValue = -4400;
-        }
-        else if (position == 4){
-            targetValue = -5700;
-        }
-        armMotor.setTargetPosition(targetValue);
-        armMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        armMotor.setPower(Math.abs(0.5));
-        telemetry.addData("Goal Position", "%7d",targetValue);
-    }
-
-    // Claw Functions (Arm)
-    public void closeClaw() {
-        leftPosition = 0.7;
-        rightPosition = 0.3;
-        armClawLeft.setPosition(leftPosition);
-        armClawRight.setPosition(rightPosition);
-        telemetry.addData("Arm Servo Status", "Closed");
-    }
-
-    public void partialClaw() {
-        leftPosition = 0.5;
-        rightPosition = 0.5;
-        armClawLeft.setPosition(leftPosition);
-        armClawRight.setPosition(rightPosition);
-        telemetry.addData("Arm Servo Status", "Partially Open");
-    }
-
-    public void openClaw() {
-        leftPosition = 0.0;
-        rightPosition = 1.0;
-        armClawLeft.setPosition(leftPosition);
-        armClawRight.setPosition(rightPosition);
-        telemetry.addData("Arm Servo Status", "Open");
-    }
-
-    // Claw Functions (Glyph Claw)
-    public void openGlyphClaw(){
-        leftPosition = 1.0;
-        rightPosition = 0.0;
-        glyphClawLeft.setPosition(leftPosition);
-        glyphClawRight.setPosition(rightPosition);
-        telemetry.addData("Glyph Servo Status", "Open");
-    }
-
-    public void closeGlyphClaw(){
-        leftPosition = 0.3;
-        rightPosition = 0.7;
-        glyphClawLeft.setPosition(leftPosition);
-        glyphClawRight.setPosition(rightPosition);
-        telemetry.addData("Glyph Servo Status", "Closed");
-    }
-
-    public void partialGlyphClaw(){
-        leftPosition = 0.4;
-        rightPosition = 0.6;
-        glyphClawLeft.setPosition(leftPosition);
-        glyphClawRight.setPosition(rightPosition);
-        telemetry.addData("Glyph Servo Status", "Partially Open");
-    }
-
-    */
 
     // Basic Drive Functions (Drivetrain)
     public void moveForward (double power, long time) {
@@ -228,7 +165,6 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
         telemetry.update();
     }
-
 
     // Combined Drive Function (Drivetrain, Encoder)
     public void encoderDrive(double driveFB, double driveS, double turnDegrees, double speed) {
@@ -361,5 +297,96 @@ public abstract class autonomousFrame extends LinearOpMode {
             motorLeftback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
             motorRightback.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
+    }
+
+    // Prints color (red/blue) and returns value
+    public float checkColor() {
+
+        float masterValue = 0;
+        float hsvValues[] = {0F, 0F, 0F};
+        Color.RGBToHSV((int) (colorSensor.red()), (int) (colorSensor.green()), (int) (colorSensor.blue()), hsvValues);
+        telemetry.addData("Hue", hsvValues[0]);
+        if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
+            masterValue = 1;
+        }
+        if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
+            masterValue = 2;
+        }
+
+        telemetry.update();
+
+        return masterValue;
+    }
+
+    // Moves depending on relationship between jewel and alliance color,
+    // detects color again if red/blue not detected
+    public void reactToJewelDetect(double distance) {
+
+        float colorValue = checkColor();
+        jewelTime.reset();
+        while (opModeIsActive() && detectJewel == false && jewelTime.milliseconds() <= 5000) {
+            colorValue = checkColor();
+            if (colorValue == 1) {
+                displayJewel = "Red";
+                detectJewel = true;
+
+                if (colorValue == allianceColor) {
+                    encoderDrive(-distance,0,0,0.3);
+                    distanceJewel = -distance;
+                }
+                else {
+                    encoderDrive(distance,0,0,0.3);
+                    distanceJewel = distance;
+                }
+            }
+            if (colorValue == 2) {
+                displayJewel = "Blue";
+                detectJewel = true;
+
+                if (colorValue == allianceColor) {
+                    encoderDrive(-distance,0,0,0.3);
+                    distanceJewel = -distance;
+                }
+                else {
+                    encoderDrive(distance,0,0,0.3);
+                    distanceJewel = distance;
+                }
+            }
+        }
+        if (colorValue == 0) {
+            displayJewel = "Unknown";
+        }
+        telemetry.addData("Color Identified:", displayJewel);
+        telemetry.update();
+    }
+
+    // Changes drive distance depending on VuMark
+    public void detectVuMark (double leftDistance, double centerDistance, double rightDistance) {
+        relicTrackables.activate();
+        vuMarkTime.reset();
+        while (opModeIsActive() && detectVuMark == false && vuMarkTime.milliseconds() <= 5000) {
+            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
+            if (vuMark == RelicRecoveryVuMark.LEFT) {
+                displayVuMark = "Left";
+                distanceVuMark = leftDistance;
+                detectVuMark = true;
+            }
+            if (vuMark == RelicRecoveryVuMark.CENTER) {
+                displayVuMark = "Center";
+                distanceVuMark = centerDistance;
+                detectVuMark = true;
+            }
+            if (vuMark == RelicRecoveryVuMark.RIGHT) {
+                displayVuMark = "Right";
+                distanceVuMark = rightDistance;
+                detectVuMark = true;
+            }
+        }
+        if (detectVuMark == false){
+            displayVuMark = "Unknown";
+            distanceVuMark = -11.5;
+        }
+        telemetry.addData("VuMark Identified:", displayVuMark);
+        telemetry.update();
     }
 }
