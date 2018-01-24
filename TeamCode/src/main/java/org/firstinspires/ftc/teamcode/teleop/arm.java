@@ -93,10 +93,16 @@ public class arm {
         }
 
         // This opens the arm claw completely when the right bumper button is pressed
-        else if (op.gamepad2.right_bumper) {
+        if (op.gamepad2.right_bumper) {
             armLeftPosition = 0.35;
             armRightPosition = 0.65;
             op.telemetry.addData("Arm Servo Status", "Open Completely");
+        }
+
+        if (op.gamepad2.a) {
+            armLeftPosition = 0.5;
+            armRightPosition = 0.5;
+            op.telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
         // Moves arm to height needed to pick up glyph on the ground

@@ -13,7 +13,7 @@ public class teleop extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-     private final String teleopVersionNumber = "8.13 - 1/21/18 ";
+     private final String teleopVersionNumber = "8.14 - 1/23/18 ";
 
     // Creates instances of chassis, glyph claw, and arm
     private chassis chassis = new chassis(this);
