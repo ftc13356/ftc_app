@@ -11,7 +11,7 @@ public class armMoveDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String armDebugVersionNumber = "3.4 - 1/21/18 ";
+    private final String armDebugVersionNumber = "3.5 - 1/23/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -50,21 +50,27 @@ public class armMoveDebug extends OpMode{
     @Override
     public void loop() {
 
-        // Right bumper opens claw, Left bumper closes claw
-        if (gamepad1.right_bumper) {
-            clawLeftPosition = 0;
-            clawRightPosition = 1;
-            telemetry.addData("Arm Servo Status", "Open Completely");
-        }
-
+        // Right bumper opens claw, Left bumper closes claw, B opens claw slightly
         if (gamepad1.left_bumper) {
             clawLeftPosition = 0.7;
             clawRightPosition = 0.3;
             telemetry.addData("Arm Servo Status", "Closed");
         }
 
-        // Reset encoder
+        if (gamepad1.right_bumper) {
+            clawLeftPosition = 0.35;
+            clawRightPosition = 0.65;
+            telemetry.addData("Arm Servo Status", "Open Completely");
+        }
+
         if (gamepad1.a) {
+            clawLeftPosition = 0.5;
+            clawRightPosition = 0.5;
+            telemetry.addData("Arm Servo Status", "Open Slightly");
+        }
+
+        // Reset encoder
+        if (gamepad1.b) {
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
