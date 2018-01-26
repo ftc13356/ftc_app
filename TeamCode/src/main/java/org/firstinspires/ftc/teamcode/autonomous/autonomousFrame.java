@@ -101,6 +101,12 @@ public abstract class autonomousFrame extends LinearOpMode {
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
     }
 
+    // Print Version Number
+    public void versionPrint() {
+        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
+        telemetry.update();
+    }
+
     // Vuforia Initialization
     public void initializeVuforia() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());

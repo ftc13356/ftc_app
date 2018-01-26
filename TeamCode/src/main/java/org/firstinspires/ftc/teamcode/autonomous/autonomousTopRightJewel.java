@@ -24,8 +24,7 @@ public class autonomousTopRightJewel extends autonomousFrame {
         // UPDATE VERSION NUMBER
         // BEFORE EVERY COMMIT
 
-        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
-        telemetry.update();
+        versionPrint();
 
         // Initialization
         initializeHardwareMap();
