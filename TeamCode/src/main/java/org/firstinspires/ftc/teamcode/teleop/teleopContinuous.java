@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -9,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "Teleop Drivetrain and Arm (Continuous Servo)")
+@Disabled
 public class teleopContinuous extends OpMode {
 
     // Creates instances of chassis, glyph claw, and arm
