@@ -32,7 +32,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "13.1- 1/23/18 ";
+    private final String autonomousVersionNumber = "13.2- 1/26/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;

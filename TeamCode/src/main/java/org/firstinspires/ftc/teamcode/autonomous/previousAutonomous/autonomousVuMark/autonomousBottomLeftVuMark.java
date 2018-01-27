@@ -62,17 +62,17 @@ public class autonomousBottomLeftVuMark extends autonomousFrame {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayText = "Left";
-                distance = -18.75;
+                distance = -19.75;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.CENTER) {
                 displayText = "Left";
-                distance = -11.5;
+                distance = -12.5;
                 detect = true;
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 displayText = "Left";
-                distance = -3.75;
+                distance = -4.75;
                 detect = true;
             }
         }

@@ -86,7 +86,7 @@ public class autonomousTopLeftVuMark extends autonomousFrame {
         telemetry.update();
         encoderDrive(distance,0,0,0.4);
         encoderDrive(0,0,-91,0.4);
-        encoderDrive(-11,0,0,0.5);
+        encoderDrive(-14,0,0,0.5);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

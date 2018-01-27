@@ -66,7 +66,7 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
             }
             if (vuMark == RelicRecoveryVuMark.RIGHT) {
                 displayText = "Right";
-                distance = 19;
+                distance = 18;
                 detect = true;
             }
         }
