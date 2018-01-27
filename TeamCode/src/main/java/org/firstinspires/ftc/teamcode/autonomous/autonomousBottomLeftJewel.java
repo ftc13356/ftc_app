@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program for knocking jewel and reading VuMark (Bottom Left)
@@ -14,6 +15,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //right--++ (-)
 
 @Autonomous(name = "Autonomous Bottom Left Jewel (HouseB)")
+@Disabled
 public class autonomousBottomLeftJewel extends autonomousFrame {
 
     @Override
@@ -35,8 +37,8 @@ public class autonomousBottomLeftJewel extends autonomousFrame {
         allianceColor = 1; // red
 
         // Set glyph claw to hold glyph
-        glyphClawLeft.setPosition(0.3);
-        glyphClawRight.setPosition(0.7);
+        glyphClawLeft.setPosition(0.4);
+        glyphClawRight.setPosition(0.6);
 
         waitForStart();
 
@@ -46,17 +48,26 @@ public class autonomousBottomLeftJewel extends autonomousFrame {
         sleep(1500);
         armMotor.setPower(0);
 
+        // Detect VuMark
         detectVuMark(-18.75, -11.5, -3.75);
 
-        // Extend underarm
+        // Extend color arm
+        colorArm.setPower(-1);
+        sleep(8000);
+        colorArm.setPower(0);
 
+        // Detect Jewel
         reactToJewelDetect(3);
 
-        // Retract underarm
+        // Retract color arm
+        colorArm.setPower(1);
+        sleep(7000);
+        colorArm.setPower(0);
 
+        // Drive to appropriate cryptobox column
         encoderDrive(-28 - distanceJewel,0,0,0.3);
         encoderDrive(0, distanceVuMark,0,0.3);
-        encoderDrive(-5.25,0,0,0.3);
+        encoderDrive(-8.25,0,0,0.3);
 
         // Release glyph
         glyphClawLeft.setPosition(1);

@@ -5,6 +5,7 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -31,50 +32,48 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    public final String autonomousVersionNumber = "13.0- 1/23/18 ";
+    private final String autonomousVersionNumber = "13.1- 1/23/18 ";
 
     // Initialize Hardware variables
-    public DcMotor motorLeftfront;
-    public DcMotor motorRightfront;
-    public DcMotor motorLeftback;
-    public DcMotor motorRightback;
+    protected DcMotor motorLeftfront;
+    protected DcMotor motorRightfront;
+    protected DcMotor motorLeftback;
+    protected DcMotor motorRightback;
     
     public DcMotor armMotor;
-    
-    public Servo armClawLeft;
-    public Servo armClawRight;
+    public DigitalChannel touchSensor;
     
     public Servo glyphClawLeft;
     public Servo glyphClawRight;
 
-    public DigitalChannel touchSensor;
-    public ColorSensor colorSensor;
+    CRServo colorArm;
+    protected ColorSensor colorSensor;
 
-    public VuforiaLocalizer vuforia;
-    public VuforiaTrackables relicTrackables;
-    public VuforiaTrackable relicTemplate;
+    private VuforiaLocalizer vuforia;
+    protected VuforiaTrackables relicTrackables;
+    protected VuforiaTrackable relicTemplate;
 
     // Initialize Drive Variables
-    final double counts_per_motor_rev = 1680 ;
-    final double robot_diameter = 23.0;
-    final double drive_gear_reduction = 0.75;
-    final double wheel_diameter_inches = 4.0 ;
-    final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
+    private final double counts_per_motor_rev = 1680 ;
+    private final double robot_diameter = 23.0;
+    private final double drive_gear_reduction = 0.75;
+    private final double wheel_diameter_inches = 4.0 ;
+    private final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
                                           (wheel_diameter_inches * Math.PI);
-    final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
+    private final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
 
     // Initialize Jewel Variables
-    boolean detectJewel = false;
+    private boolean detectJewel = false;
     float allianceColor;
     double distanceJewel;
-    String displayJewel = "";
-    ElapsedTime jewelTime = new ElapsedTime();
+    private String displayJewel = "";
+    private ElapsedTime jewelTime = new ElapsedTime();
 
     // Initialize VuMark Variables
-    boolean detectVuMark = false;
+    private boolean detectVuMark = false;
     double distanceVuMark = 0;
-    String displayVuMark = "";
-    ElapsedTime vuMarkTime = new ElapsedTime();
+    private String displayVuMark = "";
+    private ElapsedTime vuMarkTime = new ElapsedTime();
 
     // Initialize Hardware Map
     public void initializeHardwareMap() {
@@ -83,10 +82,9 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorLeftback = hardwareMap.dcMotor.get("motorLeftback");
         motorRightback = hardwareMap.dcMotor.get("motorRightback");
         armMotor = hardwareMap.dcMotor.get("armMotor");
-        armClawLeft = hardwareMap.servo.get("clawLeft");
-        armClawRight = hardwareMap.servo.get("clawRight");
         glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
         glyphClawRight = hardwareMap.servo.get("glyphClawRight");
+        colorArm = hardwareMap.crservo.get("colorArm");
         touchSensor = hardwareMap.digitalChannel.get("touchSensor");
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
@@ -330,19 +328,19 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         float colorValue = checkColor();
         jewelTime.reset();
-        while (opModeIsActive() && detectJewel == false && jewelTime.milliseconds() <= 5000) {
+        while (opModeIsActive() && detectJewel == false && jewelTime.milliseconds() <= 3000) {
             colorValue = checkColor();
             if (colorValue == 1) {
                 displayJewel = "Red";
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(-distance,0,0,0.3);
-                    distanceJewel = -distance;
-                }
-                else {
                     encoderDrive(distance,0,0,0.3);
                     distanceJewel = distance;
+                }
+                else {
+                    encoderDrive(-distance,0,0,0.3);
+                    distanceJewel = -distance;
                 }
             }
             if (colorValue == 2) {
@@ -350,12 +348,12 @@ public abstract class autonomousFrame extends LinearOpMode {
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(-distance,0,0,0.3);
-                    distanceJewel = -distance;
-                }
-                else {
                     encoderDrive(distance,0,0,0.3);
                     distanceJewel = distance;
+                }
+                else {
+                    encoderDrive(-distance,0,0,0.3);
+                    distanceJewel = -distance;
                 }
             }
         }
@@ -370,7 +368,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     public void detectVuMark (double leftDistance, double centerDistance, double rightDistance) {
         relicTrackables.activate();
         vuMarkTime.reset();
-        while (opModeIsActive() && detectVuMark == false && vuMarkTime.milliseconds() <= 5000) {
+        while (opModeIsActive() && detectVuMark == false && vuMarkTime.milliseconds() <= 3000) {
             RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(relicTemplate);
             if (vuMark == RelicRecoveryVuMark.LEFT) {
                 displayVuMark = "Left";

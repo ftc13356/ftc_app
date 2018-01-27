@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 //right--++ (-)
 
 @Autonomous(name = "Autonomous Top Left VuMark")
-@Disabled
+
 public class autonomousTopLeftVuMark extends autonomousFrame {
 
     @Override
@@ -30,8 +30,7 @@ public class autonomousTopLeftVuMark extends autonomousFrame {
         // UPDATE VERSION NUMBER
         // BEFORE EVERY COMMIT
 
-        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
-        telemetry.update();
+        versionPrint();
 
         // Initialization
         initializeHardwareMap();
