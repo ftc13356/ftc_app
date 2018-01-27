@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.teleop.debug;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -11,17 +12,19 @@ public class armMoveDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String armDebugVersionNumber = "3.5 - 1/23/18 ";
+    private final String armDebugVersionNumber = "4.0 - 1/26/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
     private DigitalChannel touchSensor;
+    private CRServo colorArm;
 
     private final double armSpeedControl = 0.5;
 
     private double armMotorPower = 0;
+    private double colorArmPower = 0;
 
     private int currentArmPosition = 0;
 
@@ -39,6 +42,7 @@ public class armMoveDebug extends OpMode{
         armClawLeft = hardwareMap.servo.get("clawLeft");
         armClawRight = hardwareMap.servo.get("clawRight");
         touchSensor = hardwareMap.digitalChannel.get("touchSensor");
+        colorArm = hardwareMap.crservo.get("colorArm");
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
         armMotor.setDirection(DcMotor.Direction.REVERSE);
@@ -76,6 +80,9 @@ public class armMoveDebug extends OpMode{
         }
         // Left stick is used to raise/lower arm
         armMotorPower = gamepad1.left_stick_y * armSpeedControl;
+        colorArmPower = gamepad1.right_stick_x;
+
+        colorArm.setPower(colorArmPower);
 
         currentArmPosition = armMotor.getCurrentPosition();
 
