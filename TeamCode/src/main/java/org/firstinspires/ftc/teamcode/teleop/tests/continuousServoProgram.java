@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Continuous Servo Debug")
+@TeleOp(name = "Continuous Servo Test")
 @Disabled
 public class continuousServoProgram extends OpMode{
 

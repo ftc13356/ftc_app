@@ -34,7 +34,7 @@ public class chassis {
 
     // Creates OpMode
     private OpMode op;
-    chassis(OpMode opmode) {
+    public chassis(OpMode opmode) {
         op = opmode;
     }
 

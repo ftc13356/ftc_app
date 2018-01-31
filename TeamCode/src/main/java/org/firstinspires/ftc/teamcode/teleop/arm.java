@@ -45,7 +45,7 @@ public class arm {
 
     // Create OpMode
     private OpMode op;
-    arm(OpMode opmode) {
+    public arm(OpMode opmode) {
         op = opmode;
     }
 
