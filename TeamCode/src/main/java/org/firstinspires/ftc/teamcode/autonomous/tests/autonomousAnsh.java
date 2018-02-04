@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 
@@ -78,6 +79,32 @@ public class autonomousAnsh extends autonomousFrame
 
         // Tells Driver Time Left
         telemetry.addData("Status", "Time Left: " + (30 - runtime.seconds()));
+        telemetry.update();
+    }
+
+    // Combined Drive Functions (Drivetrain)
+    public void drive(double driveFB, double driveS, double turn, long time, double speedControl) {
+        // Define Speed Variables
+        double motorLeftfrontPower;
+        double motorRightfrontPower;
+        double motorLeftbackPower;
+        double motorRightbackPower;
+
+        // Calculating Power
+        motorLeftfrontPower = Range.clip((-driveFB + driveS + turn) * speedControl, -1.0, 1.0);
+        motorRightfrontPower = Range.clip((driveFB + driveS + turn) * speedControl, -1.0, 1.0);
+        motorLeftbackPower = Range.clip((-driveFB - driveS + turn) * speedControl, -1.0, 1.0);
+        motorRightbackPower = Range.clip((driveFB - driveS + turn) * speedControl, -1.0, 1.0);
+
+        // Set Motor Power to Calculated Power
+        motorLeftfront.setPower(motorLeftfrontPower);
+        motorRightfront.setPower(motorRightfrontPower);
+        motorLeftback.setPower(motorLeftbackPower);
+        motorRightback.setPower(motorRightbackPower);
+
+        sleep(time);
+
+        telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
         telemetry.update();
     }
 }

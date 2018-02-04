@@ -60,5 +60,30 @@ public class autonomousJonathan extends autonomousFrame {
         moveRight(0.5, 500);
         stop();
     }
+
+    // Basic Drive Functions (Drivetrain)
+    public void moveForward (double power, long time) {
+        motorLeftfront.setPower(-power);
+        motorRightfront.setPower(power);
+        motorLeftback.setPower(-power);
+        motorRightback.setPower(power);
+        sleep(time);
+    }
+
+    public void moveLeft (double power, long time) {
+        motorLeftfront.setPower(power);
+        motorRightfront.setPower(power);
+        motorLeftback.setPower(-power);
+        motorRightback.setPower(-power);
+        sleep(time);
+    }
+
+    public void  moveRight (double power, long time) {
+        moveLeft(-power, time);
+    }
+
+    public void  moveBackward (double power, long time) {
+        moveForward(-power, time);
+    }
 }
 
