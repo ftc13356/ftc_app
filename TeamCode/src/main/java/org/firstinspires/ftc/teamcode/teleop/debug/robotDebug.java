@@ -1,18 +1,21 @@
 package org.firstinspires.ftc.teamcode.teleop.debug;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
-@TeleOp(name = "Arm Move for Debug")
-public class armMoveDebug extends OpMode{
+@TeleOp(name = "Robot Debug")
+public class robotDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String armDebugVersionNumber = "4.0 - 1/26/18 ";
+    private final String robotDebugVersionNumber = "5.0 - 2/4/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -20,6 +23,7 @@ public class armMoveDebug extends OpMode{
     private Servo armClawRight;
     private DigitalChannel touchSensor;
     private CRServo colorArm;
+    private ColorSensor colorSensor;
 
     private final double armSpeedControl = 0.5;
 
@@ -27,14 +31,17 @@ public class armMoveDebug extends OpMode{
     private double colorArmPower = 0;
 
     private int currentArmPosition = 0;
+    private final int armUpperLimit = -6900;
 
-    private double clawLeftPosition = 0.35;
-    private double clawRightPosition = 0.65;
+    private double armLeftPosition = 0.35;
+    private double armRightPosition = 0.65;
+
+    private float hsvValues[] = {0F, 0F, 0F};
 
     @Override
     public void init() {
 
-        telemetry.addData("Teleop Program Version", armDebugVersionNumber);
+        telemetry.addData("Debug Program Version", robotDebugVersionNumber);
         telemetry.addData("Arm", "Initializing");
 
         // Initialize hardware variables
@@ -42,6 +49,7 @@ public class armMoveDebug extends OpMode{
         armClawLeft = hardwareMap.servo.get("clawLeft");
         armClawRight = hardwareMap.servo.get("clawRight");
         touchSensor = hardwareMap.digitalChannel.get("touchSensor");
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
         colorArm = hardwareMap.crservo.get("colorArm");
         touchSensor.setMode(DigitalChannel.Mode.INPUT);
 
@@ -54,22 +62,24 @@ public class armMoveDebug extends OpMode{
     @Override
     public void loop() {
 
+        currentArmPosition = armMotor.getCurrentPosition();
+
         // Right bumper opens claw, Left bumper closes claw, B opens claw slightly
         if (gamepad1.left_bumper) {
-            clawLeftPosition = 0.7;
-            clawRightPosition = 0.3;
+            armLeftPosition = 0.7;
+            armRightPosition = 0.3;
             telemetry.addData("Arm Servo Status", "Closed");
         }
 
         if (gamepad1.right_bumper) {
-            clawLeftPosition = 0.35;
-            clawRightPosition = 0.65;
+            armLeftPosition = 0.35;
+            armRightPosition = 0.65;
             telemetry.addData("Arm Servo Status", "Open Completely");
         }
 
         if (gamepad1.a) {
-            clawLeftPosition = 0.5;
-            clawRightPosition = 0.5;
+            armLeftPosition = 0.5;
+            armRightPosition = 0.5;
             telemetry.addData("Arm Servo Status", "Open Slightly");
         }
 
@@ -78,13 +88,10 @@ public class armMoveDebug extends OpMode{
             armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             armMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        // Left stick is used to raise/lower arm
+
+        // Left stick used to control arm, Right stick used to control color arm
         armMotorPower = gamepad1.left_stick_y * armSpeedControl;
         colorArmPower = gamepad1.right_stick_x;
-
-        colorArm.setPower(colorArmPower);
-
-        currentArmPosition = armMotor.getCurrentPosition();
 
         // Stop arm's motion if it hits touch sensor and moving downward
         if (!touchSensor.getState()) {
@@ -97,16 +104,30 @@ public class armMoveDebug extends OpMode{
         }
 
         // Stop arm's motion if it goes above upper limit and moving upward
-        if (currentArmPosition < -5900 && armMotorPower < 0) {
+        if (currentArmPosition < armUpperLimit && armMotorPower < 0) {
             armMotorPower = 0;
             telemetry.addData("Arm Status", "Upper Limit Reached");
         }
 
-        // Set arm power, servo position
-        armMotor.setPower(armMotorPower);
+        // Scans for red or blue color
+        Color.RGBToHSV((colorSensor.red()), (colorSensor.green()), (colorSensor.blue()), hsvValues);
+        telemetry.addData("Hue", hsvValues[0]);
+        if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
+            telemetry.addData("Color Sensor Status", "Red");
+        }
+        if (hsvValues[0] >= 200 && hsvValues[0] <= 275) {
+            telemetry.addData("Color Sensor Status", "Blue");
+        }
+        else {
+            telemetry.addData("Color Sensor Status", "Unknown");
+        }
 
-        armClawLeft.setPosition(clawLeftPosition);
-        armClawRight.setPosition(clawRightPosition);
+        // Set arm, color arm power, servo position
+        armMotor.setPower(armMotorPower);
+        colorArm.setPower(colorArmPower);
+
+        armClawLeft.setPosition(armLeftPosition);
+        armClawRight.setPosition(armRightPosition);
 
         telemetry.addData("Left Arm Servo Position", armClawLeft.getPosition());
         telemetry.addData("Right Arm Servo Position", armClawRight.getPosition());
