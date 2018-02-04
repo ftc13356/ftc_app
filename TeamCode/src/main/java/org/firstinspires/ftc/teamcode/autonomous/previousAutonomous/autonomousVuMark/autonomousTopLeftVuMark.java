@@ -19,7 +19,7 @@ import org.firstinspires.ftc.teamcode.autonomous.autonomousFrame;
 //right--++ (-)
 
 @Autonomous(name = "Autonomous Top Left VuMark")
-
+@Disabled
 public class autonomousTopLeftVuMark extends autonomousFrame {
 
     @Override

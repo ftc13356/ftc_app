@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program for knocking jewel and reading VuMark (Top Right)
@@ -15,7 +14,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //right--++ (-)
 
 @Autonomous(name = "Autonomous Top Right Jewel (HouseT)")
-@Disabled
 public class autonomousTopRightJewel extends autonomousFrame {
 
     @Override
