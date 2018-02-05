@@ -13,42 +13,35 @@ public class teleop extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-     private final String teleopVersionNumber = "8.14 - 1/23/18 ";
+     private final String teleopVersionNumber = "9.0 - 2/4/18 ";
 
     // Creates instances of chassis, glyph claw, and arm
     private chassis chassis = new chassis(this);
-    private glyphC glyphC = new glyphC(this);
     private arm arm = new arm(this);
 
     // Calls methods in chassis and arm
     @Override
     public void init() {
-
         telemetry.addData("Teleop Program Version", teleopVersionNumber);
-
         chassis.init();
-        glyphC.init();
         arm.init();
     }
 
     @Override
     public void init_loop() {
         chassis.init_loop();
-        glyphC.init_loop();
         arm.init_loop();
     }
 
     @Override
     public void start() {
         chassis.start();
-        glyphC.start();
         arm.start();
     }
 
     @Override
     public void loop() {
         chassis.loop();
-        glyphC.loop();
         arm.loop();
     }
 

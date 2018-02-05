@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.Range;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -26,11 +27,17 @@ public class chassis {
     private DcMotor motorLeftback;
     private DcMotor motorRightback;
 
+    private Servo glyphClawSwerveLeft;
+    private Servo glyphClawSwerveRight;
+
     private double speedControl = 0.5;
 
     private int display = 0;
 
     private int hold = 0;
+
+    private double leftSwervePosition = 0.5;
+    private double rightSwervePosition = 0.5;
 
     // Creates OpMode
     private OpMode op;
@@ -47,6 +54,8 @@ public class chassis {
         motorRightfront = op.hardwareMap.dcMotor.get("motorRightfront");
         motorLeftback = op.hardwareMap.dcMotor.get("motorLeftback");
         motorRightback = op.hardwareMap.dcMotor.get("motorRightback");
+        glyphClawSwerveLeft = op.hardwareMap.servo.get("glyphClawSwerveLeft");
+        glyphClawSwerveRight = op.hardwareMap.servo.get("glyphClawSwerveRight");
 
         // This tells the direction of the motor
         motorLeftfront.setDirection(DcMotor.Direction.FORWARD);
@@ -63,6 +72,8 @@ public class chassis {
 
     // When Play button is pressed
     public void start() {
+        glyphClawSwerveLeft.setPosition(leftSwervePosition);
+        glyphClawSwerveRight.setPosition(rightSwervePosition);
     }
 
     // Main Loop
@@ -117,6 +128,18 @@ public class chassis {
                 display = 2;
             }
         }
+        // This makes the swerve drive go to normal mode
+        if(op.gamepad1.dpad_up) {
+            leftSwervePosition = 0.5;
+            rightSwervePosition = 0.5;
+            op.telemetry.addData("Swerve Status", "Holonomic");
+        }
+        // This makes the swerve drive go to balancing stone mode
+        if(op.gamepad1.dpad_down) {
+            leftSwervePosition = 0;
+            rightSwervePosition = 1;
+            op.telemetry.addData("Swerve Status", "Power Drive");
+        }
 
         // Forward:  +LF -RF +LB -RB
         // Backward: -LF +RF -LB +RB
@@ -138,7 +161,14 @@ public class chassis {
         motorLeftback.setPower(motorLeftbackPower);
         motorRightback.setPower(motorRightbackPower);
 
-        // This prints speed mode on the screen
+        // The calculated servo position is then applied to the servos
+        glyphClawSwerveLeft.setPosition(leftSwervePosition);
+        glyphClawSwerveRight.setPosition(rightSwervePosition);
+
+        // This prints speed, servo information on the screen
+        op.telemetry.addData("Left Glyph Servo Position", leftSwervePosition);
+        op.telemetry.addData("Right Glyph Servo Position", rightSwervePosition);
+
         if (display == 0) {
             op.telemetry.addData("SpeedMode", "Fast");
         }
@@ -151,6 +181,5 @@ public class chassis {
         else if (display == 3) {
             op.telemetry.addData("SpeedMode", "Micro-Adjustment");
         }
-
     }
 }
