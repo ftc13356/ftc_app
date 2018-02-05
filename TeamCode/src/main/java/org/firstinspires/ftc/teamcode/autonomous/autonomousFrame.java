@@ -32,7 +32,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "13.4- 2/4/18 ";
+    private final String autonomousVersionNumber = "13.5- 2/4/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;
@@ -43,8 +43,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     public DcMotor armMotor;
     public DigitalChannel touchSensor;
     
-    public Servo glyphClawLeft;
-    public Servo glyphClawRight;
+    public Servo glyphClawSwerveLeft;
+    public Servo glyphClawSwerveRight;
 
     CRServo colorArm;
     protected ColorSensor colorSensor;
@@ -82,8 +82,8 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorLeftback = hardwareMap.dcMotor.get("motorLeftback");
         motorRightback = hardwareMap.dcMotor.get("motorRightback");
         armMotor = hardwareMap.dcMotor.get("armMotor");
-        glyphClawLeft = hardwareMap.servo.get("glyphClawLeft");
-        glyphClawRight = hardwareMap.servo.get("glyphClawRight");
+        glyphClawSwerveLeft = hardwareMap.servo.get("glyphClawSwerveLeft");
+        glyphClawSwerveRight = hardwareMap.servo.get("glyphClawSwerveRight");
         colorArm = hardwareMap.crservo.get("colorArm");
         touchSensor = hardwareMap.digitalChannel.get("touchSensor");
         colorSensor = hardwareMap.colorSensor.get("colorSensor");

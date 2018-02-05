@@ -35,8 +35,8 @@ public class autonomousBottomLeftJewel extends autonomousFrame {
         allianceColor = 1; // red
 
         // Set glyph claw to hold glyph
-        glyphClawLeft.setPosition(0.4);
-        glyphClawRight.setPosition(0.6);
+        glyphClawSwerveLeft.setPosition(0.5);
+        glyphClawSwerveRight.setPosition(0.5);
 
         waitForStart();
 
@@ -68,8 +68,8 @@ public class autonomousBottomLeftJewel extends autonomousFrame {
         encoderDrive(-8.25,0,0,0.3);
 
         // Release glyph
-        glyphClawLeft.setPosition(1);
-        glyphClawRight.setPosition(0);
+        glyphClawSwerveLeft.setPosition(1);
+        glyphClawSwerveRight.setPosition(0);
         telemetry.addData("Task", "Glyph In");
         telemetry.update();
 

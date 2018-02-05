@@ -44,8 +44,8 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         ElapsedTime runtime = new ElapsedTime();
 
         // Set glyph claw to hold glyph
-        glyphClawLeft.setPosition(0.3);
-        glyphClawRight.setPosition(0.7);
+        glyphClawSwerveLeft.setPosition(0.3);
+        glyphClawSwerveRight.setPosition(0.7);
 
         waitForStart();
 
@@ -83,8 +83,8 @@ public class autonomousBottomRightVuMark extends autonomousFrame {
         encoderDrive(-11.5,0,0,0.4);
 
         // Release glyph
-        glyphClawLeft.setPosition(1);
-        glyphClawRight.setPosition(0);
+        glyphClawSwerveLeft.setPosition(1);
+        glyphClawSwerveRight.setPosition(0);
         telemetry.addData("Task", "Glyph In");
         telemetry.update();
 
