@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.teleop;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -25,6 +26,7 @@ public class arm {
     private DcMotor armMotor;
     private Servo armClawLeft;
     private Servo armClawRight;
+    private CRServo colorArm;
     private DigitalChannel touchSensor;
 
     // Initialize arm claw variables
@@ -34,6 +36,7 @@ public class arm {
     // Initialize arm motor variables
     private final double armSpeedControl = 0.5;
     private double armMotorPower = 0;
+    private double colorArmPower = 0;
     private int currentArmPosition = 0;
 
     // Encoder Variables
@@ -57,6 +60,7 @@ public class arm {
         armMotor = op.hardwareMap.dcMotor.get("armMotor");
         armClawLeft = op.hardwareMap.servo.get("clawLeft");
         armClawRight = op.hardwareMap.servo.get("clawRight");
+        colorArm = op.hardwareMap.crservo.get("colorArm");
         touchSensor = op.hardwareMap.digitalChannel.get("touchSensor");
 
         // Set the digital channel to input
@@ -161,8 +165,11 @@ public class arm {
             op.telemetry.addData("Arm Status", "Upper Limit Reached");
         }
 
+        colorArmPower = op.gamepad2.right_stick_x;
+
         // The calculated power is then applied to the motors
         armMotor.setPower(armMotorPower);
+        colorArm.setPower(colorArmPower);
 
         // Sets/Reads Servo Positions
         armClawLeft.setPosition(armLeftPosition);
