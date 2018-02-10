@@ -11,7 +11,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
@@ -32,7 +31,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "13.5- 2/4/18 ";
+    private final String autonomousVersionNumber = "14.0 - 2/9/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;
@@ -46,8 +45,10 @@ public abstract class autonomousFrame extends LinearOpMode {
     public Servo glyphClawSwerveLeft;
     public Servo glyphClawSwerveRight;
 
-    CRServo colorArm;
+    private CRServo colorArm;
     protected ColorSensor colorSensor;
+    private final int armExtendTime = 4400;
+    private final int armRetractTime = 4200;
 
     private VuforiaLocalizer vuforia;
     protected VuforiaTrackables relicTrackables;
@@ -66,7 +67,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     private boolean detectJewel = false;
     float allianceColor;
     double distanceJewel;
-    private String displayJewel = "";
+    String displayJewel = "";
     private ElapsedTime jewelTime = new ElapsedTime();
 
     // Initialize VuMark Variables
@@ -119,55 +120,33 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.update();
     }
 
-    // Basic Drive Functions (Drivetrain)
-    public void moveForward (double power, long time) {
-        motorLeftfront.setPower(-power);
-        motorRightfront.setPower(power);
-        motorLeftback.setPower(-power);
-        motorRightback.setPower(power);
+    // Moves the arm
+    public void moveArm(double power, long time) {
+        armMotor.setPower(power);
         sleep(time);
+        armMotor.setPower(0);
     }
 
-    public void moveLeft (double power, long time) {
-        motorLeftfront.setPower(power);
-        motorRightfront.setPower(power);
-        motorLeftback.setPower(-power);
-        motorRightback.setPower(-power);
-        sleep(time);
+    // Grips/releases glyph, change between holonomic drivetrain
+    public void gripGlyphHolonomic() {
+        glyphClawSwerveLeft.setPosition(0.5);
+        glyphClawSwerveRight.setPosition(0.5);
+    }
+    public void releaseGlyphSwerve() {
+        glyphClawSwerveLeft.setPosition(0);
+        glyphClawSwerveRight.setPosition(1);
     }
 
-    public void  moveRight (double power, long time) {
-        moveLeft(-power, time);
+    // Extends/retracts the color arm
+    public void extendColorArm() {
+        colorArm.setPower(-1);
+        sleep(armExtendTime);
+        colorArm.setPower(0);
     }
-
-    public void  moveBackward (double power, long time) {
-        moveForward(-power, time);
-    }
-
-    // Combined Drive Functions (Drivetrain)
-    public void drive(double driveFB, double driveS, double turn, long time, double speedfactor) {
-        // Define Speed Variables
-        double motorLeftfrontPower;
-        double motorRightfrontPower;
-        double motorLeftbackPower;
-        double motorRightbackPower;
-
-        // Calculating Power
-        motorLeftfrontPower = Range.clip((-driveFB + driveS + turn) * speedfactor, -1.0, 1.0);
-        motorRightfrontPower = Range.clip((driveFB + driveS + turn) * speedfactor, -1.0, 1.0);
-        motorLeftbackPower = Range.clip((-driveFB - driveS + turn) * speedfactor, -1.0, 1.0);
-        motorRightbackPower = Range.clip((driveFB - driveS + turn) * speedfactor, -1.0, 1.0);
-
-        // Set Motor Power to Calculated Power
-        motorLeftfront.setPower(motorLeftfrontPower);
-        motorRightfront.setPower(motorRightfrontPower);
-        motorLeftback.setPower(motorLeftbackPower);
-        motorRightback.setPower(motorRightbackPower);
-
-        sleep(time);
-
-        telemetry.addData("Motors", "Leftfront (%.2f), Rightfront (%.2f), Leftback (%.2f), Rightback (%.2f)", motorLeftfrontPower, motorRightfrontPower, motorLeftbackPower, motorRightbackPower);
-        telemetry.update();
+    public void retractColorArm() {
+        colorArm.setPower(1);
+        sleep(armRetractTime);
+        colorArm.setPower(0);
     }
 
     // Combined Drive Function (Drivetrain, Encoder)
@@ -242,7 +221,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     // Individual Motor Drive Function (Drivetrain, Encoder)
-    public void encoderDriveBasic(double speed, double leftFrontinches, double rightFrontinches, double leftBackinches, double rightBackinches) {
+    public void encoderDriveBasic(double speed, double leftFrontinches, double rightFrontinches,
+                                  double leftBackinches, double rightBackinches) {
 
         // Defines Variables
         int newLeftfrontTarget;
@@ -308,12 +288,12 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         float masterValue = 0;
         float hsvValues[] = {0F, 0F, 0F};
-        Color.RGBToHSV((int) (colorSensor.red()), (int) (colorSensor.green()), (int) (colorSensor.blue()), hsvValues);
+        Color.RGBToHSV((colorSensor.red()), (colorSensor.green()), (colorSensor.blue()), hsvValues);
         telemetry.addData("Hue", hsvValues[0]);
         if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
             masterValue = 1;
         }
-        if (hsvValues[0] >= 210 && hsvValues[0] <= 275) {
+        if (hsvValues[0] >= 200 && hsvValues[0] <= 275) {
             masterValue = 2;
         }
 
@@ -335,11 +315,11 @@ public abstract class autonomousFrame extends LinearOpMode {
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(distance,0,0,0.3);
+                    encoderDrive(0,0,-distance,0.2);
                     distanceJewel = distance;
                 }
                 else {
-                    encoderDrive(-distance,0,0,0.3);
+                    encoderDrive(0,0,distance,0.2);
                     distanceJewel = -distance;
                 }
             }
@@ -348,11 +328,11 @@ public abstract class autonomousFrame extends LinearOpMode {
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(distance,0,0,0.3);
+                    encoderDrive(0,0,-distance,0.2);
                     distanceJewel = distance;
                 }
                 else {
-                    encoderDrive(-distance,0,0,0.3);
+                    encoderDrive(0,0,distance,0.2);
                     distanceJewel = -distance;
                 }
             }

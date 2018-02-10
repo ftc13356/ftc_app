@@ -35,56 +35,52 @@ public class autonomousBottomLeftJewel extends autonomousFrame {
         allianceColor = 1; // red
 
         // Set glyph claw to hold glyph
-        glyphClawSwerveLeft.setPosition(0.5);
-        glyphClawSwerveRight.setPosition(0.5);
+        gripGlyphHolonomic();
 
         waitForStart();
 
         // Pushing glyph, facing away from audience
         // Move arm up
-        armMotor.setPower(-0.25);
-        sleep(1500);
-        armMotor.setPower(0);
+        moveArm(-0.2,1000);
 
         // Detect VuMark
         detectVuMark(-18.75, -11.5, -3.75);
 
         // Extend color arm
-        colorArm.setPower(-1);
-        sleep(8000);
-        colorArm.setPower(0);
+        extendColorArm();
 
-        // Detect Jewel
-        reactToJewelDetect(3);
+        // Detect and knock jewel
+        reactToJewelDetect(17.5);
+        encoderDrive(0,0, distanceJewel,0.3);
 
         // Retract color arm
-        colorArm.setPower(1);
-        sleep(7000);
-        colorArm.setPower(0);
+        retractColorArm();
 
         // Drive to appropriate cryptobox column
-        encoderDrive(-28 - distanceJewel,0,0,0.3);
+        encoderDrive(-28,0,0,0.3);
         encoderDrive(0, distanceVuMark,0,0.3);
-        encoderDrive(-8.25,0,0,0.3);
+        encoderDrive(-7,0,0,0.3);
 
         // Release glyph
-        glyphClawSwerveLeft.setPosition(1);
-        glyphClawSwerveRight.setPosition(0);
+        releaseGlyphSwerve();
         telemetry.addData("Task", "Glyph In");
         telemetry.update();
 
         // Back up from glyph
-        encoderDrive(3, 0, 0, 0.3);
+        encoderDrive(4, 0, 0, 0.3);
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
         // Move arm back down
-        armMotor.setPower(0.15);
+        armMotor.setPower(0.2);
         while (touchSensor.getState()) {
             telemetry.addData("Touch Sensor", touchSensor.getState());
             telemetry.update();
         }
         armMotor.setPower(0);
+
+        // Return to holonomic drive
+        gripGlyphHolonomic();
 
         stop();
 
