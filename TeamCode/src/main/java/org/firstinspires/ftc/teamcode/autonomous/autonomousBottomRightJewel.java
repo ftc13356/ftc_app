@@ -44,31 +44,33 @@ public class autonomousBottomRightJewel extends autonomousFrame {
         moveArm(-0.2,1000);
 
         // Detect VuMark
-        detectVuMark(4.5, 13, 19);
+        detectVuMark(5.5, 14, 20);
 
         // Extend color arm
         extendColorArm();
 
         // Detect and knock jewel
         reactToJewelDetect(17.5);
-        encoderDrive(0,0, distanceJewel,0.3);
+        encoderDrive(0,0, distanceJewel,0.5);
 
         // Retract color arm
         retractColorArm();
 
         // Drive to appropriate cryptobox column
-        encoderDrive(26,0,0,0.3);
-        encoderDrive(0,0,181,0.3);
-        encoderDrive(0, distanceVuMark,0,0.3);
-        encoderDrive(-11.5,0,0,0.3);
+        encoderDrive(26,0,0,0.5);
+        encoderDrive(0,0,181,0.5);
+        encoderDrive(0, distanceVuMark,0,0.5);
+        encoderDrive(-11.5,0,0,0.5);
 
         // Release glyph
         releaseGlyphSwerve();
         telemetry.addData("Task", "Glyph In");
         telemetry.update();
 
-        // Back up from glyph
-        encoderDrive(4, 0, 0, 0.3);
+        // Back up from, shove in, back up from glyph
+        encoderDrive(5, 0, 0, 0.5);
+        encoderDrive(-5,0,0,0.5);
+        encoderDrive(4,0,0,0.5);
         telemetry.addData("Task", "At safe zone");
         telemetry.update();
 
@@ -80,8 +82,6 @@ public class autonomousBottomRightJewel extends autonomousFrame {
         }
         armMotor.setPower(0);
 
-        // Return to holonomic drive
-        gripGlyphHolonomic();
 
         stop();
 

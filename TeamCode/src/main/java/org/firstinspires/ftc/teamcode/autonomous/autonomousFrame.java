@@ -31,7 +31,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "14.0 - 2/9/18 ";
+    private final String autonomousVersionNumber = "14.1 - 2/14/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;
@@ -368,7 +368,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
         if (detectVuMark == false){
             displayVuMark = "Unknown";
-            distanceVuMark = -11.5;
+            distanceVuMark = centerDistance;
         }
         telemetry.addData("VuMark Identified:", displayVuMark);
         telemetry.update();
