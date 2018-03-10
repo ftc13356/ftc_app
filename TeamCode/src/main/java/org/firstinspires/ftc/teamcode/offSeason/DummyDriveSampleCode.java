@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.util.Range;
  * Created by ansh_ on 03/09/18.
  */
 
-@TeleOp(name = "Code for Fun Outreach Event")
+@TeleOp(name = "Code for Fun Outreach")
 // @Disabled
 public class DummyDriveSampleCode extends OpMode {
 
@@ -51,20 +51,19 @@ public class DummyDriveSampleCode extends OpMode {
         double motorRightbackPower;
 
         // The left joystick is used to drive fw/s while the right joystick is used to turn in place.
-        double driveFW = gamepad1.left_stick_y;
+        double driveFB = gamepad1.left_stick_y;
         double turn  = gamepad1.right_stick_x;
 
         // The speed values are calculated and stored in variables.
 
-        motorLeftbackPower = Range.clip((-driveFW - turn), -1.0, 1.0) ;
-        motorRightbackPower = Range.clip((driveFW - turn), -1.0, 1.0) ;
+        motorLeftbackPower = Range.clip((-driveFB - turn), -1.0, 1.0) ;
+        motorRightbackPower = Range.clip((driveFB - turn), -1.0, 1.0) ;
 
         // The calculated power is then applied to the motors.
         motorLeftback.setPower(motorLeftbackPower);
         motorRightback.setPower(motorRightbackPower);
 
         telemetry.addData("Motors", "Leftback (%.2f), Rightback (%.2f)", motorLeftbackPower, motorRightbackPower);
-
     }
 
     // This code will run after the STOP button is pressed.
