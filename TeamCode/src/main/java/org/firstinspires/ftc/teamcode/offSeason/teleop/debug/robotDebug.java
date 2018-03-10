@@ -10,12 +10,17 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.Servo;
 
+///////////////////////////////////////////////////////////////////////////////
+// Purpose: Class for controlling debugging, testing different parts of the robot
+// Author: Jonathan Ma, Ansh Gandhi
+///////////////////////////////////////////////////////////////////////////////
+
 @TeleOp(name = "Robot Debug")
 public class robotDebug extends OpMode{
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String robotDebugVersionNumber = "5.0 - 2/4/18 ";
+    private final String robotDebugVersionNumber = "5.1 - 3/9/18 ";
 
     // Initialize the variables
     private DcMotor armMotor;
@@ -29,9 +34,6 @@ public class robotDebug extends OpMode{
 
     private double armMotorPower = 0;
     private double colorArmPower = 0;
-
-    private int currentArmPosition = 0;
-    private final int armUpperLimit = -6900;
 
     private double armLeftPosition = 0.35;
     private double armRightPosition = 0.65;
@@ -61,8 +63,6 @@ public class robotDebug extends OpMode{
 
     @Override
     public void loop() {
-
-        currentArmPosition = armMotor.getCurrentPosition();
 
         // Right bumper opens claw, Left bumper closes claw, B opens claw slightly
         if (gamepad1.left_bumper) {
@@ -101,12 +101,6 @@ public class robotDebug extends OpMode{
                 armMotorPower = 0;
                 telemetry.addData("Arm", "Is Stopped");
             }
-        }
-
-        // Stop arm's motion if it goes above upper limit and moving upward
-        if (currentArmPosition < armUpperLimit && armMotorPower < 0) {
-            armMotorPower = 0;
-            telemetry.addData("Arm Status", "Upper Limit Reached");
         }
 
         // Scans for red or blue color

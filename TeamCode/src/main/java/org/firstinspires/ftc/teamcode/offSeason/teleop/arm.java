@@ -159,12 +159,6 @@ public class arm {
             }
         }
 
-        // Stop arm's motion if it goes above upper limit and moving upward
-        if (currentArmPosition < -5900 && armMotorPower < 0) {
-            armMotorPower = 0;
-            op.telemetry.addData("Arm Status", "Upper Limit Reached");
-        }
-
         colorArmPower = op.gamepad2.right_stick_x;
 
         // The calculated power is then applied to the motors
