@@ -45,7 +45,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     public Servo glyphClawSwerveLeft;
     public Servo glyphClawSwerveRight;
 
-    private CRServo colorArm;
+    public CRServo colorArm;
     protected ColorSensor colorSensor;
     private final int armExtendTime = 4400;
     private final int armRetractTime = 4200;
