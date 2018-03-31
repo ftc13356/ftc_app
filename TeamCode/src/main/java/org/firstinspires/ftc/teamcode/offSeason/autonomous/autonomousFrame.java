@@ -18,6 +18,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 
+import java.util.Vector;
+
 import static org.firstinspires.ftc.teamcode.key.key;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -31,7 +33,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "14.1 - 2/14/18 ";
+    private final String autonomousVersionNumber = "14.2 - 3/30/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;
@@ -75,6 +77,12 @@ public abstract class autonomousFrame extends LinearOpMode {
     double distanceVuMark = 0;
     private String displayVuMark = "";
     private ElapsedTime vuMarkTime = new ElapsedTime();
+    public Vector<String> messages = new Vector<String>();
+
+
+    public synchronized void print(String caption, String value) {
+        messages.add(caption + " " + value);
+    }
 
     // Initialize Hardware Map
     public void initializeHardwareMap() {
@@ -203,7 +211,6 @@ public abstract class autonomousFrame extends LinearOpMode {
                         motorRightfront.getCurrentPosition(),
                         motorLeftback.getCurrentPosition(),
                         motorRightback.getCurrentPosition());
-                telemetry.update();
             }
 
             // Stops Motors

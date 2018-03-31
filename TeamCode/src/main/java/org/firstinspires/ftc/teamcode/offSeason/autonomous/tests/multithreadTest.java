@@ -13,18 +13,17 @@ class threadMoveForward implements Runnable {
     threadMoveForward(String name, autonomousFrame autonomousFrame) {
         frame = autonomousFrame;
         threadName = name;
-        frame.telemetry.addData("Program", "Creating" +  threadName);
+        frame.print("Creating", threadName);
     }
 
     public void run() {
-        frame.telemetry.addData("Program", "Running" +  threadName);
-        frame.encoderDrive(12,0,0,0.5);
+        frame.print("Running", threadName);
+        frame.encoderDrive(48,0,0,0.5);
         done = true;
-
     }
 
     public void start () {
-        frame.telemetry.addData("Program", "Starting" +  threadName);
+        frame.print("Starting", threadName);
         moveForwardThread = new Thread (this, threadName);
         moveForwardThread.start ();
     }
@@ -39,18 +38,17 @@ class threadMoveColorArm implements Runnable {
     threadMoveColorArm(String name, autonomousFrame autonomousFrame) {
         frame = autonomousFrame;
         threadName = name;
-        frame.telemetry.addData("Program", "Creating" +  threadName);
+        frame.print("Creating", threadName);
     }
 
     public void run() {
-        frame.telemetry.addData("Program", "Running" +  threadName);
-    //    frame.extendColorArm();
+        frame.print("Running", threadName);
+        frame.extendColorArm();
         done = true;
-
     }
 
     public void start () {
-        frame.telemetry.addData("Program", "Starting" +  threadName);
+        frame.print("Starting", threadName);
         moveColorArmThread = new Thread (this, threadName);
         moveColorArmThread.start ();
     }
@@ -73,6 +71,14 @@ public class multithreadTest extends autonomousFrame {
         moveColorArm.start();
 
         while (!(moveForward.done && moveColorArm.done)) {
+            if (messages.size() > 0) {
+                while(messages.size() > 0) {
+                    telemetry.addData("Program", messages.get(0));
+                    messages.remove(0);
+                }
+                telemetry.update();
+            }
+            sleep(10);
         }
 
         stop();
