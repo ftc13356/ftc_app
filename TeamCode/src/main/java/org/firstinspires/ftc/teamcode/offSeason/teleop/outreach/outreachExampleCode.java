@@ -2,13 +2,15 @@
 package org.firstinspires.ftc.teamcode.offSeason.teleop.outreach;
 
 // Additional Software needed to write program
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 // Mode of Program(Driver controlled), Name
-@TeleOp(name = "Code for Fun Outreach Event", group = "Outreach")
+@TeleOp(name = "Code for Fun Outreach Event")
+@Disabled
 public class outreachExampleCode extends OpMode {
 
     // Create motors in program
