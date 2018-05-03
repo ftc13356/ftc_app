@@ -47,14 +47,14 @@ public abstract class autonomousFrame extends LinearOpMode {
     public Servo glyphClawSwerveLeft;
     public Servo glyphClawSwerveRight;
 
-    public CRServo colorArm;
-    protected ColorSensor colorSensor;
+    protected CRServo colorArm;
+    private ColorSensor colorSensor;
     private final int armExtendTime = 4400;
     private final int armRetractTime = 4200;
 
     private VuforiaLocalizer vuforia;
-    protected VuforiaTrackables relicTrackables;
-    protected VuforiaTrackable relicTemplate;
+    private VuforiaTrackables relicTrackables;
+    private VuforiaTrackable relicTemplate;
 
     // Initialize Drive Variables
     private final double counts_per_motor_rev = 1680 ;
@@ -69,7 +69,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     private boolean detectJewel = false;
     float allianceColor;
     double distanceJewel;
-    String displayJewel = "";
+    private String displayJewel = "";
     private ElapsedTime jewelTime = new ElapsedTime();
 
     // Initialize VuMark Variables
@@ -77,8 +77,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     double distanceVuMark = 0;
     private String displayVuMark = "";
     private ElapsedTime vuMarkTime = new ElapsedTime();
-    public Vector<String> messages = new Vector<String>();
-
+    protected Vector<String> messages = new Vector<String>();
 
     public synchronized void print(String caption, String value) {
         messages.add(caption + " " + value);
@@ -202,10 +201,13 @@ public abstract class autonomousFrame extends LinearOpMode {
             motorRightback.setPower(Math.abs(speed));
 
             // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftfront.isBusy() || motorRightfront.isBusy() || motorLeftback.isBusy() || motorRightback.isBusy())) {
+            while (opModeIsActive() && (motorLeftfront.isBusy() || motorRightfront.isBusy()
+                    || motorLeftback.isBusy() || motorRightback.isBusy())) {
 
                 // Displays Target and Current Positions
-                telemetry.addData("Target Value", "Running to %7d :%7d :%7d :%7d", newLeftfrontTarget, newRightfrontTarget, newLeftbackTarget, newRightbackTarget);
+                telemetry.addData("Target Value", "Running to %7d :%7d :%7d :%7d",
+                        newLeftfrontTarget, newRightfrontTarget,
+                        newLeftbackTarget, newRightbackTarget);
                 telemetry.addData("Current Value", "Running at %7d :%7d: %7d :%7d",
                         motorLeftfront.getCurrentPosition(),
                         motorRightfront.getCurrentPosition(),
@@ -264,10 +266,13 @@ public abstract class autonomousFrame extends LinearOpMode {
             motorRightback.setPower(Math.abs(speed));
 
             // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftfront.isBusy() || motorRightfront.isBusy() || motorLeftback.isBusy() || motorRightback.isBusy())) {
+            while (opModeIsActive() && (motorLeftfront.isBusy() || motorRightfront.isBusy()
+                    || motorLeftback.isBusy() || motorRightback.isBusy())) {
 
                 // Displays Target and Current Positions
-                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d", newLeftfrontTarget,  newRightfrontTarget, newLeftbackTarget, newRightbackTarget);
+                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d",
+                        newLeftfrontTarget, newRightfrontTarget,
+                        newLeftbackTarget, newRightbackTarget);
                 telemetry.addData("Current Value",  "Running at %7d :%7d: %7d :%7d",
                         motorLeftfront.getCurrentPosition(),
                         motorRightfront.getCurrentPosition(),
@@ -291,7 +296,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     // Prints color (red/blue) and returns value
-    public float checkColor() {
+    private float checkColor() {
 
         float masterValue = 0;
         float hsvValues[] = {0F, 0F, 0F};
