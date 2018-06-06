@@ -37,7 +37,7 @@ public class outreachExampleCode extends OpMode {
         double motorLeftPower;
         double motorRightPower;
 
-        // Joystick values stored in speed variables, Left moves Forward/Backwards, Right Turns
+        // Joystick values stored in speed variables, moves Forward/Backward, Right/Left
         double driveFB = gamepad1.left_stick_y;
         double turn  = gamepad1.right_stick_x;
 
