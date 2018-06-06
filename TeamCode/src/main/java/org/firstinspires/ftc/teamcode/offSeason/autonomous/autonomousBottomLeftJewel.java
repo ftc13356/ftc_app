@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Left Jewel (HouseB)")
+@Autonomous(name = "Autonomous Bottom Left Jewel (HouseB)1")
 public class autonomousBottomLeftJewel extends autonomousFrame {
 
     @Override
