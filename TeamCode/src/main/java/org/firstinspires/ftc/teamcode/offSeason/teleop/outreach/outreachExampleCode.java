@@ -27,27 +27,16 @@ public class outreachExampleCode extends OpMode {
         motorLeft = hardwareMap.dcMotor.get("motorLeft");
         motorRight = hardwareMap.dcMotor.get("motorRight");
 
+        // Prints info to screen
         telemetry.addData("Status", "Initialized");
     }
 
     // Main program, it continuously checks controller input
     @Override
     public void loop() {
-        // Create variable to store power
-        double motorLeftPower;
-        double motorRightPower;
-
-        // Joystick values stored in speed variables, moves Forward/Backward, Right/Left
-        double driveFB = gamepad1.left_stick_y;
-        double turn  = gamepad1.right_stick_x;
-
-        // The speed values are calculated and stored in variables
-        motorLeftPower = Range.clip((-driveFB - turn), -1.0, 1.0) ;
-        motorRightPower = Range.clip((driveFB - turn), -1.0, 1.0) ;
-
         // Power is set to motor
-        motorLeft.setPower(motorLeftPower);
-        motorRight.setPower(motorRightPower);
+        motorLeft.setPower(gamepad1.left_stick_y);
+        motorRight.setPower(-gamepad1.right_stick_y);
     }
 
     // Ends program
