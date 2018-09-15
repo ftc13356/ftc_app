@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests;
-/*
+package org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests.multiThread;
+
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
-import org.firstinspires.ftc.teamcode.offSeason.autonomous.autonomousFrame2;
+import org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests.multiThread.autonomousFrame2;
 
 class threadMoveForward implements Runnable {
     private Thread moveForwardThread;
@@ -84,4 +84,3 @@ public class multithreadTest extends autonomousFrame2 {
         stop();
     }
 }
-*/
