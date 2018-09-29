@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "ArmOld")
 @Disabled
-public class armOld {
+public class armOld extends OpMode{
 
     private DcMotor armMotor;
     private Servo clawLeft;

@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "16-17 Season Chassis")
 @Disabled
-public class seasonChassis {
+public class seasonChassis extends OpMode{
 
     // GO TO
     // seasonTeleop.JAVA TO

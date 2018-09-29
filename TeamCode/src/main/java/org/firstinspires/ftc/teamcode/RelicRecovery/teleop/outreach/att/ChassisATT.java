@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Chassis")
 @Disabled
-public class ChassisATT {
+public class ChassisATT extends OpMode{
 
     private DcMotor motorLeftfront;
     private DcMotor motorRightfront;

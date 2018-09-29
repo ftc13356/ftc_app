@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Chassis for Outreach")
 @Disabled
-public class chassis {
+public class chassis extends OpMode{
 
     // Initialize the variables
     private DcMotor motorLeftfront;

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests.multiThread;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 class detectVuMark implements Runnable {
     private Thread detectVuMarkThread;
@@ -61,6 +62,7 @@ class knockJewel implements Runnable {
 }
 
 @Autonomous(name = "Autonomous Bottom Left Jewel (HouseB)2")
+@Disabled
 public class autonomousBottomLeftJewel2 extends autonomousFrame2 {
 
     private boolean programDone = false;

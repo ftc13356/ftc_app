@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests.multiThread;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RelicRecovery.autonomous.tests.multiThread.autonomousFrame2;
 
@@ -55,6 +56,7 @@ class threadMoveColorArm implements Runnable {
 }
 
 @Autonomous(name = "Multi-thread Test")
+@Disabled
 public class multithreadTest extends autonomousFrame2 {
 
     public void runOpMode() {

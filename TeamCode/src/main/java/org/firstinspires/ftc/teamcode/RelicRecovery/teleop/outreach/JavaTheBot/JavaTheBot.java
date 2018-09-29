@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.RelicRecovery.teleop.outreach.JavaTheBot;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name="JavaTheBot")
+@Disabled
 public class JavaTheBot extends OpMode {
     //Comment
     DcMotor left;

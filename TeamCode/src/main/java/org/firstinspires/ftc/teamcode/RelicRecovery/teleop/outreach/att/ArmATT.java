@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Arm")
 @Disabled
-public class ArmATT {
+public class ArmATT extends OpMode{
 
     private Servo rightDrummer;
     private Servo leftDrummer;

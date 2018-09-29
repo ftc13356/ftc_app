@@ -15,7 +15,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 @TeleOp(name = " 16-17 Season Arm")
 @Disabled
-public class seasonArm {
+public class seasonArm extends OpMode{
 
     // GO TO
     // seasonTeleop.JAVA TO

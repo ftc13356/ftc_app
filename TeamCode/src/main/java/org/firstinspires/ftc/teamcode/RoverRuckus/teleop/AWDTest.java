@@ -12,7 +12,6 @@ import com.qualcomm.robotcore.util.Range;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "All Wheel Drive Test")
-// @Disabled
 public class AWDTest extends OpMode {
 
     // Initialize the variables

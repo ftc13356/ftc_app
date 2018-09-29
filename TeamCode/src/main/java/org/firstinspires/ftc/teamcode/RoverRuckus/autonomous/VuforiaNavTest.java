@@ -276,7 +276,7 @@ public class VuforiaNavTest extends LinearOpMode {
         while (opModeIsActive()) {
 
 
-            if ()
+           //if ()
 
 
 
