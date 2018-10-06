@@ -1,4 +1,4 @@
-/* Copyright (c) 2017 FIRST. All rights reserved.
+/* Copyright (c) 2018 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -26,31 +26,61 @@
  * OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
+
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcontroller.external.samples.ConceptVuforiaNavigation;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
-import org.firstinspires.ftc.robotcore.external.navigation.RelicRecoveryVuMark;
-import org.firstinspires.ftc.robotcore.external.navigation.VuMarkInstanceId;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import static org.firstinspires.ftc.teamcode.key.key;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
+import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
+import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+
+
 /**
- * This OpMode illustrates the basics of using the Vuforia engine to determine
- * the identity of Vuforia VuMarks encountered on the field. The code is structured as
- * a LinearOpMode. It shares much structure with {@link ConceptVuforiaNavigation}; we do not here
- * duplicate the core Vuforia documentation found there, but rather instead focus on the
- * differences between the use of Vuforia for navigation vs VuMark identification.
+ * This 2018-2019 OpMode illustrates the basics of using the Vuforia localizer to determine
+ * positioning and orientation of robot on the FTC field.
+ * The code is structured as a LinearOpMode
  *
- * @see ConceptVuforiaNavigation
+ * Vuforia uses the phone's camera to inspect it's surroundings, and attempt to locate target images.
+ *
+ * When images are located, Vuforia is able to determine the position and orientation of the
+ * image relative to the camera.  This sample code than combines that information with a
+ * knowledge of where the target images are on the field, to determine the location of the camera.
+ *
+ * This example assumes a "square" field configuration where the red and blue alliance stations
+ * are on opposite walls of each other.
+ *
+ * From the Audience perspective, the Red Alliance station is on the right and the
+ * Blue Alliance Station is on the left.
+
+ * The four vision targets are located in the center of each of the perimeter walls with
+ * the images facing inwards towards the robots:
+ *     - BlueRover is the Mars Rover image target on the wall closest to the blue alliance
+ *     - RedFootprint is the Lunar Footprint target on the wall closest to the red alliance
+ *     - FrontCraters is the Lunar Craters image target on the wall closest to the audience
+ *     - BackSpace is the Deep Space image target on the wall farthest from the audience
+ *
+ * A final calculation then uses the location of the camera on the robot to determine the
+ * robot's location and orientation on the field.
+ *
  * @see VuforiaLocalizer
  * @see VuforiaTrackableDefaultListener
  * see  ftc_app/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
@@ -59,81 +89,45 @@ import static org.firstinspires.ftc.teamcode.key.key;
  * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
  *
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained in {@link ConceptVuforiaNavigation}.
+ * is explained below.
  */
 
-@Autonomous(name="Vuforia VuMark")
+@TeleOp(name="Vuforia Test")
 public class vuforia extends LinearOpMode {
-
-    public static final String TAG = "Vuforia VuMark Sample";
-
-    OpenGLMatrix lastLocation = null;
-
     VuforiaLocalizer vuforia;
 
     @Override public void runOpMode() {
-
-        /*
-         * To start up Vuforia, tell it the view that we wish to use for camera monitor (on the RC phone);
-         * If no camera monitor is desired, use the parameterless constructor instead (commented out below).
-         */
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        // OR...  Do Not Activate the Camera Monitor View, to save power
-        // VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
+        parameters.vuforiaLicenseKey = key ;
+        parameters.cameraDirection   = BACK;
 
-        parameters.vuforiaLicenseKey = key;
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        /*
-         * We also indicate which camera on the RC that we wish to use.
-         * Here we chose the back (HiRes) camera (for greater range), but
-         * for a competition robot, the front camera might be more convenient.
-         */
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
+        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
+        blueRover.setName("Blue-Rover");
+        VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
+        redFootprint.setName("Red-Footprint");
+        VuforiaTrackable frontCraters = targetsRoverRuckus.get(2);
+        frontCraters.setName("Front-Craters");
+        VuforiaTrackable backSpace = targetsRoverRuckus.get(3);
+        backSpace.setName("Back-Space");
 
-        /**
-         * Load the data set containing the VuMarks for Relic Recovery. There's only one trackable
-         * in this data set: all three of the VuMarks in the game were created from this one template,
-         * but differ in their instance id information.
-         * @see VuMarkInstanceId
-         */
-        VuforiaTrackables roverTrackables = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
-        VuforiaTrackable roverTemplate = roverTrackables.get(0);
-        roverTemplate.setName("roverVuMarkTemplate"); // can help in debugging; otherwise not necessary
+        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+        allTrackables.addAll(targetsRoverRuckus);
 
-        telemetry.addData(">", "Press Play to start");
-        telemetry.update();
         waitForStart();
 
-        roverTrackables.activate();
-
+        targetsRoverRuckus.activate();
         while (opModeIsActive()) {
-
-            /**
-             * See if any of the instances of {@link relicTemplate} are currently visible.
-             * {@link RelicRecoveryVuMark} is an enum which can have the following values:
-             * UNKNOWN, LEFT, CENTER, and RIGHT. When a VuMark is visible, something other than
-             * UNKNOWN will be returned by {@link RelicRecoveryVuMark#from(VuforiaTrackable)}.
-             */
-            RelicRecoveryVuMark vuMark = RelicRecoveryVuMark.from(roverTemplate);
-            if (vuMark == RelicRecoveryVuMark.LEFT) {
-                telemetry.addData("User Message", "Hi! This is the left thing.");
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
+                }
             }
-            if (vuMark == RelicRecoveryVuMark.CENTER) {
-                telemetry.addData("User Message", "Hi! This is the center thing.");
-            }
-            if (vuMark == RelicRecoveryVuMark.RIGHT) {
-                telemetry.addData("User Message", "Hi! This is the right thing.");
-            }
-
             telemetry.update();
         }
     }
-
-    String format(OpenGLMatrix transformationMatrix) {
-        return (transformationMatrix != null) ? transformationMatrix.formatAsTransform() : "null";
-    }
 }
-
