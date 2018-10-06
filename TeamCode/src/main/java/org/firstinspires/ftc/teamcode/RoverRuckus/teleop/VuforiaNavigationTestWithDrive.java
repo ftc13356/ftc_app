@@ -171,8 +171,8 @@ public class VuforiaNavigationTestWithDrive extends LinearOpMode {
             double driveFW = gamepad1.left_stick_y;
             double turn  = gamepad1.right_stick_x;
 
-            motorLeftPower = Range.clip((driveFW + turn) *0.35, -1.0, 1.0) ;
-            motorRightPower = Range.clip((-driveFW + turn) *0.35, -1.0, 1.0) ;
+            motorLeftPower = Range.clip((driveFW - turn) * 0.4, -1.0, 1.0) ;
+            motorRightPower = Range.clip((-driveFW - turn) * 0.4, -1.0, 1.0) ;
 
             motorLeft.setPower(motorLeftPower);
             motorRight.setPower(motorRightPower);
