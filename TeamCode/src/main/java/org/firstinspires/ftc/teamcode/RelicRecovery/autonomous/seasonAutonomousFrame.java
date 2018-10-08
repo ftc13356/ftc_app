@@ -25,7 +25,7 @@ import static org.firstinspires.ftc.teamcode.key.key;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@Autonomous(name="16-17 Season Basic Autonomous Frame")
+@Autonomous(name="17-18 Season Basic Autonomous Frame")
 @Disabled
 public abstract class seasonAutonomousFrame extends LinearOpMode {
 
