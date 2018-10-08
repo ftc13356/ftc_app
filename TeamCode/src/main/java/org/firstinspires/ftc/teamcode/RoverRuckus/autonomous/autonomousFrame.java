@@ -52,9 +52,6 @@ public abstract class autonomousFrame extends LinearOpMode {
     protected DcMotor motorRightback;
 
     protected ColorSensor colorSensor;
-    
-    protected VuforiaTrackables relicTrackables;
-    protected VuforiaTrackable relicTemplate;
 
     // Initialize Drive Variables
     private final double counts_per_motor_rev = 1680 ;
@@ -107,21 +104,8 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.update();
     }
 
-    // Vuforia Initialization
-    public void initializeVuforia() {
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
-        parameters.vuforiaLicenseKey = key;
-        parameters.cameraDirection = VuforiaLocalizer.CameraDirection.BACK;
-        this.vuforia = ClassFactory.createVuforiaLocalizer(parameters);
-        relicTrackables = this.vuforia.loadTrackablesFromAsset("RelicVuMark");
-        relicTemplate = relicTrackables.get(0);
-        relicTemplate.setName("relicVuMarkTemplate");
-        telemetry.addData("Vuforia Status", "Initialized");
-        telemetry.update();
-    }
-
-    public void blah() {
+    // Does Vuforia Navigation
+    public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT, final int CAMERA_LEFT_DISPLACEMENT) {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -163,14 +147,14 @@ public abstract class autonomousFrame extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocation(backSpaceLocationOnField);
 
-        final int CAMERA_FORWARD_DISPLACEMENT  = 0;   // eg: Camera is 110 mm in front of robot center
-        final int CAMERA_VERTICAL_DISPLACEMENT = 0;   // eg: Camera is 200 mm above ground
-        final int CAMERA_LEFT_DISPLACEMENT     = 0;     // eg: Camera is ON the robot's center line
+        // eg: Camera is 110 mm in front of robot center
+        // eg: Camera is 200 mm above ground
+        // eg: Camera is ON the robot's center line
 
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_CHOICE == FRONT ? 90 : -90, 0, 0));
+                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
 
         for (VuforiaTrackable trackable : allTrackables)
         {
