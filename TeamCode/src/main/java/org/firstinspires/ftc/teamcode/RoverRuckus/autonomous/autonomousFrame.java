@@ -33,7 +33,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 import static org.firstinspires.ftc.teamcode.key.key;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Basic Autonomous Frame
+// Purpose: Autonomous Frame with Common Autonomous Functions
 // Author: Ansh Gandhi, Jonathan Ma
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -106,6 +106,10 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // Does Vuforia Navigation
     public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT, final int CAMERA_LEFT_DISPLACEMENT) {
+        // Camera is 110 mm in front of robot center
+        // Camera is 200 mm above ground
+        // Camera is ON the robot's center line
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -146,10 +150,6 @@ public abstract class autonomousFrame extends LinearOpMode {
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocation(backSpaceLocationOnField);
-
-        // eg: Camera is 110 mm in front of robot center
-        // eg: Camera is 200 mm above ground
-        // eg: Camera is ON the robot's center line
 
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
                 .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
