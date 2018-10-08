@@ -12,7 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = "16-17 Season Chassis")
+@TeleOp(name = "17-18 Season Chassis")
 @Disabled
 public class seasonChassis extends OpMode{
 

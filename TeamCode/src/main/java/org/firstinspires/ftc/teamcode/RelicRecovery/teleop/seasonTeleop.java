@@ -9,7 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = "16-17 Season Teleop Drivetrain and Arm")
+@TeleOp(name = "17-18 Season Teleop Drivetrain and Arm")
 @Disabled
 public class seasonTeleop extends OpMode {
 

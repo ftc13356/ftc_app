@@ -13,7 +13,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 // Author: Jonathan Ma, Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = " 16-17 Season Arm")
+@TeleOp(name = " 17-18 Season Arm")
 @Disabled
 public class seasonArm extends OpMode{
 

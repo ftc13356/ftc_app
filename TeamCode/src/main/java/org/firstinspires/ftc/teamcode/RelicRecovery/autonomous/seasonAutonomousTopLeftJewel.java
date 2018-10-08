@@ -14,7 +14,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = " 16-17 Season Autonomous Top Left Jewel")
+@Autonomous(name = " 17-18 Season Autonomous Top Left Jewel")
 @Disabled
 public class seasonAutonomousTopLeftJewel extends seasonAutonomousFrame {
 
