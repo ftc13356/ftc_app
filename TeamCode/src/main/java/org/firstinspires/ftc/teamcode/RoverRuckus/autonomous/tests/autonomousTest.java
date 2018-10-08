@@ -30,11 +30,19 @@ public class autonomousTest extends LinearOpMode {
 
         waitForStart();
 
+        //Next to depot
         forward(0.5,1000); //15 inches forward
         right(0.5,1000); // 90 degrees right
         forward(0.5,2000); //30 inches forward
         left(0.5,1500); // 135 degrees left
         forward(0.5,3000); //45 inches forward
+
+        //Next to crater
+        forward(0.5,1000); //15 inches forward
+        left(0.5,1000); // 90 degrees left
+        forward(0.5,2500); //40 inches forward
+        left(0.5,500); // 45 degrees left
+        forward(0.5,3500); //55 inches forward
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
