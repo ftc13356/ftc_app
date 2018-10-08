@@ -1,12 +1,9 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-
-import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Red Side
+// Purpose: Autonomous Program for Top Right
 // Author: Ansh Gandhi, Jonathan Ma
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -16,8 +13,8 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = " 18-19 Autonomous Red")
-public class autonomousRed extends autonomousFrame {
+@Autonomous(name = "Autonomous Top Right")
+public class autonomousTopRight extends autonomousFrame {
 
     @Override
     public void runOpMode() {
