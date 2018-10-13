@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Bottom Right
+// Purpose: Autonomous Program for Top Right
 // Author: Ansh Gandhi, Jonathan Ma
 ///////////////////////////////////////////////////////////////////////////////
 
@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = " Autonomous Bottom Right")
-public class autonomousBottomRight extends autonomousFrame {
+@Autonomous(name = "Autonomous Red Depot")
+public class autonomousRedDepot extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -32,8 +32,8 @@ public class autonomousBottomRight extends autonomousFrame {
 
         waitForStart();
 
-        encoderDrive(5, 0, 0, 0.5);
-        encoderDrive(-4,0,0,0.5);
+        encoderDrive(5,  0, 0.5);
+        encoderDrive(-4,0,0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

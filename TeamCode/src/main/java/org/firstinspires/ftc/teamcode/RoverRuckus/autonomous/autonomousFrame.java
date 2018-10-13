@@ -38,7 +38,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "1.0 - 10/7/18 ";
+    private final String autonomousVersionNumber = "2.0 - 10/12/18 ";
 
     // Initialize Hardware variables
     protected DcMotor motorLeftfront;
@@ -158,7 +158,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     // Combined Drive Function (Drivetrain, Encoder)
-    public void encoderDrive(double driveFB, double driveS, double turnDegrees, double speed) {
+    public void encoderDrive(double driveFB, double turnDegrees, double speed) {
 
         // Defines Variables
         int newLeftfrontTarget;
@@ -169,10 +169,10 @@ public abstract class autonomousFrame extends LinearOpMode {
         turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
 
         // Calculates Target Position
-        double motorLeftfrontEncoder = (-driveFB + driveS + turnDegrees) * counts_per_inch;
-        double motorRightfrontEncoder = (driveFB + driveS + turnDegrees) * counts_per_inch;
-        double motorLeftbackEncoder = (-driveFB - driveS + turnDegrees) * counts_per_inch;
-        double motorRightbackEncoder = (driveFB - driveS + turnDegrees) * counts_per_inch;
+        double motorLeftfrontEncoder = (-driveFB + turnDegrees) * counts_per_inch;
+        double motorRightfrontEncoder = (driveFB + turnDegrees) * counts_per_inch;
+        double motorLeftbackEncoder = (-driveFB + turnDegrees) * counts_per_inch;
+        double motorRightbackEncoder = (driveFB + turnDegrees) * counts_per_inch;
 
         // Ensures OpMode is Active
         if (opModeIsActive()) {
@@ -323,11 +323,11 @@ public abstract class autonomousFrame extends LinearOpMode {
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(0,0,-distance,0.2);
+                    encoderDrive(0,0,0.2);
                     distanceJewel = distance;
                 }
                 else {
-                    encoderDrive(0,0,distance,0.2);
+                    encoderDrive(0,0,0.2);
                     distanceJewel = -distance;
                 }
             }
@@ -336,11 +336,11 @@ public abstract class autonomousFrame extends LinearOpMode {
                 detectJewel = true;
 
                 if (colorValue == allianceColor) {
-                    encoderDrive(0,0,-distance,0.2);
+                    encoderDrive(0,0,0.2);
                     distanceJewel = distance;
                 }
                 else {
-                    encoderDrive(0,0,distance,0.2);
+                    encoderDrive(0,0,0.2);
                     distanceJewel = -distance;
                 }
             }

@@ -13,8 +13,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Bottom Left")
-public class autonomousBottomLeft extends autonomousFrame {
+@Autonomous(name = "Autonomous Blue Crater")
+public class autonomousBlueCrater extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -32,8 +32,8 @@ public class autonomousBottomLeft extends autonomousFrame {
 
         waitForStart();
 
-        encoderDrive(5, 0, 0, 0.5);
-        encoderDrive(-4,0,0,0.5);
+        encoderDrive(5, 0, 0.5);
+        encoderDrive(-4,0,0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

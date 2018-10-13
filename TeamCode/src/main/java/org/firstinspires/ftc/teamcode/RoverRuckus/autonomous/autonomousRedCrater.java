@@ -16,8 +16,8 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 //left ++-- (+)
 //right--++ (-)
 
-@Autonomous(name = "Autonomous Top Left")
-public class autonomousTopLeft extends autonomousFrame {
+@Autonomous(name = "Autonomous Red Crater")
+public class autonomousRedCrater extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -35,8 +35,8 @@ public class autonomousTopLeft extends autonomousFrame {
 
         waitForStart();
 
-        encoderDrive(5, 0, 0, 0.5);
-        encoderDrive(-4,0,0,0.5);
+        encoderDrive(5,  0, 0.5);
+        encoderDrive(-4,0,0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
