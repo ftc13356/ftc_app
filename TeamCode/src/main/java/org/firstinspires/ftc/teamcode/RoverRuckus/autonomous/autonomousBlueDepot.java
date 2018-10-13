@@ -28,12 +28,15 @@ public class autonomousBlueDepot extends autonomousFrame {
 
         initializeHardwareMap();
         setMotorDirection();
-        vuforiaNavigation(0,0,0);
 
         waitForStart();
 
-        encoderDrive(5, 0, 0.5);
-        encoderDrive(-4,0,0.5);
+        encoderDrive(15,  0, 0.5);
+        encoderDrive(0, 90, 0.5);
+        encoderDrive(30, 0, 0.5);
+        encoderDrive(0, -135, 0.5);
+        encoderDrive(45, 0, 0.5);
+        //copy of red depot
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

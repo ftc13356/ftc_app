@@ -28,12 +28,15 @@ public class autonomousBlueCrater extends autonomousFrame {
 
         initializeHardwareMap();
         setMotorDirection();
-        vuforiaNavigation(0,0,0);
 
         waitForStart();
 
-        encoderDrive(5, 0, 0.5);
-        encoderDrive(-4,0,0.5);
+        encoderDrive(15,  0, 0.5);
+        encoderDrive(0, -90, 0.5);
+        encoderDrive(40, 0, 0.5);
+        encoderDrive(0, -45, 0.5);
+        encoderDrive(55, 0, 0.5);
+        //copy of red crater
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

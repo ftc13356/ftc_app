@@ -28,12 +28,21 @@ public class autonomousRedDepot extends autonomousFrame {
 
         initializeHardwareMap();
         setMotorDirection();
-        vuforiaNavigation(0,0,0);
 
         waitForStart();
 
-        encoderDrive(5,  0, 0.5);
-        encoderDrive(-4,0,0.5);
+        encoderDrive(15,  0, 0.5);
+        encoderDrive(0, 90, 0.5);
+        encoderDrive(40, 0, 0.5);
+        encoderDrive(0, -135, 0.5);
+        encoderDrive(45, 0, 0.5);
+        /*
+        15 inches forward
+        90 degrees right
+        30 inches forward
+        135 degrees left
+        45 inches forward
+        */
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

@@ -1,11 +1,13 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 @TeleOp(name="Telephone")
+@Disabled
 public class TelephoneOperator extends OpMode {
     DcMotor Left;
     DcMotor Right;

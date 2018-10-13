@@ -31,12 +31,21 @@ public class autonomousRedCrater extends autonomousFrame {
 
         initializeHardwareMap();
         setMotorDirection();
-        vuforiaNavigation(0,0,0);
 
         waitForStart();
 
-        encoderDrive(5,  0, 0.5);
-        encoderDrive(-4,0,0.5);
+        encoderDrive(15,  0, 0.5);
+        encoderDrive(0, -90, 0.5);
+        encoderDrive(40, 0, 0.5);
+        encoderDrive(0, -45, 0.5);
+        encoderDrive(55, 0, 0.5);
+        /*
+        15 inches forward
+        90 degrees left
+        40 inches forward
+        45 degrees left
+        55 inches forward
+        */
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
