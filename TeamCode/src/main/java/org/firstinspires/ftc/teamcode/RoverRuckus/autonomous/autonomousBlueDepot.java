@@ -33,9 +33,9 @@ public class autonomousBlueDepot extends autonomousFrame {
 
         encoderDrive(15,  0, 0.5);
         encoderDrive(0, 90, 0.5);
-        encoderDrive(30, 0, 0.5);
+        encoderDrive(50, 0, 0.5);
         encoderDrive(0, -135, 0.5);
-        encoderDrive(45, 0, 0.5);
+        encoderDrive(65, 0, 0.5);
         //copy of red depot
 
         telemetry.addData("Status", "Everything executed");

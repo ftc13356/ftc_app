@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -35,15 +34,15 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "2.0 - 10/12/18 ";
+    private final String autonomousVersionNumber = "2.1 - 10/13/18 ";
 
     // Initialize Hardware variables
-    protected DcMotor motorLeftFront;
-    protected DcMotor motorRightFront;
-    protected DcMotor motorLeftBack;
-    protected DcMotor motorRightBack;
+    private DcMotor motorLeftFront;
+    private DcMotor motorRightFront;
+    private DcMotor motorLeftBack;
+    private DcMotor motorRightBack;
 
-    //protected ColorSensor colorSensor;
+    //private ColorSensor colorSensor;
 
     // Initialize Drive Variables
     private final double counts_per_motor_rev = 1680 ;
@@ -90,6 +89,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorRightFront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftBack.setDirection(DcMotor.Direction.FORWARD);
         motorRightBack.setDirection(DcMotor.Direction.FORWARD);
+
+        motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
     // Print Version Number

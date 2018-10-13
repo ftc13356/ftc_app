@@ -33,9 +33,9 @@ public class autonomousRedDepot extends autonomousFrame {
 
         encoderDrive(15,  0, 0.5);
         encoderDrive(0, 90, 0.5);
-        encoderDrive(40, 0, 0.5);
+        encoderDrive(50, 0, 0.5);
         encoderDrive(0, -135, 0.5);
-        encoderDrive(45, 0, 0.5);
+        encoderDrive(65, 0, 0.5);
         /*
         15 inches forward
         90 degrees right

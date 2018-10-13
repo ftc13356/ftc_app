@@ -33,9 +33,9 @@ public class autonomousBlueCrater extends autonomousFrame {
 
         encoderDrive(15,  0, 0.5);
         encoderDrive(0, -90, 0.5);
-        encoderDrive(40, 0, 0.5);
+        encoderDrive(50, 0, 0.5);
         encoderDrive(0, -45, 0.5);
-        encoderDrive(55, 0, 0.5);
+        encoderDrive(65, 0, 0.5);
         //copy of red crater
 
         telemetry.addData("Status", "Everything executed");
