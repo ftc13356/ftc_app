@@ -74,7 +74,7 @@ public class ArmATT extends OpMode{
             leftPosition = leftDrummer.getPosition();
             rightPosition = rightDrummer.getPosition();
 
-            op.telemetry.addData("Arm Status", "Time Left- " + timeLeft);
+            op.telemetry.addData("Arm Status", "Time Left- %.1f",  timeLeft);
         }
 
 

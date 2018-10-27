@@ -84,7 +84,7 @@ public class ChassisATT extends OpMode{
         motorRightback.setPower(motorRightbackPower);
 
         if (timeLeft >= 0) {
-            op.telemetry.addData("Driving Status", "Time Left: " + timeLeft);
+            op.telemetry.addData("Driving Status", "Time Left- %.1f", timeLeft);
         }
 
         if (timeLeft <= 0) {
