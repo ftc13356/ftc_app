@@ -27,17 +27,20 @@ public class ArmATT extends OpMode{
         op = opmode;
     }
 
-    public void init(){
+    public void init() {
         op.telemetry.addData("Arm", "Initializing");
 
         rightDrummer = op.hardwareMap.servo.get("armRight");
         leftDrummer = op.hardwareMap.servo.get("armLeft");
 
-        op.telemetry.addData("Arm", "Initialized");
+        rightDrummer.setPosition(downPosition);
+        leftDrummer.setPosition(downPosition);
 
+        op.telemetry.addData("Arm", "Initialized");
+        //leftArm's down is rightArm's up
     }
 
-    public void init_loop(){}
+    public void init_loop() {}
 
     public void start(){
         runtime.reset();
@@ -46,43 +49,37 @@ public class ArmATT extends OpMode{
     double timeLeft;
     double startTime = runtime.seconds();
 
-    public void loop(){
-        if (op.gamepad1.a) {
-           leftPosition = upPosition;
-           op.telemetry.addData("Servo Status", "Left Up");
-           op.telemetry.addData("Button Pressed", "A");
-        }
-        if (op.gamepad1.b) {
-            leftPosition = downPosition;
-            op.telemetry.addData("Servo Status", "Left Down");
-            op.telemetry.addData("Button Pressed", "B");
-        }
-        if (op.gamepad1.x) {
-            rightPosition = 1 - upPosition;
-            op.telemetry.addData("Servo Status", "Right Up");
-            op.telemetry.addData("Button Pressed", "X");
-        }
-        if (op.gamepad1.y) {
-            rightPosition = 1- downPosition;
-            op.telemetry.addData("Servo Status", "Right Down");
-            op.telemetry.addData("Button Pressed", "Y");
-        }
-
+    public void loop() {
         timeLeft = 60 + startTime - op.getRuntime();
-        if (timeLeft <= 0) {
-            leftDrummer.setPosition(0);
-            rightDrummer.setPosition(0.5);
+
+        if (timeLeft >= 0) {
+            if (op.gamepad2.left_bumper) {
+                leftPosition = upPosition;
+                leftDrummer.setPosition(leftPosition);
+            } else {
+                leftPosition = downPosition;
+                leftDrummer.setPosition(leftPosition);
+            }
+
+            if (op.gamepad2.right_bumper) {
+                rightPosition = 1 - upPosition;
+                rightDrummer.setPosition(rightPosition);
+            } else {
+                rightPosition = 1 - downPosition;
+                rightDrummer.setPosition(rightPosition);
+            }
+
+            leftDrummer.setPosition(leftPosition);
+            rightDrummer.setPosition(rightPosition);
+            leftPosition = leftDrummer.getPosition();
+            rightPosition = rightDrummer.getPosition();
+
+            op.telemetry.addData("Arm Status", "Time Left- " + timeLeft);
         }
 
-        leftDrummer.setPosition(leftPosition);
-        rightDrummer.setPosition(rightPosition);
-        leftPosition = leftDrummer.getPosition();
-        rightPosition = rightDrummer.getPosition();
 
-        op.telemetry.addData("Arm Status", "Time Left: " + timeLeft);
-
-        op.telemetry.addData("Left Servo Position", leftPosition);
-        op.telemetry.addData("Right Servo Position", rightPosition);
-
+        if (timeLeft <= 0) {
+            op.telemetry.addData("Arm Status", "Disabled");
+        }
     }
 }
