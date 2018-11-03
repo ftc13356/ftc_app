@@ -92,9 +92,9 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  * is explained below.
  */
 
-@TeleOp(name="Vuforia Rover Nav")
+@TeleOp(name="Vuforia Navigation Test (no driving)")
 @Disabled
-public class VuforiaNavTest extends LinearOpMode {
+public class VuforiaNavigationTest extends LinearOpMode {
 
     /*
      * IMPORTANT: You need to obtain your own license key to use Vuforia. The string below with which

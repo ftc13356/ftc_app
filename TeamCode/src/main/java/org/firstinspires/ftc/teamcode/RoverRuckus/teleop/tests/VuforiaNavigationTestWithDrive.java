@@ -1,4 +1,4 @@
-/* Copyright (c) 2018 FIRST. All rights reserved.
+/* Copyright (c) 2017 FIRST. All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without modification,
  * are permitted (subject to the limitations in the disclaimer below) provided that
@@ -27,11 +27,14 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.RoverRuckus.teleop;
+package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -41,7 +44,6 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import static org.firstinspires.ftc.teamcode.key.key;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,48 +54,14 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
+import static org.firstinspires.ftc.teamcode.key.key;
 
+@TeleOp(name="Vuforia Navigation Test")
+@Disabled
+public class VuforiaNavigationTestWithDrive extends LinearOpMode {
 
-/**
- * This 2018-2019 OpMode illustrates the basics of using the Vuforia localizer to determine
- * positioning and orientation of robot on the FTC field.
- * The code is structured as a LinearOpMode
- *
- * Vuforia uses the phone's camera to inspect it's surroundings, and attempt to locate target images.
- *
- * When images are located, Vuforia is able to determine the position and orientation of the
- * image relative to the camera.  This sample code than combines that information with a
- * knowledge of where the target images are on the field, to determine the location of the camera.
- *
- * This example assumes a "square" field configuration where the red and blue alliance stations
- * are on opposite walls of each other.
- *
- * From the Audience perspective, the Red Alliance station is on the right and the
- * Blue Alliance Station is on the left.
-
- * The four vision targets are located in the center of each of the perimeter walls with
- * the images facing inwards towards the robots:
- *     - BlueRover is the Mars Rover image target on the wall closest to the blue alliance
- *     - RedFootprint is the Lunar Footprint target on the wall closest to the red alliance
- *     - FrontCraters is the Lunar Craters image target on the wall closest to the audience
- *     - BackSpace is the Deep Space image target on the wall farthest from the audience
- *
- * A final calculation then uses the location of the camera on the robot to determine the
- * robot's location and orientation on the field.
- *
- * @see VuforiaLocalizer
- * @see VuforiaTrackableDefaultListener
- * see  ftc_app/doc/tutorial/FTC_FieldCoordinateSystemDefinition.pdf
- *
- * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
- * Remove or comment out the @Disabled line to add this opmode to the Driver Station OpMode list.
- *
- * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
- * is explained below.
- */
-
-@TeleOp(name="Vuforia")
-public class vuforia extends LinearOpMode {
+    private DcMotor motorLeft;
+    private DcMotor motorRight;
 
     private static final String VUFORIA_KEY = key;
 
@@ -108,7 +76,17 @@ public class vuforia extends LinearOpMode {
 
     VuforiaLocalizer vuforia;
 
-    @Override public void runOpMode() {
+    @Override
+    public void runOpMode() {
+        telemetry.addData("Status", "Initialized");
+        telemetry.update();
+
+        motorLeft  = hardwareMap.get(DcMotor.class, "motorLeft");
+        motorRight = hardwareMap.get(DcMotor.class, "motorRight");
+
+        motorLeft.setDirection(DcMotor.Direction.FORWARD);
+        motorRight.setDirection(DcMotor.Direction.FORWARD);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
@@ -187,6 +165,19 @@ public class vuforia extends LinearOpMode {
 
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
+
+            double motorLeftPower;
+            double motorRightPower;
+
+            double driveFW = gamepad1.left_stick_y;
+            double turn  = gamepad1.right_stick_x;
+
+            motorLeftPower = Range.clip((driveFW - turn) * 0.4, -1.0, 1.0) ;
+            motorRightPower = Range.clip((-driveFW - turn) * 0.4, -1.0, 1.0) ;
+
+            motorLeft.setPower(motorLeftPower);
+            motorRight.setPower(motorRightPower);
+
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {

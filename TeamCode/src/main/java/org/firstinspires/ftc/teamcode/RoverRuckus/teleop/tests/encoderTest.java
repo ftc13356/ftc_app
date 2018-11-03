@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.util.Range;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "Encoder Test")
+@Disabled
 public class encoderTest extends OpMode {
 
     // Initialize the variables

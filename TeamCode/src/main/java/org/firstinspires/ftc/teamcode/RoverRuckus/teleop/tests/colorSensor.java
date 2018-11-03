@@ -2,11 +2,13 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 
-@TeleOp(name = "Colors!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+@TeleOp(name = "Teleop Color Sensor Test")
+@Disabled
 public class colorSensor extends OpMode{
 
     private ColorSensor colorSensor;

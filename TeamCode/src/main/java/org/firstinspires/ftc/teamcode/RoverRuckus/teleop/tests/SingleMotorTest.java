@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Intake Mechanism Test")
+@Disabled
 public class SingleMotorTest extends OpMode {
 
     private DcMotor LeftFront;
