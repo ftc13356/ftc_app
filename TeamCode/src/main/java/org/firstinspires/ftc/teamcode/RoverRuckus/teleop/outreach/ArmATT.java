@@ -53,7 +53,7 @@ public class ArmATT extends OpMode{
         timeLeft = 60 + startTime - op.getRuntime();
 
         if (timeLeft >= 0) {
-            if (op.gamepad2.left_bumper) {
+            if (op.gamepad1.left_bumper) {
                 leftPosition = upPosition;
                 leftDrummer.setPosition(leftPosition);
             } else {
@@ -61,7 +61,7 @@ public class ArmATT extends OpMode{
                 leftDrummer.setPosition(leftPosition);
             }
 
-            if (op.gamepad2.right_bumper) {
+            if (op.gamepad1.right_bumper) {
                 rightPosition = 1 - upPosition;
                 rightDrummer.setPosition(rightPosition);
             } else {
