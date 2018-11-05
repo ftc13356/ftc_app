@@ -29,10 +29,12 @@
 
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.outreach;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 @TeleOp(name = "AT&T 2018 Outreach Program")
+@Disabled
 public class teleopDrivetrainATT extends OpMode {
 
     ChassisATT chassis_att = new ChassisATT(this);
