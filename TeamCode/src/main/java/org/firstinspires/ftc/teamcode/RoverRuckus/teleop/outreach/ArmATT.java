@@ -53,20 +53,38 @@ public class ArmATT extends OpMode{
         timeLeft = 60 + startTime - op.getRuntime();
 
         if (timeLeft >= 0) {
-            if (op.gamepad1.left_bumper) {
-                leftPosition = upPosition;
-                leftDrummer.setPosition(leftPosition);
-            } else {
-                leftPosition = downPosition;
-                leftDrummer.setPosition(leftPosition);
-            }
+            if (op.gamepad2.a) {
+                if (op.gamepad2.left_bumper) {
+                    leftPosition = upPosition;
+                    leftDrummer.setPosition(leftPosition);
+                } else {
+                    leftPosition = downPosition;
+                    leftDrummer.setPosition(leftPosition);
+                }
 
-            if (op.gamepad1.right_bumper) {
-                rightPosition = 1 - upPosition;
-                rightDrummer.setPosition(rightPosition);
+                if (op.gamepad2.right_bumper) {
+                    rightPosition = 1 - upPosition;
+                    rightDrummer.setPosition(rightPosition);
+                } else {
+                    rightPosition = 1 - downPosition;
+                    rightDrummer.setPosition(rightPosition);
+                }
             } else {
-                rightPosition = 1 - downPosition;
-                rightDrummer.setPosition(rightPosition);
+                if (op.gamepad1.left_bumper) {
+                    leftPosition = upPosition;
+                    leftDrummer.setPosition(leftPosition);
+                } else {
+                    leftPosition = downPosition;
+                    leftDrummer.setPosition(leftPosition);
+                }
+
+                if (op.gamepad1.right_bumper) {
+                    rightPosition = 1 - upPosition;
+                    rightDrummer.setPosition(rightPosition);
+                } else {
+                    rightPosition = 1 - downPosition;
+                    rightDrummer.setPosition(rightPosition);
+                }
             }
 
             leftDrummer.setPosition(leftPosition);
@@ -74,9 +92,15 @@ public class ArmATT extends OpMode{
             leftPosition = leftDrummer.getPosition();
             rightPosition = rightDrummer.getPosition();
 
+            if (op.gamepad2.dpad_up) {
+                timeLeft=timeLeft+5;
+            }
+            if (op.gamepad2.dpad_down) {
+                timeLeft=timeLeft-5;
+            }
+
             op.telemetry.addData("Arm Status", "Time Left- %.1f",  timeLeft);
         }
-
 
         if (timeLeft <= 0) {
             op.telemetry.addData("Arm Status", "Disabled");
