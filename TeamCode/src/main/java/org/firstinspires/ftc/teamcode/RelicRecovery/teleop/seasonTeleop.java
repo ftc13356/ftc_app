@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 ///////////////////////////////////////////////////////////////////////////////
 
 @TeleOp(name = "17-18 Season Teleop Drivetrain and Arm")
+@Disabled
 public class seasonTeleop extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
