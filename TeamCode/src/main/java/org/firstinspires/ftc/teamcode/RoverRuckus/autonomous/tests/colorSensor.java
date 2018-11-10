@@ -4,8 +4,10 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
+import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.colorChecker;
 
 @Autonomous(name="Autonomous Color Sensor Test")
+@Disabled
 public class colorSensor extends autonomousFrame {
 
     @Override
@@ -14,8 +16,8 @@ public class colorSensor extends autonomousFrame {
         setMotorDirection();
         waitForStart();
 
-        colorChecker sampleCheck = new colorChecker(this);
+        //colorChecker sampleCheck = new colorChecker(this);
 
-        sampleCheck.detectObject();
+        //sampleCheck.detectObject();
     }
 }
