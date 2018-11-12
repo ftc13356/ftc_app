@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -23,10 +25,18 @@ import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.key.key;
 
-///////////////////////////////////////////////////////////////////////////////
-// Purpose: Basic Autonomous Frame with Common Autonomous Functions
-// Author: Ansh Gandhi, Jonathan Ma
-///////////////////////////////////////////////////////////////////////////////
+/**
+ * <h2>Autonomous Frame</h2>
+ * Purpose:
+ * <p> Contains all the common variables and functions
+ * so that we can easily create organized autonomous programs
+ * <p>
+ * <p> Contributors: Jonathan Ma, Ansh Gandhi
+ * <p> Current Version: {@value autonomousVersionNumber}
+ *
+ * <p> {@linkplain org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.colorChecker Color Checker}
+ *      used to detect minerals
+ */
 
 @Autonomous(name="Basic Autonomous Frame")
 @Disabled
@@ -34,56 +44,62 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String autonomousVersionNumber = "2.1 - 10/13/18 ";
+    private static final String autonomousVersionNumber = "3.0 - 11/12/18 ";
 
-    // Initialize Hardware variables
+    // Initialize Motors, Servos, and Sensor Variables
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
     private DcMotor motorLeftBack;
     private DcMotor motorRightBack;
 
-    //private ColorSensor colorSensor;
+    public ColorSensor colorSensor;
 
-    // Initialize Drive Variables
+    // Initialize Sampling Variables
+    private ElapsedTime sampleTime = new ElapsedTime();
+    private boolean samplingDone = false;
+
+    // Initialize Encoder Drive Variables
     private final double counts_per_motor_rev = 1680 ;
-    private final double robot_diameter = 30.0;
+    private final double robot_diameter = 30.0; //needs to change, robot not turning 90 anymore
     private final double drive_gear_reduction = 0.75;
     private final double wheel_diameter_inches = 4.0 ;
     private final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) / (wheel_diameter_inches * Math.PI);
     private final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
+    //cpi = 100, cpd needs to be 44.5
 
-    //cpi = 100, cpd needs to be 44.5,
-
-    /*// Initialize Jewel Variables
-    private boolean detectJewel = false;
-    float allianceColor;
-    double distanceJewel;
-    String displayJewel = "";
-    private ElapsedTime jewelTime = new ElapsedTime();*/
-
+    // Initialize Vuforia Navigation Variables
     private static final String VUFORIA_KEY = key;
-
-    private static final float mmPerInch        = 25.4f;
-    private static final float mmFTCFieldWidth  = (12*6) * mmPerInch;       // the width of the FTC field (from the center point to the outer panels)
-    private static final float mmTargetHeight   = (6) * mmPerInch;          // the height of the center of the target image above the floor
-
+    private VuforiaLocalizer vuforia;
     private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
 
-    private OpenGLMatrix lastLocation = null;
-    private boolean targetVisible = false;
+    private static final float mmPerInch        = 25.4f;
+    private static final float mmFTCFieldWidth  = (12 * 6) * mmPerInch; // the width of the FTC field (from the center point to the outer panels)
+    private static final float mmTargetHeight   = (6) * mmPerInch; // the height of the center of the target image above the floor
 
-    private VuforiaLocalizer vuforia;
+    /**
+     * Prints version number of autonomous program
+     * <p> Current Version: {@value autonomousVersionNumber}
+     */
+    public void versionPrint() {
+        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
+        telemetry.update();
+    }
 
-    // Initialize Hardware Map
+    /**
+     * Initializes Hardware Map-
+     * Maps motors, servos, and sensors to their names in the robot config file
+     */
     public void initializeHardwareMap() {
         motorLeftFront = hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = hardwareMap.dcMotor.get("motorRightFront");
         motorLeftBack = hardwareMap.dcMotor.get("motorLeftBack");
         motorRightBack = hardwareMap.dcMotor.get("motorRightBack");
-        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
 
-    // Set Motor Direction
+    /**
+     * Sets motor direction to forward and tells motors to not apply brakes when power is 0
+     */
     public void setMotorDirection() {
         motorLeftFront.setDirection(DcMotor.Direction.FORWARD);
         motorRightFront.setDirection(DcMotor.Direction.FORWARD);
@@ -96,14 +112,17 @@ public abstract class autonomousFrame extends LinearOpMode {
         motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    // Print Version Number
-    public void versionPrint() {
-        telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
-        telemetry.update();
-    }
+    /**
+     * Vuforia Navigation
+     * <p>PLEASE EXPLAIN Ansh
+     *
+     * @param CAMERA_FORWARD_DISPLACEMENT
+     * @param CAMERA_VERTICAL_DISPLACEMENT
+     * @param CAMERA_LEFT_DISPLACEMENT
+     */
+    public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT,
+                                  final int CAMERA_LEFT_DISPLACEMENT) {
 
-    // Does Vuforia Navigation
-    public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT, final int CAMERA_LEFT_DISPLACEMENT) {
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground
         // Camera is ON the robot's center line
@@ -111,7 +130,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY ;
+        parameters.vuforiaLicenseKey = VUFORIA_KEY;
         parameters.cameraDirection   = CAMERA_CHOICE;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
@@ -160,31 +179,30 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
     }
 
-    // Combined Drive Function (Drivetrain, Encoder)
-    public void encoderDrive(double driveFB, double turnDegrees, double speed) {
+    /**
+     * Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
+     * @param leftFrontInches Inches to move motorLeftFront
+     * @param rightFrontInches Inches to move motorRightFront
+     * @param leftBackInches Inches to move motorLeftBack
+     * @param rightBackInches Inches to move motorRightBack
+     */
+    public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
+                                  double leftBackInches, double rightBackInches, double speed) {
 
-        // Defines Variables
+        // Defines Target Position Variables
         int newLeftFrontTarget;
         int newRightFrontTarget;
         int newLeftBackTarget;
         int newRightBackTarget;
 
-        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
-
-        // Calculates Target Position
-        double motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        double motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch;
-        double motorLeftBackEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        double motorRightBackEncoder = (driveFB - turnDegrees) * counts_per_inch;
-
-        // Ensures OpMode is Active
+        // Ensure that the OpMode is still active
         if (opModeIsActive()) {
 
-            // Calculates Target Position Based on Current Position
-            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int) (motorLeftFrontEncoder);
-            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int) (motorRightFrontEncoder);
-            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int) (motorLeftBackEncoder);
-            newRightBackTarget = motorRightBack.getCurrentPosition() + (int) (motorRightBackEncoder);
+            // Calculates Target Position by Adding Current Position and Distance To Target Position
+            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int)(leftFrontInches * counts_per_inch);
+            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int)(rightFrontInches * counts_per_inch);
+            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int)(leftBackInches * counts_per_inch);
+            newRightBackTarget = motorRightBack.getCurrentPosition() + (int)(rightBackInches * counts_per_inch);
 
             // Sets Target Position for Motors
             motorLeftFront.setTargetPosition(newLeftFrontTarget);
@@ -192,7 +210,7 @@ public abstract class autonomousFrame extends LinearOpMode {
             motorLeftBack.setTargetPosition(newLeftBackTarget);
             motorRightBack.setTargetPosition(newRightBackTarget);
 
-            // Changes Motor Mode
+            // Changes Motor Mode So They Can Move to Target Position
             motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -205,73 +223,12 @@ public abstract class autonomousFrame extends LinearOpMode {
             motorRightBack.setPower(Math.abs(speed));
 
             // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() || motorLeftBack.isBusy() || motorRightBack.isBusy())) {
+            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
+                   motorLeftBack.isBusy() || motorRightBack.isBusy())) {
 
                 // Displays Target and Current Positions
-                telemetry.addData("Target Value", "Running to %7d :%7d :%7d :%7d", newLeftFrontTarget, newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
-                telemetry.addData("Current Value", "Running at %7d :%7d: %7d :%7d",
-                        motorLeftFront.getCurrentPosition(),
-                        motorRightFront.getCurrentPosition(),
-                        motorLeftBack.getCurrentPosition(),
-                        motorRightBack.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stops Motors
-            motorLeftFront.setPower(0);
-            motorRightFront.setPower(0);
-            motorLeftBack.setPower(0);
-            motorRightBack.setPower(0);
-
-            // Changes Motor Mode
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
-    }
-
-    // Individual Motor Drive Function (Drivetrain, Encoder)
-    public void encoderDriveBasic(double speed, double leftFrontinches, double rightFrontinches,
-                                  double leftBackinches, double rightBackinches) {
-
-        // Defines Variables
-        int newLeftfrontTarget;
-        int newRightfrontTarget;
-        int newLeftbackTarget;
-        int newRightbackTarget;
-
-        // Ensure that the OpMode is still active
-        if (opModeIsActive()) {
-
-            // Calculates Target Position Based on Current Position
-            newLeftfrontTarget = motorLeftFront.getCurrentPosition() + (int)(leftFrontinches * counts_per_inch);
-            newRightfrontTarget = motorRightFront.getCurrentPosition() + (int)(rightFrontinches * counts_per_inch);
-            newLeftbackTarget = motorLeftBack.getCurrentPosition() + (int)(leftBackinches * counts_per_inch);
-            newRightbackTarget = motorRightBack.getCurrentPosition() + (int)(rightBackinches * counts_per_inch);
-
-            motorLeftFront.setTargetPosition(newLeftfrontTarget);
-            motorRightFront.setTargetPosition(newRightfrontTarget);
-            motorLeftBack.setTargetPosition(newLeftbackTarget);
-            motorRightBack.setTargetPosition(newRightbackTarget);
-
-            // Sets Target Position for Motors
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // Sets Power to Motors
-            motorLeftFront.setPower(Math.abs(speed));
-            motorRightFront.setPower(Math.abs(speed));
-            motorLeftBack.setPower(Math.abs(speed));
-            motorRightBack.setPower(Math.abs(speed));
-
-            // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() || motorLeftBack.isBusy() || motorRightBack.isBusy())) {
-
-                // Displays Target and Current Positions
-                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d", newLeftfrontTarget,  newRightfrontTarget, newLeftbackTarget, newRightbackTarget);
+                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d",
+                        newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
                 telemetry.addData("Current Value",  "Running at %7d :%7d: %7d :%7d",
                         motorLeftFront.getCurrentPosition(),
                         motorRightFront.getCurrentPosition(),
@@ -294,25 +251,201 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
     }
 
-    /*// Prints color (red/blue) and returns value
-    public float checkColor() {
+    /**
+     * Allows robot to be programmed to go forward, backward a certain amount of inches
+     * <p> Allows robot to be programmed to turn left and right a certain number of degrees
+     * @param driveFB Inches to move forward or backward (forward: +, backward: -)
+     * @param turnDegrees Degrees to turn left or right (right: +, left: -)
+     * @param speed Speed of robot (min: 0, max: 1)
+     */
+    public void encoderDrive(double driveFB, double turnDegrees, double speed) {
 
-        float masterValue = 0;
-        float hsvValues[] = {0F, 0F, 0F};
-        Color.RGBToHSV((colorSensor.red()), (colorSensor.green()), (colorSensor.blue()), hsvValues);
-        telemetry.addData("Hue", hsvValues[0]);
-        if (hsvValues[0] >= 340 || hsvValues[0] <= 20) {
-            masterValue = 1;
+        // Defines Target Position Variables
+        int newLeftFrontTarget;
+        int newRightFrontTarget;
+        int newLeftBackTarget;
+        int newRightBackTarget;
+
+        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
+
+        // Calculates Target Position
+        double motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch;
+        double motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch;
+        double motorLeftBackEncoder = (-driveFB - turnDegrees) * counts_per_inch;
+        double motorRightBackEncoder = (driveFB - turnDegrees) * counts_per_inch;
+
+        if (opModeIsActive()) {
+
+            // Calculates Target Position by Adding Current Position and Distance To Target Position
+            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int) (motorLeftFrontEncoder);
+            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int) (motorRightFrontEncoder);
+            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int) (motorLeftBackEncoder);
+            newRightBackTarget = motorRightBack.getCurrentPosition() + (int) (motorRightBackEncoder);
+
+            // Sets Target Position for Motors
+            motorLeftFront.setTargetPosition(newLeftFrontTarget);
+            motorRightFront.setTargetPosition(newRightFrontTarget);
+            motorLeftBack.setTargetPosition(newLeftBackTarget);
+            motorRightBack.setTargetPosition(newRightBackTarget);
+
+            // Changes Motor Mode So They Can Move to Target Position
+            motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            motorRightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            // Sets Power to Motors
+            motorLeftFront.setPower(Math.abs(speed));
+            motorRightFront.setPower(Math.abs(speed));
+            motorLeftBack.setPower(Math.abs(speed));
+            motorRightBack.setPower(Math.abs(speed));
+
+            // Displays Target and Current Position When Active OpMode and Active Motor(s)
+            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
+                   motorLeftBack.isBusy() || motorRightBack.isBusy())) {
+                // telemetry for debug only
+                /*// Displays Target and Current Positions
+                telemetry.addData("Target Value", "Running to %7d :%7d :%7d :%7d",
+                        newLeftFrontTarget, newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
+                telemetry.addData("Current Value", "Running at %7d :%7d: %7d :%7d",
+                        motorLeftFront.getCurrentPosition(),
+                        motorRightFront.getCurrentPosition(),
+                        motorLeftBack.getCurrentPosition(),
+                        motorRightBack.getCurrentPosition());
+                telemetry.update();*/
+            }
+
+            // Stops Motors
+            motorLeftFront.setPower(0);
+            motorRightFront.setPower(0);
+            motorLeftBack.setPower(0);
+            motorRightBack.setPower(0);
+
+            // Changes Motor Mode
+            motorLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorLeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+            motorRightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         }
-        if (hsvValues[0] >= 200 && hsvValues[0] <= 275) {
-            masterValue = 2;
-        }
-
-        telemetry.update();
-
-        return masterValue;
     }
 
+    /**
+     * Moves robot forward
+     * @param distance Inches forward
+     * @param speed Speed of robot
+     */
+    public void forward(double distance, double speed) {
+        encoderDrive(distance, 0, speed);
+    }
+
+    /**
+     * Moves robot backward
+     * @param distance Inches backward
+     * @param speed Speed of robot
+     */
+    public void backward(double distance, double speed) {
+        encoderDrive(-distance, 0, speed);
+    }
+
+    /**
+     * Turns robot left
+     * @param degrees Degrees left
+     * @param speed Speed of robot
+     */
+    public void left(double degrees, double speed) {
+        encoderDrive(0, -degrees, speed);
+    }
+
+    /**
+     * Turns robot right
+     * @param degrees Degrees right
+     * @param speed Speed of robot
+     */
+    public void right(double degrees, double speed) {
+        encoderDrive(0, degrees, speed);
+    }
+
+    /**
+     * Checks if the mineral is gold or silver during sampling
+     * <ul>
+     *     <li>If the mineral is gold, the robot will knock it and head to the depot</li>
+     *     <li>If the mineral is silver, the robot will scan the next mineral</li>
+     * </ul>
+     * @param sampleId Tells robot which position the robot is currently checking (Left: 1, Center: 2, Right: 3)
+     */
+    private void sample(int sampleId) {
+
+        sampleTime.reset();
+
+        colorChecker samplingDetector = new colorChecker(this);
+
+        while (sampleTime.milliseconds() <= 5000) {
+            if (samplingDetector.detectObject() == 1) {
+                samplingDone = true;
+                telemetry.addData("Status", samplingDone);
+                telemetry.update();
+            }
+            break;
+        }
+
+        if (samplingDone) {
+            /* knock jewel here
+            left(45, 0.5);
+            forward(-3, 0.5);
+            right(45, 0.5);
+            */
+
+            if (sampleId == 1) {
+                forward(15,0.5);
+            }
+            else if (sampleId == 2) {
+                forward(30,0.5);
+            }
+            else if (sampleId == 3) {
+                forward(45,0.5);
+            }
+            right(135, 0.5);
+            forward(40,0.5);
+        }
+    }
+
+    /**
+     * Preforms sampling-
+     * <ul>
+     *     <li>Robot scans left mineral</li>
+     *     <li>If it is gold, it goes to the depot</li>
+     *     <li>If it is not gold, it backs up to the next mineral to measure it (and so on)</li>
+     * </ul>
+     * <p> See {@linkplain #sample(int)} for more detail
+     */
+    public void sampling() {
+        sample(1);
+
+        telemetry.addData("Status", samplingDone);
+        telemetry.update();
+
+        if (!samplingDone){
+            backward(-15,0.5);
+            sample(2);
+
+            telemetry.addData("Status", samplingDone);
+            telemetry.update();
+
+            if (!samplingDone)
+                backward(-15,0.5);
+                sample(3);
+
+                telemetry.addData("Status", samplingDone);
+                telemetry.update();
+            }
+    }
+
+    /*// Initialize Jewel Variables
+    private boolean detectJewel = false;
+    float allianceColor;
+    double distanceJewel;
+    String displayJewel = "";
+    private ElapsedTime jewelTime = new ElapsedTime();
     // Moves depending on relationship between jewel and alliance color,
     // detects color again if red/blue not detected
     public void reactToJewelDetect(double distance) {

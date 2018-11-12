@@ -3,19 +3,12 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 ///////////////////////////////////////////////////////////////////////////////
 // Purpose: Autonomous Program Test
-// Author: Ansh Gandhi, Jonathan Ma
+// Contributors: Ansh Gandhi
 ///////////////////////////////////////////////////////////////////////////////
-
-//Motor powers per encoderDrive();
-//forward -+-+
-//backward +-+-
-//left ++-- (+)
-//right--++ (-)
 
 @Autonomous(name = "Basic Autonomous Test")
 @Disabled

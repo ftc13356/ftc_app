@@ -1,20 +1,16 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.depotPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
+
 ///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program for Bottom Left
-// Author: Ansh Gandhi, Jonathan Ma
+// Purpose: Autonomous Program for Depot Position Strategy 3
+// Contributors: Ansh Gandhi, Jonathan Ma
 ///////////////////////////////////////////////////////////////////////////////
 
-//Motor powers per encoderDrive();
-//forward -+-+
-//backward +-+-
-//left ++-- (+)
-//right--++ (-)
-
-@Autonomous(name = "Autonomous Blue Crater")
-public class autonomousBlueCrater extends autonomousFrame {
+@Autonomous(name = "Autonomous Depot Strategy 3", group = "Depot")
+public class autonomousDepot3 extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -31,12 +27,11 @@ public class autonomousBlueCrater extends autonomousFrame {
 
         waitForStart();
 
-        encoderDrive(15,  0, 0.5);
-        encoderDrive(0, -90, 0.5);
-        encoderDrive(50, 0, 0.5);
-        encoderDrive(0, -45, 0.5);
-        encoderDrive(65, 0, 0.5);
-        //copy of red crater
+        forward(12,0.5);
+        left(-90, 0.5);
+        forward(20,0.5);
+
+        sampling();
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
