@@ -44,7 +44,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "3.0 - 11/12/18 ";
+    private static final String autonomousVersionNumber = "3.1 - 11/12/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private DcMotor motorLeftFront;
@@ -404,8 +404,6 @@ public abstract class autonomousFrame extends LinearOpMode {
             else if (sampleId == 3) {
                 forward(45,0.5);
             }
-            right(135, 0.5);
-            forward(40,0.5);
         }
     }
 

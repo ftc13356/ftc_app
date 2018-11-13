@@ -28,10 +28,17 @@ public class autonomousDepot3 extends autonomousFrame {
         waitForStart();
 
         forward(12,0.5);
-        left(-90, 0.5);
-        forward(20,0.5);
+        left(90, 0.25);
+        forward(-20,0.5);
 
-        sampling();
+        //sampling(); //change sampling to not go forward
+
+        left(90, 0.25);
+        forward(10, 0.5);
+        left(45, 0.25);
+        forward(30, 0.5);
+        //drop team marker
+        backward(95, 0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
