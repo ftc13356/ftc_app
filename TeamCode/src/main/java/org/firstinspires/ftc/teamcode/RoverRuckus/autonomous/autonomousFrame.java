@@ -114,11 +114,11 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     /**
      * Vuforia Navigation
-     * <p>PLEASE EXPLAIN Ansh
+     * <p> This contains some of the Vuforia initialization code. The function also calculates the location of the robot based on the the VuMarks detected.
      *
-     * @param CAMERA_FORWARD_DISPLACEMENT
-     * @param CAMERA_VERTICAL_DISPLACEMENT
-     * @param CAMERA_LEFT_DISPLACEMENT
+     * @param CAMERA_FORWARD_DISPLACEMENT This is the forward location of the phone relative to the center of the robot.
+     * @param CAMERA_VERTICAL_DISPLACEMENT This is the vertical location of the phone relative to the center of the robot.
+     * @param CAMERA_LEFT_DISPLACEMENT This is the left location of the phone relative to the center of the robot.
      */
     public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT,
                                   final int CAMERA_LEFT_DISPLACEMENT) {
