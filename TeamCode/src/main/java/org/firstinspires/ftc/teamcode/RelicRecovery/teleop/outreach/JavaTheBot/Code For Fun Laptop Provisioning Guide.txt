@@ -1,0 +1,7 @@
+ftc app project without .git folder (hidden)
+ftc app's...
+	build-tools(1)
+	sdk platform(1)
+	gradle (.gradle in personal folder), delete old versions
+android studio installer
+java jdk installer
