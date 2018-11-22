@@ -4,7 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.ColorSensor;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -44,13 +43,11 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "3.1 - 11/12/18 ";
+    private static final String autonomousVersionNumber = "4.0 - 11/21/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
-    private DcMotor motorLeftFront;
-    private DcMotor motorRightFront;
-    private DcMotor motorLeftBack;
-    private DcMotor motorRightBack;
+    private hexChassis chassis = new hexChassis();
+    //private andyMarkChassis chassis = new andyMarkChassis();
 
     public ColorSensor colorSensor;
 
@@ -58,23 +55,16 @@ public abstract class autonomousFrame extends LinearOpMode {
     private ElapsedTime sampleTime = new ElapsedTime();
     private boolean samplingDone = false;
 
-    // Initialize Encoder Drive Variables
-    private final double counts_per_motor_rev = 1680 ;
-    private final double robot_diameter = 30.0; //needs to change, robot not turning 90 anymore
-    private final double drive_gear_reduction = 0.75;
-    private final double wheel_diameter_inches = 4.0 ;
-    private final double counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) / (wheel_diameter_inches * Math.PI);
-    private final double counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
-    //cpi = 100, cpd needs to be 44.5
-
     // Initialize Vuforia Navigation Variables
-    private static final String VUFORIA_KEY = key;
+    private static final String vuforia_key = key;
     private VuforiaLocalizer vuforia;
-    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private static final VuforiaLocalizer.CameraDirection camera_choice = BACK;
 
     private static final float mmPerInch        = 25.4f;
-    private static final float mmFTCFieldWidth  = (12 * 6) * mmPerInch; // the width of the FTC field (from the center point to the outer panels)
-    private static final float mmTargetHeight   = (6) * mmPerInch; // the height of the center of the target image above the floor
+    // the width of the FTC field (from the center point to the outer panels)
+    private static final float mmFTCFieldWidth  = (12 * 6) * mmPerInch;
+    // the height of the center of the target image above the floor
+    private static final float mmTargetHeight   = (6) * mmPerInch;
 
     /**
      * Prints version number of autonomous program
@@ -90,38 +80,28 @@ public abstract class autonomousFrame extends LinearOpMode {
      * Maps motors, servos, and sensors to their names in the robot config file
      */
     public void initializeHardwareMap() {
-        motorLeftFront = hardwareMap.dcMotor.get("motorLeftFront");
-        motorRightFront = hardwareMap.dcMotor.get("motorRightFront");
-        motorLeftBack = hardwareMap.dcMotor.get("motorLeftBack");
-        motorRightBack = hardwareMap.dcMotor.get("motorRightBack");
+        chassis.initializeHardwareMap(hardwareMap);
+
         colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
 
     /**
      * Sets motor direction to forward and tells motors to not apply brakes when power is 0
      */
-    public void setMotorDirection() {
-        motorLeftFront.setDirection(DcMotor.Direction.FORWARD);
-        motorRightFront.setDirection(DcMotor.Direction.FORWARD);
-        motorLeftBack.setDirection(DcMotor.Direction.FORWARD);
-        motorRightBack.setDirection(DcMotor.Direction.FORWARD);
-
-        motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    public void initializeMotors() {
+        chassis.initializeMotors();
     }
 
     /**
      * Vuforia Navigation
      * <p> This contains some of the Vuforia initialization code. The function also calculates the location of the robot based on the the VuMarks detected.
      *
-     * @param CAMERA_FORWARD_DISPLACEMENT This is the forward location of the phone relative to the center of the robot.
-     * @param CAMERA_VERTICAL_DISPLACEMENT This is the vertical location of the phone relative to the center of the robot.
-     * @param CAMERA_LEFT_DISPLACEMENT This is the left location of the phone relative to the center of the robot.
+     * @param camera_forward_displacement This is the forward location of the phone relative to the center of the robot.
+     * @param camera_vertical_displacement This is the vertical location of the phone relative to the center of the robot.
+     * @param camera_left_displacement This is the left location of the phone relative to the center of the robot.
      */
-    public void vuforiaNavigation(final int CAMERA_FORWARD_DISPLACEMENT, final int CAMERA_VERTICAL_DISPLACEMENT,
-                                  final int CAMERA_LEFT_DISPLACEMENT) {
+    public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement,
+                                  final int camera_left_displacement) {
 
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground
@@ -130,8 +110,8 @@ public abstract class autonomousFrame extends LinearOpMode {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        parameters.vuforiaLicenseKey = VUFORIA_KEY;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.vuforiaLicenseKey = vuforia_key;
+        parameters.cameraDirection   = camera_choice;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -169,15 +149,16 @@ public abstract class autonomousFrame extends LinearOpMode {
         backSpace.setLocation(backSpaceLocationOnField);
 
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
-                .translation(CAMERA_FORWARD_DISPLACEMENT, CAMERA_LEFT_DISPLACEMENT, CAMERA_VERTICAL_DISPLACEMENT)
+                .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
+                        camera_choice == BACK ? 90 : -90, 0, 0));
 
         for (VuforiaTrackable trackable : allTrackables)
         {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
         }
     }
+
 
     /**
      * Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
@@ -189,66 +170,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed) {
 
-        // Defines Target Position Variables
-        int newLeftFrontTarget;
-        int newRightFrontTarget;
-        int newLeftBackTarget;
-        int newRightBackTarget;
-
-        // Ensure that the OpMode is still active
-        if (opModeIsActive()) {
-
-            // Calculates Target Position by Adding Current Position and Distance To Target Position
-            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int)(leftFrontInches * counts_per_inch);
-            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int)(rightFrontInches * counts_per_inch);
-            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int)(leftBackInches * counts_per_inch);
-            newRightBackTarget = motorRightBack.getCurrentPosition() + (int)(rightBackInches * counts_per_inch);
-
-            // Sets Target Position for Motors
-            motorLeftFront.setTargetPosition(newLeftFrontTarget);
-            motorRightFront.setTargetPosition(newRightFrontTarget);
-            motorLeftBack.setTargetPosition(newLeftBackTarget);
-            motorRightBack.setTargetPosition(newRightBackTarget);
-
-            // Changes Motor Mode So They Can Move to Target Position
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // Sets Power to Motors
-            motorLeftFront.setPower(Math.abs(speed));
-            motorRightFront.setPower(Math.abs(speed));
-            motorLeftBack.setPower(Math.abs(speed));
-            motorRightBack.setPower(Math.abs(speed));
-
-            // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
-                   motorLeftBack.isBusy() || motorRightBack.isBusy())) {
-
-                // Displays Target and Current Positions
-                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d",
-                        newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
-                telemetry.addData("Current Value",  "Running at %7d :%7d: %7d :%7d",
-                        motorLeftFront.getCurrentPosition(),
-                        motorRightFront.getCurrentPosition(),
-                        motorLeftBack.getCurrentPosition(),
-                        motorRightBack.getCurrentPosition());
-                telemetry.update();
-            }
-
-            // Stops Motors
-            motorLeftFront.setPower(0);
-            motorRightFront.setPower(0);
-            motorLeftBack.setPower(0);
-            motorRightBack.setPower(0);
-
-            // Changes Motor Mode
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        chassis.encoderDriveBasic(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches,
+                                 speed, opModeIsActive());
     }
 
     /**
@@ -259,74 +182,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot (min: 0, max: 1)
      */
     public void encoderDrive(double driveFB, double turnDegrees, double speed) {
-
-        // Defines Target Position Variables
-        int newLeftFrontTarget;
-        int newRightFrontTarget;
-        int newLeftBackTarget;
-        int newRightBackTarget;
-
-        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
-
-        // Calculates Target Position
-        double motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        double motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch;
-        double motorLeftBackEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        double motorRightBackEncoder = (driveFB - turnDegrees) * counts_per_inch;
-
-        if (opModeIsActive()) {
-
-            // Calculates Target Position by Adding Current Position and Distance To Target Position
-            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int) (motorLeftFrontEncoder);
-            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int) (motorRightFrontEncoder);
-            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int) (motorLeftBackEncoder);
-            newRightBackTarget = motorRightBack.getCurrentPosition() + (int) (motorRightBackEncoder);
-
-            // Sets Target Position for Motors
-            motorLeftFront.setTargetPosition(newLeftFrontTarget);
-            motorRightFront.setTargetPosition(newRightFrontTarget);
-            motorLeftBack.setTargetPosition(newLeftBackTarget);
-            motorRightBack.setTargetPosition(newRightBackTarget);
-
-            // Changes Motor Mode So They Can Move to Target Position
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-            // Sets Power to Motors
-            motorLeftFront.setPower(Math.abs(speed));
-            motorRightFront.setPower(Math.abs(speed));
-            motorLeftBack.setPower(Math.abs(speed));
-            motorRightBack.setPower(Math.abs(speed));
-
-            // Displays Target and Current Position When Active OpMode and Active Motor(s)
-            while (opModeIsActive() && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
-                   motorLeftBack.isBusy() || motorRightBack.isBusy())) {
-                // telemetry for debug only
-                /*// Displays Target and Current Positions
-                telemetry.addData("Target Value", "Running to %7d :%7d :%7d :%7d",
-                        newLeftFrontTarget, newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
-                telemetry.addData("Current Value", "Running at %7d :%7d: %7d :%7d",
-                        motorLeftFront.getCurrentPosition(),
-                        motorRightFront.getCurrentPosition(),
-                        motorLeftBack.getCurrentPosition(),
-                        motorRightBack.getCurrentPosition());
-                telemetry.update();*/
-            }
-
-            // Stops Motors
-            motorLeftFront.setPower(0);
-            motorRightFront.setPower(0);
-            motorLeftBack.setPower(0);
-            motorRightBack.setPower(0);
-
-            // Changes Motor Mode
-            motorLeftFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightFront.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorLeftBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-            motorRightBack.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
-        }
+        chassis.encoderDrive(driveFB, turnDegrees, speed, opModeIsActive());
     }
 
     /**

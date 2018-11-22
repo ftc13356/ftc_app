@@ -23,25 +23,23 @@ public class autonomousCrater2 extends autonomousFrame {
         versionPrint();
 
         initializeHardwareMap();
-        setMotorDirection();
+        initializeMotors();
 
         waitForStart();
 
-        forward(67, 0.5);
-        right(90, 0.5);
-        forward(49, 0.5);
-        //drop team marker
-        right(180, 0.5);
-        forward(49, 0.5);
-        left(90, 0.5);
-        forward(68, 0.5);
-        left(90, 0.5);
-        forward(24, 0.5);
-        right(135, 0.5);
-        //do sampling
-        forward(42, 0.5); // in place of sampling
-        left(135, 0.5);
-        forward(26, 0.5);//over the crater hump
+        forward(75,0.25);
+        right(120, 0.75);
+        forward(30, 0.25);
+        // drop team marker
+        sleep(3000);
+        backward(30, 0.25);
+        right(120, 0.75);
+        forward(75, 0.25);
+        left(60, 0.75);
+        forward(20, 0.25);
+        //intake down to push random mineral
+        sleep(3000);
+        forward(20, 0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();

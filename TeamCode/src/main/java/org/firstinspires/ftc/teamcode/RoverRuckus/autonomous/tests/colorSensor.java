@@ -17,7 +17,6 @@ public class colorSensor extends autonomousFrame {
     @Override
     public void runOpMode() {
         initializeHardwareMap();
-        setMotorDirection();
         waitForStart();
 
         //colorChecker sampleCheck = new colorChecker(this);

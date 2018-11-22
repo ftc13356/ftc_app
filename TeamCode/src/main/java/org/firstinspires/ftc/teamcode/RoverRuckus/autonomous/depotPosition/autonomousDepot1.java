@@ -23,21 +23,19 @@ public class autonomousDepot1 extends autonomousFrame {
         versionPrint();
 
         initializeHardwareMap();
-        setMotorDirection();
+        initializeMotors();
 
         waitForStart();
 
-        forward(12,0.5);
-        left(100, 0.5);
-        forward(35,0.5); // 20 for sampling
-
-        //sampling();
-
-        right(135, 0.5);
-        forward(40,0.5);
+        forward(20,0.25);
+        //intake down to push random mineral
+        sleep(3000);
+        forward(30,0.25);
         // drop team marker
-        right(100, 0.5);
-        forward(95, 0.5);
+        sleep(3000);
+        right(200, 0.75);
+        forward(90, 0.25);
+        forward(10, 0.5);
 
         telemetry.addData("Status", "Everything executed");
         telemetry.update();
