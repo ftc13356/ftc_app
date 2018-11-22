@@ -1,10 +1,12 @@
 package org.firstinspires.ftc.teamcode.RelicRecovery.teleop.outreach.JavaTheBot.studentCode;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Jerfur: Nathan, Andrew")
+@Disabled
 public class JavaTheBotNathanAndrew extends OpMode {
 
     DcMotor left;
