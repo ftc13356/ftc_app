@@ -3,16 +3,26 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 
+/**
+ * <h2>Base Chassis</h2>
+ * Purpose:
+ * <p> Contains all the common variables and functions involving the chassis
+ * <p> so that we can easily create organized autonomous programs
+ */
+
 public class baseChassis {
 
+    // Initialize Motors
     DcMotor motorLeftFront;
     DcMotor motorRightFront;
     DcMotor motorLeftBack;
     DcMotor motorRightBack;
 
+    // Initialize Encoder Variables
     final double robot_diameter = 14.0;
     final double drive_gear_reduction = 1.0;
 
+    // these encoder variables vary depending on chassis type
     double counts_per_motor_rev = 0;
     double wheel_diameter_inches = 0;
     double counts_per_inch = 0;
@@ -25,6 +35,10 @@ public class baseChassis {
 
     public e_type type;
 
+    /**
+     * Maps chassis motors to their names in the robot config file
+     * @param hardwareMap hardware map of robot in autonomousFrame (program extending LinerOpMode)
+     */
     public void initializeHardwareMap(HardwareMap hardwareMap) {
         motorLeftFront = hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = hardwareMap.dcMotor.get("motorRightFront");
@@ -32,6 +46,9 @@ public class baseChassis {
         motorRightBack = hardwareMap.dcMotor.get("motorRightBack");
     }
 
+    /**
+     * Tells motors to not apply brakes when power is 0
+     */
     public void initializeMotors() {
         motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -39,9 +56,15 @@ public class baseChassis {
         motorRightBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
     }
 
-    //public void encoderDrive(double driveFB, double turnDegrees, double speed) {
-    //}
-
+    /**
+     * Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
+     * @param leftFrontInches Inches to move motorLeftFront
+     * @param rightFrontInches Inches to move motorRightFront
+     * @param leftBackInches Inches to move motorLeftBack
+     * @param rightBackInches Inches to move motorRightBack
+     * @param speed Speed of robot (min: 0, max: 1)
+     * @param opModeIsActive Use opModeIsActive() boolean in autonomousFrame (program extending LinerOpMode)
+     */
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed, boolean opModeIsActive) {
 

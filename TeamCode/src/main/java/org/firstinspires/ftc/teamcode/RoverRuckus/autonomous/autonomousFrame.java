@@ -27,14 +27,10 @@ import static org.firstinspires.ftc.teamcode.key.key;
 /**
  * <h2>Autonomous Frame</h2>
  * Purpose:
- * <p> Contains all the common variables and functions
- * so that we can easily create organized autonomous programs
+ * <p> Contains all the common variables and functions in autonomous programs
+ * so that they are neat and organized
  * <p>
- * <p> Contributors: Jonathan Ma, Ansh Gandhi
  * <p> Current Version: {@value autonomousVersionNumber}
- *
- * <p> {@linkplain org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.colorChecker Color Checker}
- *      used to detect minerals
  */
 
 @Autonomous(name="Basic Autonomous Frame")
@@ -43,7 +39,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.0 - 11/21/18 ";
+    private static final String autonomousVersionNumber = "4.1 - 11/24/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassis chassis = new hexChassis();
@@ -60,11 +56,11 @@ public abstract class autonomousFrame extends LinearOpMode {
     private VuforiaLocalizer vuforia;
     private static final VuforiaLocalizer.CameraDirection camera_choice = BACK;
 
-    private static final float mmPerInch        = 25.4f;
+    private static final float mmPerInch = 25.4f;
     // the width of the FTC field (from the center point to the outer panels)
-    private static final float mmFTCFieldWidth  = (12 * 6) * mmPerInch;
+    private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
     // the height of the center of the target image above the floor
-    private static final float mmTargetHeight   = (6) * mmPerInch;
+    private static final float mmTargetHeight = (6) * mmPerInch;
 
     /**
      * Prints version number of autonomous program
@@ -76,17 +72,17 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     /**
-     * Initializes Hardware Map-
      * Maps motors, servos, and sensors to their names in the robot config file
      */
     public void initializeHardwareMap() {
         chassis.initializeHardwareMap(hardwareMap);
 
-        colorSensor = hardwareMap.colorSensor.get("colorSensor");
+        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
 
     /**
-     * Sets motor direction to forward and tells motors to not apply brakes when power is 0
+     * Sets chassis specific motor direction
+     * <p> Tells motors to not apply brakes when power is 0
      */
     public void initializeMotors() {
         chassis.initializeMotors();
@@ -94,11 +90,15 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     /**
      * Vuforia Navigation
-     * <p> This contains some of the Vuforia initialization code. The function also calculates the location of the robot based on the the VuMarks detected.
+     * <p> This contains some of the Vuforia initialization code.
+     * The function also calculates the location of the robot based on the the VuMarks detected.
      *
-     * @param camera_forward_displacement This is the forward location of the phone relative to the center of the robot.
-     * @param camera_vertical_displacement This is the vertical location of the phone relative to the center of the robot.
-     * @param camera_left_displacement This is the left location of the phone relative to the center of the robot.
+     * @param camera_forward_displacement
+     *        This is the forward location of the phone relative to the center of the robot.
+     * @param camera_vertical_displacement
+     *        This is the vertical location of the phone relative to the center of the robot.
+     * @param camera_left_displacement
+     *        This is the left location of the phone relative to the center of the robot.
      */
     public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement,
                                   final int camera_left_displacement) {
@@ -161,15 +161,11 @@ public abstract class autonomousFrame extends LinearOpMode {
 
 
     /**
-     * Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
-     * @param leftFrontInches Inches to move motorLeftFront
-     * @param rightFrontInches Inches to move motorRightFront
-     * @param leftBackInches Inches to move motorLeftBack
-     * @param rightBackInches Inches to move motorRightBack
+     * {@linkplain baseChassis#encoderDriveBasic(double, double, double, double, double, boolean) Documentation Here}
      */
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed) {
-
+        // get function from chassis
         chassis.encoderDriveBasic(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches,
                                  speed, opModeIsActive());
     }
@@ -180,9 +176,12 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param driveFB Inches to move forward or backward (forward: +, backward: -)
      * @param turnDegrees Degrees to turn left or right (right: +, left: -)
      * @param speed Speed of robot (min: 0, max: 1)
+     * @param turning Whether robot is currently turning
      */
-    public void encoderDrive(double driveFB, double turnDegrees, double speed) {
-        chassis.encoderDrive(driveFB, turnDegrees, speed, opModeIsActive());
+    public void encoderDrive(double driveFB, double turnDegrees, double speed, boolean turning) {
+
+        // get function from current chassis
+        chassis.encoderDrive(driveFB, turnDegrees,speed, turning, opModeIsActive(), this);
     }
 
     /**
@@ -191,7 +190,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void forward(double distance, double speed) {
-        encoderDrive(distance, 0, speed);
+        encoderDrive(distance, 0, speed, false);
     }
 
     /**
@@ -200,7 +199,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void backward(double distance, double speed) {
-        encoderDrive(-distance, 0, speed);
+        encoderDrive(-distance, 0, speed, false);
     }
 
     /**
@@ -209,7 +208,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void left(double degrees, double speed) {
-        encoderDrive(0, -degrees, speed);
+        encoderDrive(0, -degrees, speed, true);
     }
 
     /**
@@ -218,7 +217,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void right(double degrees, double speed) {
-        encoderDrive(0, degrees, speed);
+        encoderDrive(0, degrees, speed, true);
     }
 
     /**
@@ -294,6 +293,7 @@ public abstract class autonomousFrame extends LinearOpMode {
             }
     }
 
+    public void oldCode() {
     /*// Initialize Jewel Variables
     private boolean detectJewel = false;
     float allianceColor;
@@ -341,4 +341,5 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.addData("Color Identified:", displayJewel);
         telemetry.update();
     }*/
+    }
 }

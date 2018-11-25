@@ -14,9 +14,6 @@ import java.util.ArrayList;
  * Calculated by taking the average saturation after moving each mineral to various distances away from the color sensor
  * <p> Standard Deviation (σ):
  * We took the σ of the tests
- *
- * <p>
- * <p> Contributors: Jonathan Ma
  */
 
 public class colorChecker {
