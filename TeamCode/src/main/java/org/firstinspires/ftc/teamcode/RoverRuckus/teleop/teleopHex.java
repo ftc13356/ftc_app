@@ -1,19 +1,19 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
+package org.firstinspires.ftc.teamcode.RoverRuckus.teleop;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "core hex test")
-public class coreHexTest extends OpMode {
+@TeleOp(name = "Hex Chassis Teleop")
+public class teleopHex extends OpMode {
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
     private DcMotor motorLeftBack;
     private DcMotor motorRightBack;
 
-    private double speedControl = 0.6;
+    private double speedControl = 0.5;
 
     public void init() {
 

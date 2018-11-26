@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -11,8 +10,8 @@ import com.qualcomm.robotcore.util.Range;
 // Author: Ansh Gandhi, Jonathan Ma
 ///////////////////////////////////////////////////////////////////////////////
 
-@TeleOp(name = "All Wheel Drive Test")
-public class AWDTest extends OpMode {
+@TeleOp(name = "AndyMark Chassis Teleop")
+public class teleopAndyMark extends OpMode {
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
