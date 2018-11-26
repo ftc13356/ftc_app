@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-///////////////////////////////////////////////////////////////////////////////
-// Purpose: Autonomous Program Test
-// Contributors: Ansh Gandhi
-///////////////////////////////////////////////////////////////////////////////
+/**
+ * Purpose: Basic Autonomous Program Test Program
+ */
 
 @Autonomous(name = "Basic Autonomous Test")
 @Disabled

@@ -5,10 +5,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
-///////////////////////////////////////////////////////////////////////////////
-// Purpose: Test program using color checker
-// Contributors: Jonathan Ma
-///////////////////////////////////////////////////////////////////////////////
+/**
+ * Purpose: Test program using color checker
+ */
 
 @Autonomous(name="Autonomous Color Sensor Test")
 @Disabled

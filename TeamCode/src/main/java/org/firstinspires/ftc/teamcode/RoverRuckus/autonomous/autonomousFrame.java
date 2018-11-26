@@ -39,7 +39,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.1 - 11/24/18 ";
+    private static final String autonomousVersionNumber = "4.2 - 11/25/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassis chassis = new hexChassis();
