@@ -1,12 +1,14 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "Hex Chassis Teleop")
-public class teleopHex extends OpMode {
+@TeleOp(name = "Hex Chassis")
+@Disabled
+public class chassisHex extends OpMode {
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
@@ -15,19 +17,20 @@ public class teleopHex extends OpMode {
 
     private double speedControl = 0.5;
 
+    private OpMode op;
+    chassisHex(OpMode opMode) {
+        op = opMode;
+    }
+
     public void init() {
 
-        telemetry.addData("Robot", "Initializing");
-
-        motorLeftFront = hardwareMap.dcMotor.get("motorLeftFront");
-        motorRightFront = hardwareMap.dcMotor.get("motorRightFront");
-        motorLeftBack = hardwareMap.dcMotor.get("motorLeftBack");
-        motorRightBack = hardwareMap.dcMotor.get("motorRightBack");
+        motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
+        motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
+        motorLeftBack = op.hardwareMap.dcMotor.get("motorLeftBack");
+        motorRightBack = op.hardwareMap.dcMotor.get("motorRightBack");
 
         motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
-
-        telemetry.addData("Robot", "Initialized");
     }
 
     public void loop() {
@@ -36,8 +39,8 @@ public class teleopHex extends OpMode {
         double motorLeftBackPower;
         double motorRightBackPower;
 
-        double driveFW = gamepad1.left_stick_y;
-        double turn  = gamepad1.right_stick_x;
+        double driveFW = op.gamepad1.left_stick_y;
+        double turn  = op.gamepad1.right_stick_x;
 
         motorLeftFrontPower = Range.clip((driveFW - turn) * speedControl, -1.0, 1.0);
         motorRightFrontPower = Range.clip((-driveFW - turn) * speedControl, -1.0, 1.0);

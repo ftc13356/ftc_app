@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 
 @TeleOp(name = "Intake Mechanism Test")
+@Disabled
 public class intakeTest extends OpMode {
 
     private CRServo left;
