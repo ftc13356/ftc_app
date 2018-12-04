@@ -14,7 +14,14 @@ public class intake extends OpMode {
     private CRServo leftIntake;
     private CRServo rightIntake;
 
-    private double speedControl = 0.25;
+    private double speedControl = 0.35;
+    private double armMotorPower = 0;
+    private double colorArmPower = 0;
+    private int currentArmPosition = 0;
+
+    private final int armDownLevel = -1500;
+    private final int armUpLevel = 0;
+    private final int encoderPositionError = 100;
 
     private OpMode op;
     intake(OpMode opMode) {
@@ -23,9 +30,13 @@ public class intake extends OpMode {
 
     public void init() {
 
+        op.telemetry.addData("Arm", "Initializing");
+
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
+
+        op.telemetry.addData("Arm", "Initialized");
 
     }
 
