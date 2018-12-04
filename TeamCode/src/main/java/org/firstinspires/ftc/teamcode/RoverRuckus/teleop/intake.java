@@ -10,11 +10,11 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 @Disabled
 public class intake extends OpMode {
 
-    //private DcMotor intakeAngleMotor;
+    private DcMotor intakeAngleMotor;
     private CRServo leftIntake;
     private CRServo rightIntake;
 
-    private double speedControl = 0.5;
+    private double speedControl = 0.25;
 
     private OpMode op;
     intake(OpMode opMode) {
@@ -23,7 +23,7 @@ public class intake extends OpMode {
 
     public void init() {
 
-        //intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngleMotor");
+        intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
 
@@ -32,11 +32,13 @@ public class intake extends OpMode {
     public void loop() {
 
         double intakePower = op.gamepad2.left_stick_y;
-        //double intakeAngleMotorPower = op.gamepad2.right_stick_y * speedControl;
+        double intakeAngleMotorPower = -op.gamepad2.right_stick_y * speedControl;
+
+        op.telemetry.addData("Current Position", intakeAngleMotor.getCurrentPosition());
 
         leftIntake.setPower(intakePower);
         rightIntake.setPower(-intakePower);
 
-        //intakeAngleMotor.setPower(intakeAngleMotorPower);
+        intakeAngleMotor.setPower(intakeAngleMotorPower);
     }
 }
