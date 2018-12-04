@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 /**
  * <h2>Hex Motor Chassis</h2>
  * Purpose:
- * <p> Contains the variables and functions specific to an all hex motor chassis
- * <p> so that we can switch from an all andymark motor chassis without changing any code!
+ * <p> Contains the variables and functions specific to an all Hex Motor chassis
+ * <p> so that we can switch from an all AndyMark motor chassis without changing any code!
  */
 
 public class hexChassis extends baseChassis {
