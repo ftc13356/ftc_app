@@ -30,14 +30,9 @@ public class intake extends OpMode {
 
     public void init() {
 
-        op.telemetry.addData("Arm", "Initializing");
-
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
-
-        op.telemetry.addData("Arm", "Initialized");
-
     }
 
     public void loop() {

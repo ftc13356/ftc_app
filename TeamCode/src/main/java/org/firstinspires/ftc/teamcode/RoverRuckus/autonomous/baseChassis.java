@@ -7,10 +7,10 @@ import com.qualcomm.robotcore.hardware.HardwareMap;
  * <h2>Base Chassis</h2>
  * Purpose:
  * <p> Contains all the common variables and functions involving the chassis
- * <p> so that we can easily create organized autonomous programs
+ * <p> so that we can easily create organized chassis programs
  */
 
-public class baseChassis {
+public abstract class baseChassis {
 
     // Initialize Motors
     DcMotor motorLeftFront;
@@ -22,11 +22,15 @@ public class baseChassis {
     final double robot_diameter = 14.0;
     final double drive_gear_reduction = 1.0;
 
+    final double wheel_diameter_default = 4.0;
+    final double wheel_diameter_high_grip = 5.0;
+
     // these encoder variables vary depending on chassis type
     double counts_per_motor_rev = 0;
-    double wheel_diameter_inches = 0;
-    double counts_per_inch = 0;
-    double counts_per_degree = 0;
+    double counts_per_inch_default = 0;
+    double counts_per_inch_high_grip = 0;
+    double counts_per_degree_default = 0;
+    double counts_per_degree_high_grip = 0;
 
     public enum e_type {
         AndyMark,
@@ -68,6 +72,10 @@ public class baseChassis {
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed, boolean opModeIsActive) {
 
+        counts_per_motor_rev = 1680;
+        counts_per_inch_default = (counts_per_motor_rev * drive_gear_reduction) /
+                (wheel_diameter_default * Math.PI);
+
         // Defines Target Position Variables
         int newLeftFrontTarget;
         int newRightFrontTarget;
@@ -78,10 +86,14 @@ public class baseChassis {
         if (opModeIsActive) {
 
             // Calculates Target Position by Adding Current Position and Distance To Target Position
-            newLeftFrontTarget = motorLeftFront.getCurrentPosition() + (int)(leftFrontInches * counts_per_inch);
-            newRightFrontTarget = motorRightFront.getCurrentPosition() + (int)(rightFrontInches * counts_per_inch);
-            newLeftBackTarget = motorLeftBack.getCurrentPosition() + (int)(leftBackInches * counts_per_inch);
-            newRightBackTarget = motorRightBack.getCurrentPosition() + (int)(rightBackInches * counts_per_inch);
+            newLeftFrontTarget = motorLeftFront.getCurrentPosition() +
+                    (int)(leftFrontInches * counts_per_inch_default);
+            newRightFrontTarget = motorRightFront.getCurrentPosition() +
+                    (int)(rightFrontInches * counts_per_inch_default);
+            newLeftBackTarget = motorLeftBack.getCurrentPosition() +
+                    (int)(leftBackInches * counts_per_inch_default);
+            newRightBackTarget = motorRightBack.getCurrentPosition() +
+                    (int)(rightBackInches * counts_per_inch_default);
 
             // Sets Target Position for Motors
             motorLeftFront.setTargetPosition(newLeftFrontTarget);
@@ -105,15 +117,15 @@ public class baseChassis {
             while (opModeIsActive && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
                     motorLeftBack.isBusy() || motorRightBack.isBusy())) {
                 // telemetry for debug only
-                /*// Displays Target and Current Positions
-                telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d",
-                        newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
-                telemetry.addData("Current Value",  "Running at %7d :%7d: %7d :%7d",
-                        motorLeftFront.getCurrentPosition(),
-                        motorRightFront.getCurrentPosition(),
-                        motorLeftBack.getCurrentPosition(),
-                        motorRightBack.getCurrentPosition());
-                telemetry.update();*/
+                // Displays Target and Current Positions
+                //telemetry.addData("Target Value",  "Running to %7d :%7d :%7d :%7d",
+                  //      newLeftFrontTarget,  newRightFrontTarget, newLeftBackTarget, newRightBackTarget);
+                //telemetry.addData("Current Value",  "Running at %7d :%7d: %7d :%7d",
+                  //      motorLeftFront.getCurrentPosition(),
+                    //    motorRightFront.getCurrentPosition(),
+                      //  motorLeftBack.getCurrentPosition(),
+                        //motorRightBack.getCurrentPosition());
+             //   telemetry.update();
             }
 
             // Stops Motors

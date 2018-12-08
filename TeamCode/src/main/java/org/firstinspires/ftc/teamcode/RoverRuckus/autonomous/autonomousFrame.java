@@ -3,7 +3,9 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -39,11 +41,15 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.2 - 11/25/18 ";
+    private static final String autonomousVersionNumber = "4.3 - 12/5/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassis chassis = new hexChassis();
     //private andyMarkChassis chassis = new andyMarkChassis();
+
+    private CRServo leftIntake;
+    private CRServo rightIntake;
+    private DcMotor intakeAngleMotor;
 
     public ColorSensor colorSensor;
 
@@ -76,6 +82,9 @@ public abstract class autonomousFrame extends LinearOpMode {
      */
     public void initializeHardwareMap() {
         chassis.initializeHardwareMap(hardwareMap);
+        leftIntake = hardwareMap.crservo.get("leftIntake");
+        rightIntake = hardwareMap.crservo.get("rightIntake");
+        intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
 
         //colorSensor = hardwareMap.colorSensor.get("colorSensor");
     }
@@ -86,6 +95,38 @@ public abstract class autonomousFrame extends LinearOpMode {
      */
     public void initializeMotors() {
         chassis.initializeMotors();
+        intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    }
+
+    public void expelMarker() {
+        leftIntake.setPower(1);
+        rightIntake.setPower(-1);
+
+        sleep(2000);
+
+        leftIntake.setPower(0);
+        rightIntake.setPower(0);
+    }
+
+    public void lowerIntake() {
+        int newAngleMotorTarget;
+        if (opModeIsActive()) {
+            intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            newAngleMotorTarget = -1300;
+            intakeAngleMotor.setTargetPosition(newAngleMotorTarget);
+            intakeAngleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            intakeAngleMotor.setPower(0.25);
+            while (opModeIsActive() && intakeAngleMotor.isBusy()) {
+                if ((intakeAngleMotor.getCurrentPosition()<= newAngleMotorTarget - 50) && (intakeAngleMotor.getCurrentPosition()>= -newAngleMotorTarget + 50)) {
+                    newAngleMotorTarget = intakeAngleMotor.getCurrentPosition();
+                }
+                telemetry.addData("Target Value", newAngleMotorTarget);
+                telemetry.addData("Current Value", intakeAngleMotor.getCurrentPosition());
+                telemetry.update();
+            }
+            intakeAngleMotor.setPower(0);
+            intakeAngleMotor.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        }
     }
 
     /**
@@ -161,13 +202,13 @@ public abstract class autonomousFrame extends LinearOpMode {
 
 
     /**
-     * {@linkplain baseChassis#encoderDriveBasic(double, double, double, double, double, boolean) Documentation Here}
+     * {@linkplain /baseChassis#encoderDriveBasic(double, double, double, double, double, boolean) Documentation Here}
      */
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed) {
         // get function from chassis
         chassis.encoderDriveBasic(leftFrontInches, rightFrontInches, leftBackInches, rightBackInches,
-                                 speed, opModeIsActive());
+                speed, opModeIsActive());
     }
 
     /**
@@ -178,10 +219,13 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot (min: 0, max: 1)
      * @param turning Whether robot is currently turning
      */
-    public void encoderDrive(double driveFB, double turnDegrees, double speed, boolean turning) {
+    public void encoderDrive(double driveFB, double turnDegrees, double speed,
+                             boolean turning, boolean timerRequested, int timerRequestTime) {
 
         // get function from current chassis
-        chassis.encoderDrive(driveFB, turnDegrees,speed, turning, opModeIsActive(), this);
+        chassis.encoderDrive(driveFB, turnDegrees, speed,
+                turning, timerRequested, timerRequestTime,
+                opModeIsActive(), this);
     }
 
     /**
@@ -190,7 +234,11 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void forward(double distance, double speed) {
-        encoderDrive(distance, 0, speed, false);
+        encoderDrive(distance, 0, speed, false, false, 0);
+    }
+
+    public void timedForward(double distance, double speed, int timeMilliseconds) {
+        encoderDrive(distance, 0, speed, false, true, timeMilliseconds);
     }
 
     /**
@@ -199,7 +247,11 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void backward(double distance, double speed) {
-        encoderDrive(-distance, 0, speed, false);
+        encoderDrive(-distance, 0, speed, false, false, 0);
+    }
+
+    public void timedBackward(double distance, double speed, int timeMilliseconds) {
+        encoderDrive(-distance, 0, speed, false, true, timeMilliseconds);
     }
 
     /**
@@ -208,7 +260,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void left(double degrees, double speed) {
-        encoderDrive(0, -degrees, speed, true);
+        encoderDrive(0, -degrees, speed, true, false, 0);
     }
 
     /**
@@ -217,7 +269,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot
      */
     public void right(double degrees, double speed) {
-        encoderDrive(0, degrees, speed, true);
+        encoderDrive(0, degrees, speed, true, false, 0);
     }
 
     /**

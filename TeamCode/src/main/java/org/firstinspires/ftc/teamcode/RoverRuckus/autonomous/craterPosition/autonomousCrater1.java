@@ -26,28 +26,29 @@ public class autonomousCrater1 extends autonomousFrame {
 
         waitForStart();
 
-        forward(20, 0.5);
-
         //intake down to push random mineral
+        lowerIntake();
         telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
-        sleep(1500);
 
-        forward(5, 0.5);
-        backward(7, 0.5);
+        timedForward(23, 0.5, 5000);
+
+        backward(11, 0.5);
 
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
 
-        left(130, 0.75);
-        forward(38, 0.5);
-        left(80, 0.75);
-        forward(58, 0.5);
+        left(70, 0.75);
+        timedForward(41, 0.5, 5000);
+        left(35, 0.75);
+        timedForward(40, 0.5, 8000);
 
         //drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
-        sleep(1500);
+        expelMarker();
+
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
 
-        backward(100, 0.5);
+        backward(80, 0.5);
+        backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
 

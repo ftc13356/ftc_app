@@ -17,10 +17,9 @@ public class andyMarkChassis extends baseChassis {
 
         // Set hex motor chassis encoder variables
         counts_per_motor_rev = 1680;
-        wheel_diameter_inches = 4.0;
-        counts_per_inch = (counts_per_motor_rev * drive_gear_reduction) /
-                (wheel_diameter_inches * Math.PI);
-        counts_per_degree = counts_per_inch * robot_diameter * Math.PI / 360;
+        counts_per_inch_default = (counts_per_motor_rev * drive_gear_reduction) /
+                (wheel_diameter_default * Math.PI);
+        counts_per_degree_default = counts_per_inch_default * robot_diameter * Math.PI / 360;
     }
 
     /**
@@ -64,12 +63,12 @@ public class andyMarkChassis extends baseChassis {
         double motorLeftBackEncoder;
         double motorRightBackEncoder;
 
-        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
+//        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
 
-        motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch;
-        motorLeftBackEncoder = (-driveFB - turnDegrees) * counts_per_inch;
-        motorRightBackEncoder = (driveFB - turnDegrees) * counts_per_inch;
+        motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch_default;
+        motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch_default;
+        motorLeftBackEncoder = (-driveFB - turnDegrees) * counts_per_inch_default;
+        motorRightBackEncoder = (driveFB - turnDegrees) * counts_per_inch_default;
 
         if (opModeIsActive) {
 

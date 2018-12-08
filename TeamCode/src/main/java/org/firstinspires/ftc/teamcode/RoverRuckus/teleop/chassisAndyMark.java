@@ -28,8 +28,6 @@ public class chassisAndyMark extends OpMode {
 
     public void init() {
 
-        op.telemetry.addData("Chassis", "Initializing");
-
         motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
         motorLeftBack = op.hardwareMap.dcMotor.get("motorLeftBack");
@@ -37,8 +35,6 @@ public class chassisAndyMark extends OpMode {
 
         motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
-
-        op.telemetry.addData("Chassis", "Initialized");
     }
 
     public void loop() {
