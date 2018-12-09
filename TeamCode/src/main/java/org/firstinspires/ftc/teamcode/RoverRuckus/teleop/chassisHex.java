@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Range;
 
 @TeleOp(name = "Hex Chassis")
 @Disabled
-public class chassisHex extends OpMode {
+public class chassisHex extends OpMode { // Combine teleop + autonomous hex chassis???
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
