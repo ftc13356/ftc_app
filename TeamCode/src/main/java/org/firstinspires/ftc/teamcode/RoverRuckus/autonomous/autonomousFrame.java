@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.3 - 12/5/18 ";
+    private static final String autonomousVersionNumber = "4.4 - 12/8/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassis chassis = new hexChassis();
@@ -52,6 +52,10 @@ public abstract class autonomousFrame extends LinearOpMode {
     private DcMotor intakeAngleMotor;
 
     public ColorSensor colorSensor;
+
+    // Intake Encoder Variables
+    protected int intakeDown = -1300;
+    protected int intakeUp = 0;
 
     // Initialize Sampling Variables
     private ElapsedTime sampleTime = new ElapsedTime();
@@ -96,6 +100,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     public void initializeMotors() {
         chassis.initializeMotors();
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void expelMarker() {
@@ -108,11 +113,9 @@ public abstract class autonomousFrame extends LinearOpMode {
         rightIntake.setPower(0);
     }
 
-    public void lowerIntake() {
-        int newAngleMotorTarget;
+    public void moveIntake(int newAngleMotorTarget) {
+
         if (opModeIsActive()) {
-            intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-            newAngleMotorTarget = -1300;
             intakeAngleMotor.setTargetPosition(newAngleMotorTarget);
             intakeAngleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             intakeAngleMotor.setPower(0.25);

@@ -27,7 +27,7 @@ public class autonomousDepot1 extends autonomousFrame {
         waitForStart();
 
         //intake down to push random mineral
-        lowerIntake();
+        moveIntake(intakeDown);
         telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
 
         timedForward(50,0.5, 5000);
@@ -35,11 +35,12 @@ public class autonomousDepot1 extends autonomousFrame {
         //drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
         expelMarker();
+        moveIntake(intakeUp);
 
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
 
         left(35, 0.75);
-        backward(80, 0.5);
+        backward(70, 0.5);
         backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
