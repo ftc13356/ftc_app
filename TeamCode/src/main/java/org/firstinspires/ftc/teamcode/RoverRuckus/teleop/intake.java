@@ -24,6 +24,7 @@ public class intake extends OpMode {
     // BEFORE EVERY COMMIT
 
     private DcMotor intakeAngleMotor;
+    private DcMotor shooter;
     private CRServo leftIntake;
     private CRServo rightIntake;
 
@@ -44,6 +45,7 @@ public class intake extends OpMode {
     public void init() {
 
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
+        shooter = op.hardwareMap.dcMotor.get("shooter");
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
 
@@ -53,9 +55,14 @@ public class intake extends OpMode {
     public void loop() {
 
         double intakePower = 0;
+        double shooterPower = 0;
 
         // Left stick y-axis controls intake's angle
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
+
+        if (op.gamepad2.right_trigger!=0) {
+            shooterPower = -0.5;
+        }
 
         // If a pressed, minerals sucked in
         if (op.gamepad2.a) {
@@ -71,5 +78,6 @@ public class intake extends OpMode {
         leftIntake.setPower(intakePower);
         rightIntake.setPower(-intakePower);
         intakeAngleMotor.setPower(intakeAngleMotorPower);
+        shooter.setPower(shooterPower);
     }
 }
