@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Intake")
 @Disabled
-public class intake extends OpMode {
+public class intakeShooter extends OpMode {
 
     // GO TO
     // teleopMain.java TO
@@ -24,7 +24,11 @@ public class intake extends OpMode {
     // BEFORE EVERY COMMIT
 
     private DcMotor intakeAngleMotor;
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intake.java
     private DcMotor shooter;
+=======
+    private DcMotor shooterMotor;
+>>>>>>> 6975743fd35767664f36561935b886873269da8d:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intakeShooter.java
     private CRServo leftIntake;
     private CRServo rightIntake;
 
@@ -38,14 +42,18 @@ public class intake extends OpMode {
     private final int encoderPositionError = 100;
 
     private OpMode op;
-    intake(OpMode opMode) {
+    intakeShooter(OpMode opMode) {
         op = opMode;
     }
 
     public void init() {
 
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intake.java
         shooter = op.hardwareMap.dcMotor.get("shooter");
+=======
+        shooterMotor = op.hardwareMap.dcMotor.get("shooter");
+>>>>>>> 6975743fd35767664f36561935b886873269da8d:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intakeShooter.java
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
 
@@ -60,9 +68,13 @@ public class intake extends OpMode {
         // Left stick y-axis controls intake's angle
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
 
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intake.java
         if (op.gamepad2.right_trigger!=0) {
             shooterPower = -0.5;
         }
+=======
+        double shooterMotorPower = -op.gamepad2.right_trigger;
+>>>>>>> 6975743fd35767664f36561935b886873269da8d:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intakeShooter.java
 
         // If a pressed, minerals sucked in
         if (op.gamepad2.a) {
@@ -78,6 +90,10 @@ public class intake extends OpMode {
         leftIntake.setPower(intakePower);
         rightIntake.setPower(-intakePower);
         intakeAngleMotor.setPower(intakeAngleMotorPower);
+<<<<<<< HEAD:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intake.java
         shooter.setPower(shooterPower);
+=======
+        shooterMotor.setPower(shooterMotorPower);
+>>>>>>> 6975743fd35767664f36561935b886873269da8d:TeamCode/src/main/java/org/firstinspires/ftc/teamcode/RoverRuckus/teleop/intakeShooter.java
     }
 }
