@@ -17,13 +17,13 @@ public class teleopMain extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String teleopVersionNumber = "1.3 - 12/8/18 ";
+    private final String teleopVersionNumber = "1.4 - 12/12/18 ";
 
     // Creates (instances of) chassis, and intake
     private chassisHex chassis = new chassisHex(this);
     //private chassisAndyMark chassis = new chassisAndyMark(this);
 
-    private intake intake = new intake(this);
+    private intakeShooter intakeShooter = new intakeShooter(this);
 
     // Calls methods in chassis and arm
     @Override
@@ -32,7 +32,7 @@ public class teleopMain extends OpMode {
         telemetry.addData("Robot", "Initializing");
 
         chassis.init();
-        intake.init();
+        intakeShooter.init();
 
         telemetry.addData("Robot", "Initialized");
     }
@@ -40,6 +40,6 @@ public class teleopMain extends OpMode {
     @Override
     public void loop() {
         chassis.loop();
-        intake.loop();
+        intakeShooter.loop();
     }
 }

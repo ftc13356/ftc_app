@@ -16,7 +16,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 @TeleOp(name = "Intake")
 @Disabled
-public class intake extends OpMode {
+public class intakeShooter extends OpMode {
 
     // GO TO
     // teleopMain.java TO
@@ -24,6 +24,7 @@ public class intake extends OpMode {
     // BEFORE EVERY COMMIT
 
     private DcMotor intakeAngleMotor;
+    private DcMotor shooterMotor;
     private CRServo leftIntake;
     private CRServo rightIntake;
 
@@ -37,13 +38,14 @@ public class intake extends OpMode {
     private final int encoderPositionError = 100;
 
     private OpMode op;
-    intake(OpMode opMode) {
+    intakeShooter(OpMode opMode) {
         op = opMode;
     }
 
     public void init() {
 
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
+        shooterMotor = op.hardwareMap.dcMotor.get("shooter");
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
 
@@ -56,6 +58,8 @@ public class intake extends OpMode {
 
         // Left stick y-axis controls intake's angle
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
+
+        double shooterMotorPower = -op.gamepad2.right_trigger;
 
         // If a pressed, minerals sucked in
         if (op.gamepad2.a) {
@@ -71,5 +75,6 @@ public class intake extends OpMode {
         leftIntake.setPower(intakePower);
         rightIntake.setPower(-intakePower);
         intakeAngleMotor.setPower(intakeAngleMotorPower);
+        shooterMotor.setPower(shooterMotorPower);
     }
 }
