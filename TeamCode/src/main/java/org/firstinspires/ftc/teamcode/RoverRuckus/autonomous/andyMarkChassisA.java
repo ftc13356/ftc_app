@@ -10,9 +10,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
  * <p> so that we can switch from an all hex motor chassis without changing any code!
  */
 
-public class andyMarkChassis extends baseChassis {
+public class andyMarkChassisA extends baseChassisA {
 
-    andyMarkChassis() {
+    andyMarkChassisA() {
         type = e_type.AndyMark;
 
         // Set hex motor chassis encoder variables

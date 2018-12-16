@@ -20,7 +20,7 @@ public class teleopMain extends OpMode {
     private final String teleopVersionNumber = "1.4 - 12/12/18 ";
 
     // Creates (instances of) chassis, and intake
-    private chassisHex chassis = new chassisHex(this);
+    private hexChassisT chassis = new hexChassisT(this);
     //private chassisAndyMark chassis = new chassisAndyMark(this);
 
     private intakeShooter intakeShooter = new intakeShooter(this);

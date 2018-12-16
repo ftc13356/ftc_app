@@ -1,11 +1,12 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import android.graphics.Color;
+
+import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 import java.util.ArrayList;
 
 /**
- * <h2>Color Checker</h2>
  * Purpose:
  * <p> To tell if a mineral is gold or silver during sampling
  * <p> It sees if a predetermined benchmark number is within ±2σ of the average saturation (how white) of the mineral
@@ -17,7 +18,6 @@ import java.util.ArrayList;
  */
 
 public class colorChecker {
-
 
     private float hsvValues[] = {0F, 0F, 0F};
 

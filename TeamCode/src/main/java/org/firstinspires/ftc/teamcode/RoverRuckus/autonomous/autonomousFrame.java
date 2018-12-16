@@ -44,8 +44,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     private static final String autonomousVersionNumber = "4.5 - 12/9/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
-    private hexChassis chassis = new hexChassis();
-    //private andyMarkChassis chassis = new andyMarkChassis();
+    private hexChassisA chassis = new hexChassisA();
+    //private andyMarkChassisA chassis = new andyMarkChassisA();
 
     private CRServo leftIntake;
     private CRServo rightIntake;
@@ -58,8 +58,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     protected int intakeUp = 0;
 
     // Initialize Sampling Variables
-    private ElapsedTime sampleTime = new ElapsedTime();
-    private boolean samplingDone = false;
+    //private ElapsedTime sampleTime = new ElapsedTime();
+    //private boolean samplingDone = false;
 
     // Initialize Vuforia Navigation Variables
     private static final String vuforia_key = key;
@@ -222,7 +222,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param speed Speed of robot (min: 0, max: 1)
      * @param turning Whether robot is currently turning
      */
-    public void encoderDrive(double driveFB, double turnDegrees, double speed,
+    private void encoderDrive(double driveFB, double turnDegrees, double speed,
                              boolean turning, boolean timerRequested, int timerRequestTime) {
 
         // get function from current chassis
@@ -275,6 +275,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         encoderDrive(0, degrees, speed, true, false, 0);
     }
 
+    public void oldSamplingCode() {
     /**
      * Checks if the mineral is gold or silver during sampling
      * <ul>
@@ -283,9 +284,9 @@ public abstract class autonomousFrame extends LinearOpMode {
      * </ul>
      * @param sampleId Tells robot which position the robot is currently checking (Left: 1, Center: 2, Right: 3)
      */
-    private void sample(int sampleId) {
+    //private void sample(int sampleId) {
 
-        sampleTime.reset();
+        /*sampleTime.reset();
 
         colorChecker samplingDetector = new colorChecker(this);
 
@@ -299,11 +300,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
 
         if (samplingDone) {
-            /* knock jewel here
+            knock jewel here
             left(45, 0.5);
             forward(-3, 0.5);
             right(45, 0.5);
-            */
+
 
             if (sampleId == 1) {
                 forward(15,0.5);
@@ -314,8 +315,8 @@ public abstract class autonomousFrame extends LinearOpMode {
             else if (sampleId == 3) {
                 forward(45,0.5);
             }
-        }
-    }
+        }*/
+    //}
 
     /**
      * Preforms sampling-
@@ -326,8 +327,8 @@ public abstract class autonomousFrame extends LinearOpMode {
      * </ul>
      * <p> See {@linkplain #sample(int)} for more detail
      */
-    public void sampling() {
-        sample(1);
+    //public void sampling() {
+        /*sample(1);
 
         telemetry.addData("Status", samplingDone);
         telemetry.update();
@@ -345,7 +346,8 @@ public abstract class autonomousFrame extends LinearOpMode {
 
                 telemetry.addData("Status", samplingDone);
                 telemetry.update();
-            }
+            }*/
+    //}
     }
 
     public void oldCode() {

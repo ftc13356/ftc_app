@@ -6,9 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
-@TeleOp(name = "AndyMark Chassis")
+@TeleOp(name = "Hex Chassis")
 @Disabled
-public class chassisAndyMark extends OpMode { // Combine teleop + autonomous andymark chassis???
+public class hexChassisT extends OpMode { // Combine teleop + autonomous hex chassis???
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
@@ -22,7 +22,7 @@ public class chassisAndyMark extends OpMode { // Combine teleop + autonomous and
     private int hold = 0;
 
     private OpMode op;
-    chassisAndyMark(OpMode opMode) {
+    hexChassisT(OpMode opMode) {
         op = opMode;
     }
 
