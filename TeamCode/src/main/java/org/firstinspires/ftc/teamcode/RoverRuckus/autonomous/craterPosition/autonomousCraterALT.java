@@ -22,9 +22,7 @@ public class autonomousCraterALT extends autonomousFrame {
         // BEFORE EVERY COMMIT
 
         versionPrint();
-
-        initializeHardwareMap();
-        initializeMotors();
+        initializeRobot();
 
         waitForStart();
 

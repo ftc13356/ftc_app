@@ -22,7 +22,7 @@ public class hexChassisT extends OpMode { // Combine teleop + autonomous hex cha
     private int hold = 0;
 
     private OpMode op;
-    hexChassisT(OpMode opMode) {
+    public hexChassisT(OpMode opMode) {
         op = opMode;
     }
 

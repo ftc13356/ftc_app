@@ -22,9 +22,7 @@ public class autonomousCrater3 extends autonomousFrame {
         // BEFORE EVERY COMMIT
 
         versionPrint();
-
-        initializeHardwareMap();
-        initializeMotors();
+        initializeRobot();
 
         waitForStart();
 

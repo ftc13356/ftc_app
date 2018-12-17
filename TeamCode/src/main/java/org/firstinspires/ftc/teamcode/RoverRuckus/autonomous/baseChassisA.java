@@ -40,20 +40,17 @@ public abstract class baseChassisA {
     public e_type type;
 
     /**
+     * Tells motors to not apply brakes when power is 0
+     *
      * Maps chassis motors to their names in the robot config file
      * @param hardwareMap hardware map of robot in autonomousFrame (program extending LinerOpMode)
      */
-    public void initializeHardwareMap(HardwareMap hardwareMap) {
+    public void initializeMotors(HardwareMap hardwareMap) {
         motorLeftFront = hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = hardwareMap.dcMotor.get("motorRightFront");
         motorLeftBack = hardwareMap.dcMotor.get("motorLeftBack");
         motorRightBack = hardwareMap.dcMotor.get("motorRightBack");
-    }
 
-    /**
-     * Tells motors to not apply brakes when power is 0
-     */
-    public void initializeMotors() {
         motorLeftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorLeftBack.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         motorRightFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

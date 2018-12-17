@@ -22,8 +22,7 @@ public class autonomousDepot2 extends autonomousFrame {
         // BEFORE EVERY COMMIT
 
         versionPrint();
-        initializeHardwareMap();
-        initializeMotors();
+        initializeRobot();
 
         waitForStart();
 

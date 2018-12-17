@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 /**
@@ -32,14 +33,13 @@ public class hexChassisA extends baseChassisA {
      * Sets hex motor chassis motor direction
      */
     @Override
-    public void initializeMotors() {
+    public void initializeMotors(HardwareMap hardwareMap) {
+        super.initializeMotors(hardwareMap);
 
         motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightFront.setDirection(DcMotor.Direction.FORWARD);
         motorLeftBack.setDirection(DcMotor.Direction.FORWARD);
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
-
-        super.initializeMotors();
     }
 
     /**

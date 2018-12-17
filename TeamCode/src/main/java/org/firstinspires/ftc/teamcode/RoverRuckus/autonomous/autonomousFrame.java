@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.5 - 12/9/18 ";
+    private static final String autonomousVersionNumber = "4.6 - 12/16/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -54,12 +54,12 @@ public abstract class autonomousFrame extends LinearOpMode {
     public ColorSensor colorSensor;
 
     // Intake Encoder Variables
-    protected int intakeDown = -1300;
+    protected int intakeDown = -1000;
     protected int intakeUp = 0;
 
     // Initialize Sampling Variables
-    //private ElapsedTime sampleTime = new ElapsedTime();
-    //private boolean samplingDone = false;
+    private tensorFlow sampling;
+    private int goldLocation;
 
     // Initialize Vuforia Navigation Variables
     private static final String vuforia_key = key;
@@ -83,24 +83,24 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     /**
      * Maps motors, servos, and sensors to their names in the robot config file
-     */
-    public void initializeHardwareMap() {
-        chassis.initializeHardwareMap(hardwareMap);
-        leftIntake = hardwareMap.crservo.get("leftIntake");
-        rightIntake = hardwareMap.crservo.get("rightIntake");
-        intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
-
-        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
-    }
-
-    /**
+     *
      * Sets chassis specific motor direction
      * <p> Tells motors to not apply brakes when power is 0
      */
-    public void initializeMotors() {
-        chassis.initializeMotors();
+    public void initializeRobot() {
+        chassis.initializeMotors(hardwareMap);
+        leftIntake = hardwareMap.crservo.get("leftIntake");
+        rightIntake = hardwareMap.crservo.get("rightIntake");
+        intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
+        //colorSensor = hardwareMap.colorSensor.get("colorSensor");
+
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
+
+    public void initializeTensorFlow() {
+        sampling = new tensorFlow(this);
+        sampling.initialize();
     }
 
     public void expelMarker() {
@@ -273,6 +273,28 @@ public abstract class autonomousFrame extends LinearOpMode {
      */
     public void right(double degrees, double speed) {
         encoderDrive(0, degrees, speed, true, false, 0);
+
+    }
+
+    public void scanMinerals() {
+        goldLocation = sampling.scan();
+        telemetry.addData("Gold Location", goldLocation);
+        telemetry.update();
+    }
+
+    public void sampling(int goldLocation) {
+        if (goldLocation == 0) { // gold not detected
+
+        }
+        if (goldLocation == 1) { // gold in left position
+
+        }
+        if (goldLocation == 2) { // gold in center position
+
+        }
+        if (goldLocation == 3) { // gold in right position
+
+        }
     }
 
     public void oldSamplingCode() {
