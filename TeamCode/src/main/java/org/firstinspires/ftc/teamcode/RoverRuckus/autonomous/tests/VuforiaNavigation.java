@@ -27,14 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -44,6 +41,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.teamcode.RoverRuckus.teleop.hexChassisT;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,12 +54,10 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.FRONT;
 import static org.firstinspires.ftc.teamcode.key.key;
 
-@TeleOp(name="Vuforia Navigation Test")
-@Disabled
-public class VuforiaNavigationTestWithDrive extends LinearOpMode {
+@TeleOp(name="Vuforia Navigation Test With Drive")
+public class VuforiaNavigation extends LinearOpMode {
 
-    private DcMotor motorLeft;
-    private DcMotor motorRight;
+    private hexChassisT chassis = new hexChassisT(this);
 
     private static final String VUFORIA_KEY = key;
 
@@ -81,11 +77,7 @@ public class VuforiaNavigationTestWithDrive extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        motorLeft  = hardwareMap.get(DcMotor.class, "motorLeft");
-        motorRight = hardwareMap.get(DcMotor.class, "motorRight");
-
-        motorLeft.setDirection(DcMotor.Direction.FORWARD);
-        motorRight.setDirection(DcMotor.Direction.FORWARD);
+        chassis.init();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -166,17 +158,7 @@ public class VuforiaNavigationTestWithDrive extends LinearOpMode {
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
 
-            double motorLeftPower;
-            double motorRightPower;
-
-            double driveFW = gamepad1.left_stick_y;
-            double turn  = gamepad1.right_stick_x;
-
-            motorLeftPower = Range.clip((driveFW - turn) * 0.4, -1.0, 1.0) ;
-            motorRightPower = Range.clip((-driveFW - turn) * 0.4, -1.0, 1.0) ;
-
-            motorLeft.setPower(motorLeftPower);
-            motorRight.setPower(motorRightPower);
+            chassis.loop();
 
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
