@@ -28,8 +28,8 @@ public class autonomousDepot2 extends autonomousFrame {
 
         forward(20,0.5);
 
-        //intake down to push random mineral
-        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
+        //intake down to push center mineral in Sampling
+        telemetry.addData("Status", "Knock center Mineral"); telemetry.update();
         sleep(1500);
 
         forward(40,0.5);
