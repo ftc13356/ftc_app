@@ -5,12 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
- * Purpose: Autonomous Program for Depot Position
+ * Purpose: Autonomous Program for Depot Position (Strategy 1)
  * What it does- sampling, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Depot", group = "Depot")
-public class autonomousDepotSampling extends autonomousFrame {
+@Autonomous(name = "Autonomous Depot 1", group = "Depot")
+public class autonomousDepot1 extends autonomousFrame {
 
     @Override
     public void runOpMode() {

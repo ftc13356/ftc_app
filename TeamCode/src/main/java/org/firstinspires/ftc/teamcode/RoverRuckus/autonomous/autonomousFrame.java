@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "5.0 - 12/23/18 ";
+    private static final String autonomousVersionNumber = "5.1 - 12/24/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -311,7 +311,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         scanMinerals();
 
         if (goldLocation == 1) { // gold in left position
-
+            left(20, 0.75);
+            timedForward(23, 0.5, 5000);
+            backward(11, 0.5);
+            left(45, 0.75);
+            timedForward(41, 0.5, 5000);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
             timedForward(23, 0.5, 5000);
@@ -320,7 +324,11 @@ public abstract class autonomousFrame extends LinearOpMode {
             timedForward(41, 0.5, 5000);
         }
         if (goldLocation == 3) { // gold in right position
-
+            right(20, 0.75);
+            timedForward(23, 0.5, 5000);
+            backward(11, 0.5);
+            left(135, 0.75);
+            timedForward(41, 0.5, 5000);
         }
     }
 

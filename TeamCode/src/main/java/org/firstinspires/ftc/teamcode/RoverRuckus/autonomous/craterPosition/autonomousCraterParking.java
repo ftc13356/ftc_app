@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 @Autonomous(name = "ALT Autonomous Crater", group = "Crater")
 @Disabled
-public class autonomousCraterALT extends autonomousFrame {
+public class autonomousCraterParking extends autonomousFrame {
 
     @Override
     public void runOpMode() {

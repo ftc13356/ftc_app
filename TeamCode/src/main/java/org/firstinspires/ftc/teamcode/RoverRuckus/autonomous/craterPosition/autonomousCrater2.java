@@ -5,11 +5,12 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
- * Purpose: Autonomous Program for Crater Position
+ * Purpose: Autonomous Program for Crater Position (Strategy 2)
+ * What it does- sampling, delivers team marker, parks in crater
  */
 
 @Autonomous(name = "Autonomous Crater 2", group = "Crater")
-public class autonomousCrater4 extends autonomousFrame {
+public class autonomousCrater2 extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -21,6 +22,7 @@ public class autonomousCrater4 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
