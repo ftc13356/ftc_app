@@ -6,10 +6,11 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
  * Purpose: Autonomous Program for Depot Position
+ * What it does- sampling, delivers team marker, parks in crater
  */
 
 @Autonomous(name = "Autonomous Depot", group = "Depot")
-public class autonomousDepot1 extends autonomousFrame {
+public class autonomousDepotSampling extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -21,28 +22,25 @@ public class autonomousDepot1 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
-        //intake down to push random mineral
-        moveIntake(intakeDown);
-        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
+        // sampling
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        samplingDepot();
 
-        timedForward(50,0.5, 5000);
-
-        //drop team marker
+        // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
-        expelMarker();
+        //expelMarker();
         moveIntake(intakeUp);
 
+        // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-
-        left(35, 0.75);
         backward(70, 0.5);
         backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
-
         stop();
 
     }

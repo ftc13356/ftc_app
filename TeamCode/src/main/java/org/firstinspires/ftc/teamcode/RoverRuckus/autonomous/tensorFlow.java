@@ -69,7 +69,7 @@ public class tensorFlow {
      */
     private TFObjectDetector tfod;
 
-    private int timeout = 60000;
+    private int timeout = 10000;
     private ElapsedTime sampleTime = new ElapsedTime();
 
     private autonomousFrame frame;

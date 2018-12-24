@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.craterPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "ALT Autonomous Crater", group = "Crater")
+@Disabled
 public class autonomousCraterALT extends autonomousFrame {
 
     @Override

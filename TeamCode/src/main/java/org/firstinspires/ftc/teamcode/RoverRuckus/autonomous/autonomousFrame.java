@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "4.6 - 12/16/18 ";
+    private static final String autonomousVersionNumber = "5.0 - 12/23/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -282,15 +282,42 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.update();
     }
 
-    public void sampling(int goldLocation) {
-        if (goldLocation == 0) { // gold not detected
+    public void samplingDepot() {
+        moveIntake(intakeDown);
+        scanMinerals();
 
+        if (goldLocation == 1) { // gold in left position
+            left(20, 0.75);
+            timedForward(30, 0.5, 5000);
+            right(40, 0.75);
+            timedForward(30, 0.5, 5000);
+            left(45, 0.75);
         }
+        if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
+            timedForward(50,0.5, 5000);
+            left(35, 0.75);
+        }
+        if (goldLocation == 3) { // gold in right position
+            right(25, 0.75);
+            timedForward(30, 0.5, 5000);
+            left(40, 0.75);
+            timedForward(25, 0.5, 5000);
+            left(20, 0.75);
+        }
+    }
+
+    public void samplingCrater() {
+        moveIntake(intakeDown);
+        scanMinerals();
+
         if (goldLocation == 1) { // gold in left position
 
         }
-        if (goldLocation == 2) { // gold in center position
-
+        if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
+            timedForward(23, 0.5, 5000);
+            backward(11, 0.5);
+            left(70, 0.75);
+            timedForward(41, 0.5, 5000);
         }
         if (goldLocation == 3) { // gold in right position
 
@@ -370,55 +397,5 @@ public abstract class autonomousFrame extends LinearOpMode {
                 telemetry.update();
             }*/
     //}
-    }
-
-    public void oldCode() {
-    /*// Initialize Jewel Variables
-    private boolean detectJewel = false;
-    float allianceColor;
-    double distanceJewel;
-    String displayJewel = "";
-    private ElapsedTime jewelTime = new ElapsedTime();
-    // Moves depending on relationship between jewel and alliance color,
-    // detects color again if red/blue not detected
-    public void reactToJewelDetect(double distance) {
-
-        float colorValue = checkColor();
-        jewelTime.reset();
-        while (opModeIsActive() && detectJewel == false && jewelTime.milliseconds() <= 3000) {
-            colorValue = checkColor();
-            if (colorValue == 1) {
-                displayJewel = "Red";
-                detectJewel = true;
-
-                if (colorValue == allianceColor) {
-                    encoderDrive(0,0,0.2);
-                    distanceJewel = distance;
-                }
-                else {
-                    encoderDrive(0,0,0.2);
-                    distanceJewel = -distance;
-                }
-            }
-            if (colorValue == 2) {
-                displayJewel = "Blue";
-                detectJewel = true;
-
-                if (colorValue == allianceColor) {
-                    encoderDrive(0,0,0.2);
-                    distanceJewel = distance;
-                }
-                else {
-                    encoderDrive(0,0,0.2);
-                    distanceJewel = -distance;
-                }
-            }
-        }
-        if (colorValue == 0) {
-            displayJewel = "Unknown";
-        }
-        telemetry.addData("Color Identified:", displayJewel);
-        telemetry.update();
-    }*/
     }
 }
