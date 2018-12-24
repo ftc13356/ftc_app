@@ -29,19 +29,9 @@ public class autonomousDepot2 extends autonomousFrame {
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingDepot();
+        left(45,0.75);
+        backward(80,0.5);
 
-        // drop team marker
-        telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
-        //expelMarker();
-        moveIntake(intakeUp);
-        // right(35, 0.75)??
-
-        // go to crater
-        telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(70, 0.5);
-        backward(5, 0.75);
-
-        telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();
 
     }
