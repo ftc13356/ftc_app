@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "5.2 - 12/24/18 ";
+    private static final String autonomousVersionNumber = "5.3 - 12/25/18 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -145,7 +145,7 @@ public abstract class autonomousFrame extends LinearOpMode {
      *        This is the left location of the phone relative to the center of the robot.
      */
     public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement,
-                                  final int camera_left_displacement)   {
+                                  final int camera_left_displacement) {
 
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground

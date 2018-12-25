@@ -32,7 +32,7 @@ public class autonomousDepot1 extends autonomousFrame {
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
-        //expelMarker();
+        expelMarker();
         moveIntake(intakeUp);
 
         // go to crater

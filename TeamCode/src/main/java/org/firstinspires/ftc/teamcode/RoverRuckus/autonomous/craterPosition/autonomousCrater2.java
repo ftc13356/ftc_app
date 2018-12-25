@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  * What it does- sampling, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Crater 2", group = "Depot")
+@Autonomous(name = "Autonomous Crater 2", group = "Crater")
 public class autonomousCrater2 extends autonomousFrame {
 
     @Override
@@ -30,12 +30,22 @@ public class autonomousCrater2 extends autonomousFrame {
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingCrater();
 
+        // go to depot
+        telemetry.addData("Status", "Going to Depot"); telemetry.update();
         left(90,0.75);
         forward(70, 0.5);
         right(135, 0.75);
         forward(40,0.5);
-        backward(80,0.5);
+
+        // drop team marker
+        telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
+        expelMarker();
+        moveIntake(intakeUp);
+
+        // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
+        backward(80,0.5);
+
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();
 
