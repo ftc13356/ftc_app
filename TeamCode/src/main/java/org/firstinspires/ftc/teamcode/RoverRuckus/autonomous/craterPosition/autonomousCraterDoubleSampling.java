@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "Autonomous Crater Double Sampling", group = "Crater")
-@Disabled
+//@Disabled
 public class autonomousCraterDoubleSampling extends autonomousFrame {
 
     @Override
@@ -32,10 +32,13 @@ public class autonomousCraterDoubleSampling extends autonomousFrame {
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingCrater();
 
-        // go to depot
+        // go into depot starting position in order to do the depot sampling
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(36, 0.75);
-        timedForward(40, 0.5, 6000);
+        left(90, 0.75);
+        forward(45, 0.5);
+        left(90,0.75);
+        forward(33,0.5);
+        left(180,0.75);
 
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
@@ -48,7 +51,7 @@ public class autonomousCraterDoubleSampling extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(70, 0.5);
+        backward(70, 0.75);
         backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
