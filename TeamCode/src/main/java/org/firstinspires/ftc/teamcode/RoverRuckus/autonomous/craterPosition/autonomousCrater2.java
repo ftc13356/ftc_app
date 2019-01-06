@@ -20,7 +20,7 @@ public class autonomousCrater2 extends autonomousFrame {
         // UPDATE VERSION NUMBER
         // BEFORE EVERY COMMIT
 
-        versionPrint();
+           versionPrint();
         initializeRobot();
         initializeTensorFlow();
 
@@ -33,9 +33,9 @@ public class autonomousCrater2 extends autonomousFrame {
         // go to depot
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
         left(90,0.75);
-        forward(70, 0.5);
+        forward(65, 0.5);
         right(135, 0.75);
-        forward(40,0.5);
+        forward(50,0.5);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -44,7 +44,7 @@ public class autonomousCrater2 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(80,0.5);
+        backward(95,0.5);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

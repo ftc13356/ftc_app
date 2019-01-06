@@ -30,10 +30,11 @@ public class autonomousCrater1 extends autonomousFrame {
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingCrater();
 
-        // go to depot
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(36, 0.75);
-        timedForward(40, 0.5, 6000);
+        left(90,0.75);
+        forward(65, 0.5);
+        right(135, 0.75);
+        forward(50,0.5);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
