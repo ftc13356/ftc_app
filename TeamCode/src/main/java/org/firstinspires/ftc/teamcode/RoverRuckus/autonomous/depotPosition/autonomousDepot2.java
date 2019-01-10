@@ -28,6 +28,7 @@ public class autonomousDepot2 extends autonomousFrame {
 
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
+        right(180,0.5);
         samplingDepot();
 
         // drop team marker
@@ -37,8 +38,8 @@ public class autonomousDepot2 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        left(45,0.75);
-        backward(80,0.5);
+        left(50,0.75);
+        backward(95,0.5);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

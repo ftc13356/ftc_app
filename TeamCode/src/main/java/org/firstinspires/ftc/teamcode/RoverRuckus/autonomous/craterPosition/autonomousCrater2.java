@@ -28,6 +28,7 @@ public class autonomousCrater2 extends autonomousFrame {
 
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
+        right(180,0.5);
         samplingCrater();
 
         // go to depot

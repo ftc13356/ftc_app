@@ -287,6 +287,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         scanMinerals();
 
         if (goldLocation == 1) { // gold in left position
+            right(180,0.5);
             left(20, 0.75);
             timedForward(30, 0.5, 5000);
             right(40, 0.75);
@@ -294,10 +295,12 @@ public abstract class autonomousFrame extends LinearOpMode {
             left(45, 0.75);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
+            right(180,0.5);
             timedForward(50,0.5, 5000);
             left(35, 0.75);
         }
         if (goldLocation == 3) { // gold in right position
+            right(180,0.5);
             right(25, 0.75);
             timedForward(30, 0.5, 5000);
             left(40, 0.75);
@@ -311,6 +314,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         scanMinerals();
 
         if (goldLocation == 1) { // gold in left position
+            right(180,0.5);
             left(20, 0.75);
             timedForward(23, 0.5, 5000);
             backward(11, 0.5);
@@ -318,12 +322,14 @@ public abstract class autonomousFrame extends LinearOpMode {
             timedForward(41, 0.5, 5000);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
+            right(180,0.5);
             timedForward(23, 0.5, 5000);
             backward(11, 0.5);
             left(70, 0.75);
             timedForward(41, 0.5, 5000);
         }
         if (goldLocation == 3) { // gold in right position
+            right(180,0.5);
             right(20, 0.75);
             timedForward(23, 0.5, 5000);
             backward(11, 0.5);
