@@ -41,7 +41,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "5.5 - 1/5/19 ";
+    private static final String autonomousVersionNumber = "5.6 - 1/10/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -50,6 +50,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     private CRServo leftIntake;
     private CRServo rightIntake;
     private DcMotor intakeAngleMotor;
+    private DcMotor winchMotor;
 
     public ColorSensor colorSensor;
 
@@ -92,10 +93,14 @@ public abstract class autonomousFrame extends LinearOpMode {
         leftIntake = hardwareMap.crservo.get("leftIntake");
         rightIntake = hardwareMap.crservo.get("rightIntake");
         intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
+        winchMotor = hardwareMap.dcMotor.get("winchMotor");
         //colorSensor = hardwareMap.colorSensor.get("colorSensor");
 
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+        winchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        winchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
     }
 
     public void initializeTensorFlow() {
@@ -111,6 +116,21 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         leftIntake.setPower(0);
         rightIntake.setPower(0);
+    }
+
+    /**
+     * Winch Motor
+     * <p> This is a simple function that controls the movement of the winch motor.
+     * @param power
+     *        This is the power given to the winch motor. Positive power means that the winch will retract, lifting the robot.
+     *        Negative power means that the winch will lower, lowering the robot.
+     * @param time
+     *        This is the time, in milliseconds, that the motor needs to spin.
+     */
+    public void moveWinch(double power, long time) {
+        winchMotor.setPower(power);
+        sleep(time);
+        winchMotor.setPower(0);
     }
 
     public void moveIntake(int newAngleMotorTarget) {
