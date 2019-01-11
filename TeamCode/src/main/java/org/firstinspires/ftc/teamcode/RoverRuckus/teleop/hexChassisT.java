@@ -6,9 +6,16 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * <h2>Hex Motor Chassis</h2>
+ * Purpose:
+ * <p> Contains the variables and functions specific to an all hex motor chassis
+ * <p> so that we can switch from an all andymark motor chassis without changing any code!
+ */
+
 @TeleOp(name = "Hex Chassis")
 @Disabled
-public class hexChassisT extends OpMode { // Combine teleop + autonomous hex chassis???
+public class hexChassisT extends OpMode {
 
     private DcMotor motorLeftFront;
     private DcMotor motorRightFront;
@@ -27,7 +34,6 @@ public class hexChassisT extends OpMode { // Combine teleop + autonomous hex cha
     }
 
     public void init() {
-
         motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
         motorLeftBack = op.hardwareMap.dcMotor.get("motorLeftBack");

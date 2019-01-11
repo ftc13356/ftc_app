@@ -9,46 +9,38 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 /**
  * <h2>Intake</h2>
  * Purpose:
- * <p>
- *
- * temp: This is the class which contains the code for the intake.
+ * <p> Contains the functions and variables used for the intake, shooter, and the winch for climbing
  */
 
 @TeleOp(name = "Intake")
 @Disabled
-public class intakeShooter extends OpMode {
+public class intakeShooterWinch extends OpMode {
 
     // GO TO
     // teleopMain.java TO
     // UPDATE VERSION NUMBER
     // BEFORE EVERY COMMIT
 
+    private CRServo leftIntake;
+    private CRServo rightIntake;
     private DcMotor intakeAngleMotor;
+    private double speedControl = 0.35;
+
     private DcMotor shooter;
     private DcMotor shooterMotor;
 
-    private CRServo leftIntake;
-    private CRServo rightIntake;
-
-    private double speedControl = 0.35;
-    private double armMotorPower = 0;
-    private double colorArmPower = 0;
-    private int currentArmPosition = 0;
-
-    private final int armDownLevel = -1500;
-    private final int armUpLevel = 0;
-    private final int encoderPositionError = 100;
+    private DcMotor winchMotor;
 
     private OpMode op;
-    intakeShooter(OpMode opMode) {
+    intakeShooterWinch(OpMode opMode) {
         op = opMode;
     }
 
     public void init() {
-
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         shooter = op.hardwareMap.dcMotor.get("shooter");
         shooterMotor = op.hardwareMap.dcMotor.get("shooter");
+        winchMotor = op.hardwareMap.dcMotor.get("winchMotor");
 
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
@@ -60,14 +52,16 @@ public class intakeShooter extends OpMode {
 
         double intakePower = 0;
         double shooterPower = 0;
+        double winchPower;
 
         // Left stick y-axis controls intake's angle
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
 
-
         if (op.gamepad2.right_trigger !=0 ) {
             shooterPower = -0.5;
         }
+
+        winchPower = op.gamepad1.right_trigger - op.gamepad1.left_trigger;
 
         double shooterMotorPower = -op.gamepad2.right_trigger;
 
@@ -88,5 +82,7 @@ public class intakeShooter extends OpMode {
 
         shooter.setPower(shooterPower);
         shooterMotor.setPower(shooterMotorPower);
+
+        winchMotor.setPower(winchPower);
     }
 }

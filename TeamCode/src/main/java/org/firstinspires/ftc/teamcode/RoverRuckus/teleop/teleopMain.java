@@ -6,10 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 /**
  * <h2>teleopMain</h2>
  * Purpose:
- * <p>
- *
- *
- * temp: This class creates instances of the chassis and intake and runs each of their functions.
+ * <p> This class creates instances of the chassis and intake and runs each of their functions
+ * <p> This makes are code more organized as major parts of the robot are separated
  */
 
 @TeleOp(name = "Teleop")
@@ -17,29 +15,31 @@ public class teleopMain extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String teleopVersionNumber = "1.4 - 12/12/18 ";
+    private final String teleopVersionNumber = "1.5 - 1/11/18 ";
 
     // Creates (instances of) chassis, and intake
     private hexChassisT chassis = new hexChassisT(this);
     //private chassisAndyMark chassis = new chassisAndyMark(this);
 
-    private intakeShooter intakeShooter = new intakeShooter(this);
+    private intakeShooterWinch intakeShooterWinch = new intakeShooterWinch(this);
 
     // Calls methods in chassis and arm
+    // Maps chassis, intake, shooter, and winch motors to their names in the robot config file
     @Override
     public void init() {
         telemetry.addData("Teleop Program Version", teleopVersionNumber);
         telemetry.addData("Robot", "Initializing");
 
         chassis.init();
-        intakeShooter.init();
+        intakeShooterWinch.init();
 
         telemetry.addData("Robot", "Initialized");
     }
 
+    // Runs main teleop code
     @Override
     public void loop() {
         chassis.loop();
-        intakeShooter.loop();
+        intakeShooterWinch.loop();
     }
 }
