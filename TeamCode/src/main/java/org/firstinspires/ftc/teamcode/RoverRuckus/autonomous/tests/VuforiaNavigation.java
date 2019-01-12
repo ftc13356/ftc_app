@@ -55,6 +55,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 import static org.firstinspires.ftc.teamcode.key.key;
 
 @TeleOp(name="Vuforia Navigation Test With Drive")
+@Disabled
 public class VuforiaNavigation extends LinearOpMode {
 
     private hexChassisT chassis = new hexChassisT(this);

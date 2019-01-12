@@ -42,7 +42,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "5.8 - 1/11/19 ";
+    private static final String autonomousVersionNumber = "5.9 - 1/11/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -111,7 +111,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         leftIntake.setPower(1);
         rightIntake.setPower(-1);
 
-        sleep(2000);
+        sleep(1000);
 
         leftIntake.setPower(0);
         rightIntake.setPower(0);
@@ -120,11 +120,9 @@ public abstract class autonomousFrame extends LinearOpMode {
     /**
      * Winch Motor
      * <p> This is a simple function that controls the movement of the winch motor.
-     * @param power
-     *        This is the power given to the winch motor. Positive power means that the winch will retract, lifting the robot.
-     *        Negative power means that the winch will lower, lowering the robot.
-     * @param time
-     *        This is the time, in milliseconds, that the motor needs to spin.
+     * @param power This is the power given to the winch motor. Negative power means that the winch will
+     *              retract, lifting the robot. Negative power means that the winch will lower, lowering the robot.
+     * @param time This is the time, in milliseconds, that the motor needs to spin.
      */
     public void moveWinch(double power, long time) {
         winchMotor.setPower(power);

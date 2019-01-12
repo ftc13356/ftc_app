@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
@@ -10,7 +11,8 @@ import java.util.List;
  * Purpose: Vuforia Navigation Test In Autonomous
  */
 
-@Autonomous(name = "Autonomous Crater 1", group = "Crater")
+@Autonomous(name = "Vuforia Test with Crater", group = "Crater")
+@Disabled
 public class WatchThisWillWorkAndThenYouTakeElsAndITakeDubs extends autonomousFrame {
 
     @Override
