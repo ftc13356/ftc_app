@@ -1,16 +1,18 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.depotPosition;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.one_eleven.craterPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
- * Purpose: Autonomous Program for Depot Position (Strategy 1)
+ * Purpose: Autonomous Program for Crater Position (Strategy 1)
  * What it does- sampling, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Depot 1", group = "Depot")
-public class autonomousDepot1 extends autonomousFrame {
+@Autonomous(name = "Autonomous Crater 1", group = "Crater")
+@Disabled
+public class autonomousCrater1 extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -22,17 +24,20 @@ public class autonomousDepot1 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
-        // descend
-        telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 5000);
+        // sampling
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        right(180,0.5);
+        samplingCrater();
 
-        // push central mineral
-        telemetry.addData("Status", "Knock Central Mineral"); telemetry.update();
-        moveIntake(intakeDown);
-        timedForward(50,0.5, 5000);
+        telemetry.addData("Status", "Going to Depot"); telemetry.update();
+        left(90,0.75);
+        forward(65, 0.5);
+        right(135, 0.75);
+        forward(50,0.5);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -41,8 +46,7 @@ public class autonomousDepot1 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        right(30,0.75);
-        backward(70, 0.5);
+        backward(75, 0.5);
         backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();

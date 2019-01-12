@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.craterPosition;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.one_eleven.craterPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
@@ -9,8 +10,9 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  * What it does- sampling, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Crater 1", group = "Crater")
-public class autonomousCrater1 extends autonomousFrame {
+@Autonomous(name = "Autonomous Crater Double Sampling", group = "Crater")
+@Disabled
+public class autonomousCraterDoubleSampling extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -22,25 +24,25 @@ public class autonomousCrater1 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
-        // descend
-        telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 5000);
+        // sampling
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        samplingCrater();
 
-        // push central mineral
-        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
-        moveIntake(intakeDown);
-        timedForward(23, 0.5, 5000);
-        backward(11, 0.5);
-
-        // go to depot
+        // go into depot starting position in order to do the depot sampling
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(70, 0.75);
-        timedForward(41, 0.5, 5000);
-        left(40, 0.75);
-        timedForward(40, 0.5, 6000);
+        left(90, 0.75);
+        forward(45, 0.5);
+        left(90,0.75);
+        forward(33,0.5);
+        left(180,0.75);
+
+        // sampling
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        samplingDepot();
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -49,7 +51,7 @@ public class autonomousCrater1 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(75, 0.5);
+        backward(70, 0.75);
         backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();

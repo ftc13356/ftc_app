@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "Autonomous Crater Double Sampling", group = "Crater")
-//@Disabled
+@Disabled
 public class autonomousCraterDoubleSampling extends autonomousFrame {
 
     @Override

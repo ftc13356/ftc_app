@@ -94,6 +94,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name="Vuforia Navigation Test")
+@Disabled
 public class VuforiaNavigationTest extends autonomousFrame {
 
     private static final String VUFORIA_KEY = key;

@@ -22,14 +22,17 @@ public class autonomousDepot2 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
-        initializeTensorFlow();
 
         waitForStart();
 
-        // sampling
-        telemetry.addData("Status", "Sampling"); telemetry.update();
-        right(180,0.5);
-        samplingDepot();
+        // descend
+        telemetry.addData("Status", "Descend"); telemetry.update();
+        moveWinch(1, 5000);
+
+        // push central mineral
+        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
+        moveIntake(intakeDown);
+        timedForward(50,0.5, 5000);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();

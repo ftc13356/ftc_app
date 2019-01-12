@@ -20,23 +20,27 @@ public class autonomousCrater2 extends autonomousFrame {
         // UPDATE VERSION NUMBER
         // BEFORE EVERY COMMIT
 
-           versionPrint();
+        versionPrint();
         initializeRobot();
-        initializeTensorFlow();
 
         waitForStart();
 
-        // sampling
-        telemetry.addData("Status", "Sampling"); telemetry.update();
-        right(180,0.5);
-        samplingCrater();
+        // descend
+        telemetry.addData("Status", "Descend"); telemetry.update();
+        moveWinch(1, 5000);
+
+        // push central mineral
+        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
+        moveIntake(intakeDown);
+        timedForward(23, 0.5, 5000);
+        backward(11, 0.5);
 
         // go to depot
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(90,0.75);
-        forward(65, 0.5);
-        right(135, 0.75);
-        forward(50,0.5);
+        left(70, 0.75);
+        timedForward(41, 0.5, 5000);
+        left(36, 0.75);
+        timedForward(40, 0.5, 6000);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
