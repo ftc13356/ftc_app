@@ -10,6 +10,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
+import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
@@ -41,7 +42,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "5.7 - 1/11/19 ";
+    private static final String autonomousVersionNumber = "5.8 - 1/11/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -65,7 +66,9 @@ public abstract class autonomousFrame extends LinearOpMode {
     // Initialize Vuforia Navigation Variables
     private static final String vuforia_key = key;
     private VuforiaLocalizer vuforia;
-    private static final VuforiaLocalizer.CameraDirection camera_choice = BACK;
+    private static final VuforiaLocalizer.CameraDirection CAMERA_CHOICE = BACK;
+    private OpenGLMatrix lastLocation = null;
+    private boolean targetVisible = false;
 
     private static final float mmPerInch = 25.4f;
     // the width of the FTC field (from the center point to the outer panels)
@@ -171,7 +174,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraDirection   = camera_choice;
+        parameters.cameraDirection   = CAMERA_CHOICE;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -211,7 +214,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
                 .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        camera_choice == BACK ? 90 : -90, 0, 0));
+                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
 
         for (VuforiaTrackable trackable : allTrackables)
         {
@@ -351,6 +354,101 @@ public abstract class autonomousFrame extends LinearOpMode {
             left(135, 0.75);
             timedForward(41, 0.5, 5000);
         }
+    }
+
+    public List MoveToLocation(final int camera_forward_displacement,final int camera_left_displacement,final int camera_vertical_displacement) {
+
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
+
+        parameters.vuforiaLicenseKey = vuforia_key;
+        parameters.cameraDirection   = CAMERA_CHOICE;
+
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+
+        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
+        blueRover.setName("Blue-Rover");
+        VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
+        redFootprint.setName("Red-Footprint");
+        VuforiaTrackable frontCraters = targetsRoverRuckus.get(2);
+        frontCraters.setName("Front-Craters");
+        VuforiaTrackable backSpace = targetsRoverRuckus.get(3);
+        backSpace.setName("Back-Space");
+
+        List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
+        allTrackables.addAll(targetsRoverRuckus);
+
+        OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
+                .translation(0, mmFTCFieldWidth, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+        blueRover.setLocation(blueRoverLocationOnField);
+
+        OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
+                .translation(0, -mmFTCFieldWidth, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+        redFootprint.setLocation(redFootprintLocationOnField);
+
+        OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
+                .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
+        frontCraters.setLocation(frontCratersLocationOnField);
+
+        OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
+                .translation(mmFTCFieldWidth, 0, mmTargetHeight)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+        backSpace.setLocation(backSpaceLocationOnField);
+
+        OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+                .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
+                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
+                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
+
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+        }
+
+        List returnList = new ArrayList();
+
+        targetsRoverRuckus.activate();
+        while (opModeIsActive()) {
+
+            targetVisible = false;
+            for (VuforiaTrackable trackable : allTrackables) {
+                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                    telemetry.addData("Visible Target", trackable.getName());
+                    targetVisible = true;
+
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    if (robotLocationTransform != null) {
+                        lastLocation = robotLocationTransform;
+                    }
+                    break;
+                }
+            }
+
+            if (targetVisible) {
+
+                VectorF translation = lastLocation.getTranslation();
+                returnList.add(translation.get(0) / mmPerInch);
+                returnList.add(translation.get(1) / mmPerInch);
+                returnList.add(translation.get(2) / mmPerInch);
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f", translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+
+                Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
+                returnList.add(rotation.firstAngle);
+                returnList.add(rotation.secondAngle);
+                returnList.add(rotation.thirdAngle);
+                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+            }
+            else {
+                telemetry.addData("Visible Target", "none");
+            }
+            telemetry.update();
+
+        }
+
+        return returnList;
     }
 
     public void oldSamplingCode() {
