@@ -6,6 +6,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
  * Purpose: Autonomous Program for Crater Position (Strategy 1)
+ * Goes to our alliance's crater
  * What it does- sampling, delivers team marker, parks in crater
  */
 
@@ -27,13 +28,15 @@ public class autonomousCrater1 extends autonomousFrame {
 
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 2500);
-        moveWinch(-1, 1000);
+        moveWinch(1, 2000);
+        timedForward(15, 0.2, 1500);
+        moveWinch(1, 2000);
+        moveWinch(-1, 1500);
 
         // push central mineral
         telemetry.addData("Status", "Knock Central Mineral"); telemetry.update();
         moveIntake(intakeDown);
-        timedForward(23, 0.75, 2000);
+        timedForward(21, 0.75, 2000);
         timedBackward(11, 0.75, 2000);
 
         // go to depot
