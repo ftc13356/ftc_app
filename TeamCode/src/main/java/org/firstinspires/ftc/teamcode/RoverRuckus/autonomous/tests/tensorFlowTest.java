@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tensorFlow;
  */
 
 @Autonomous(name="Tensor Flow Test")
-@Disabled
 public class tensorFlowTest extends autonomousFrame {
 
     @Override

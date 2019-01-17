@@ -1,18 +1,20 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.depotPosition;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.oldAutonomous.walnutCreek;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
- * Purpose: Autonomous Program for Depot Position (Strategy 1)
+ * Purpose: Autonomous Program for Crater Position
  * Goes to our alliance's crater
  * What it does- descending from lander, knocks central mineral in sampling field,
  *               delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Depot 1", group = "Depot")
-public class autonomousDepot1 extends autonomousFrame {
+@Autonomous(name = "Walnut Creek Autonomous Crater", group = "Crater")
+@Disabled
+public class autonomousCraterWalnut extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -37,7 +39,15 @@ public class autonomousDepot1 extends autonomousFrame {
         // push central mineral
         telemetry.addData("Status", "Knock Central Mineral"); telemetry.update();
         moveIntake(intakeDown);
-        timedForward(47,0.75, 5000);
+        timedForward(21, 0.75, 2000);
+        timedBackward(11, 0.75, 2000);
+
+        // go to depot
+        telemetry.addData("Status", "Going to Depot"); telemetry.update();
+        left(70, 0.75);
+        timedForward(41, 0.75, 3000);
+        left(48, 0.75);
+        timedForward(40, 0.75, 3000);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -46,8 +56,8 @@ public class autonomousDepot1 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        left(45,0.75);
-        backward(85,0.75);
+        backward(75, 0.75);
+        backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.one_eleven.craterPosition;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.oldAutonomous.piedmont;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -6,13 +6,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
- * Purpose: Autonomous Program for Crater Position (Strategy 2)
- * What it does- sampling, delivers team marker, parks in crater
+ * Purpose: Autonomous Program for Depot Position
+ * What it does- knocks central mineral in sampling field, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Crater 2", group = "Crater")
+@Autonomous(name = "Piedmont Autonomous Depot", group = "Depot")
 @Disabled
-public class autonomousCrater2 extends autonomousFrame {
+public class autonomousDepotPiedmont extends autonomousFrame {
 
     @Override
     public void runOpMode() {
@@ -22,23 +22,15 @@ public class autonomousCrater2 extends autonomousFrame {
         // UPDATE VERSION NUMBER
         // BEFORE EVERY COMMIT
 
-           versionPrint();
+        versionPrint();
         initializeRobot();
-        initializeTensorFlow();
 
         waitForStart();
 
-        // sampling
-        telemetry.addData("Status", "Sampling"); telemetry.update();
-        right(180,0.5);
-        samplingCrater();
-
-        // go to depot
-        telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(90,0.75);
-        forward(65, 0.5);
-        right(135, 0.75);
-        forward(50,0.5);
+        // push central mineral
+        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
+        moveIntake(intakeDown);
+        timedForward(50,0.5, 5000);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -47,7 +39,9 @@ public class autonomousCrater2 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(95,0.5);
+        left(35, 0.75);
+        backward(70, 0.5);
+        backward(5, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

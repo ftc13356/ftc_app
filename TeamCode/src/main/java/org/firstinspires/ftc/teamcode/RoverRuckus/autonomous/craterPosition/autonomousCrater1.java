@@ -7,7 +7,8 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 /**
  * Purpose: Autonomous Program for Crater Position (Strategy 1)
  * Goes to our alliance's crater
- * What it does- sampling, delivers team marker, parks in crater
+ * What it does- descending from lander, knocks central mineral in sampling field,
+ *               delivers team marker, parks in crater
  */
 
 @Autonomous(name = "Autonomous Crater 1", group = "Crater")

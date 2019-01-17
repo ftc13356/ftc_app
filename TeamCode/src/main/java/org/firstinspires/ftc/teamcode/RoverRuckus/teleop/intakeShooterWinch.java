@@ -27,7 +27,6 @@ public class intakeShooterWinch extends OpMode {
     private double speedControl = 0.35;
 
     private DcMotor shooter;
-    private DcMotor shooterMotor;
 
     private DcMotor winchMotor;
 
@@ -39,7 +38,6 @@ public class intakeShooterWinch extends OpMode {
     public void init() {
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         shooter = op.hardwareMap.dcMotor.get("shooter");
-        shooterMotor = op.hardwareMap.dcMotor.get("shooter");
         winchMotor = op.hardwareMap.dcMotor.get("winchMotor");
 
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
@@ -58,12 +56,10 @@ public class intakeShooterWinch extends OpMode {
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
 
         if (op.gamepad2.right_trigger !=0 ) {
-            shooterPower = -0.5;
+            shooterPower = -1;
         }
 
         winchPower = op.gamepad1.right_trigger - op.gamepad1.left_trigger;
-
-        double shooterMotorPower = -op.gamepad2.right_trigger;
 
         // If a pressed, minerals sucked in
         if (op.gamepad2.a) {
@@ -81,7 +77,6 @@ public class intakeShooterWinch extends OpMode {
         intakeAngleMotor.setPower(intakeAngleMotorPower);
 
         shooter.setPower(shooterPower);
-        shooterMotor.setPower(shooterMotorPower);
 
         winchMotor.setPower(winchPower);
     }
