@@ -32,14 +32,14 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 
 import java.util.List;
-
-import static org.firstinspires.ftc.teamcode.key.key;
 
 /**
  * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
@@ -54,8 +54,6 @@ public class tensorFlow {
     private static final String tfod_model_asset = "RoverRuckus.tflite";
     private static final String gold_mineral_label = "Gold Mineral";
     private static final String silver_mineral_label = "Silver Mineral";
-
-    private static final String vuforia_key = key;
 
     /**
      * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
@@ -125,6 +123,7 @@ public class tensorFlow {
 
                                 if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
                                     frame.telemetry.addData("Gold Mineral Position", "Left");
+                                    frame.telemetry.update();
                                     position = 1;
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     frame.telemetry.addData("Gold Mineral Position", "Right");
@@ -160,10 +159,11 @@ public class tensorFlow {
          */
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
-        parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraName = frame.hardwareMap.get(WebcamName.class, "Webcam 1");
-        //  Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters);
+        parameters.vuforiaLicenseKey = frame.vuforia_key;
+        parameters.cameraName = frame.hardwareMap.get(WebcamName.class, "Webcam");
+
+        // Instantiate the Vuforia engine
+        vuforia = ClassFactory.getInstance().createVuforia(parameters); // fails here
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }

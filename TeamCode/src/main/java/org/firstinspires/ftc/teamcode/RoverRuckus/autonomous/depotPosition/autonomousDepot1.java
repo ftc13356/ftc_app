@@ -7,8 +7,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 /**
  * Purpose: Autonomous Program for Depot Position (Strategy 1)
  * Goes to our alliance's crater
- * What it does- descending from lander, knocks central mineral in sampling field,
- *               delivers team marker, parks in crater
+ * What it does- descending from lander, sampling, delivers team marker, parks in crater
  */
 
 @Autonomous(name = "Autonomous Depot 1", group = "Depot")
@@ -24,6 +23,7 @@ public class autonomousDepot1 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
@@ -35,9 +35,8 @@ public class autonomousDepot1 extends autonomousFrame {
         moveWinch(-1, 1500);
 
         // push central mineral
-        telemetry.addData("Status", "Knock Central Mineral"); telemetry.update();
-        moveIntake(intakeDown);
-        timedForward(47,0.75, 5000);
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        samplingDepot();
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();

@@ -1,0 +1,19 @@
+How to initially install android apps over wifi:
+(help from https://futurestud.io/tutorials/how-to-debug-your-android-app-without-root)
+
+1. Make sure driver station and robot controller connected using wifi direct 
+	(make sure rc hosts group)
+2. Connect to RC's wifi direct network (use group password)
+3. Connect rc via usb to computer
+4. In android studio terminal, type
+    cd C:\Users\jonat\AppData\Local\Android\Sdk\platform-tools (this is where adb located)
+	adb devices (to find current connected usb devices, not needed)
+	adb tcpip 5555
+5. Disconnect phone from computer
+6. Open a new cmd window, type
+	ipconfig /all
+7. Find default gateway ip address
+8. In android studio terminal, type
+    adb connect <ip address>:5555 (example: adb connect 192.168.49.1:5555)
+    adb devices (to find if phone connected, not needed)
+9. Yay! If you followed the instructions, you should be able to download programs over wifi

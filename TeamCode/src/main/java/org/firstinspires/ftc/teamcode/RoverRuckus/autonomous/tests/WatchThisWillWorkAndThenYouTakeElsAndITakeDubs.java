@@ -29,7 +29,7 @@ public class WatchThisWillWorkAndThenYouTakeElsAndITakeDubs extends autonomousFr
 
         waitForStart();
 
-        List locationData = MoveToLocation(200,100,0);
+        //List locationData = MoveToLocation(200,100,0);
 
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
