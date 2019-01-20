@@ -57,7 +57,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.1 - 1/19/19 ";
+    private static final String autonomousVersionNumber = "6.2 - 1/19/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -82,7 +82,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // Initialize Vuforia Navigation Variables
     final String vuforia_key = key;
-    //CameraName webcamName;
+    CameraName webcam;
     private VuforiaLocalizer vuforia;
     int captureCounter = 0;
     File captureDirectory = AppUtil.ROBOT_DATA_DIR;
@@ -120,6 +120,11 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+<<<<<<< HEAD
+=======
+
+        webcam = hardwareMap.get(WebcamName.class, "Webcam");
+>>>>>>> 8507f51b03fdf4626c64102e160c559da38daa25
     }
 
     public void initializeTensorFlow() {
@@ -241,11 +246,21 @@ public abstract class autonomousFrame extends LinearOpMode {
         winchMotor.setPower(0);
     }
 
+    public void descend() {
+        moveWinch(1, 2000);
+        timedForward(15, 0.2, 1500);
+        moveWinch(1, 2000);
+        moveWinch(-1, 1500);
+    }
+
     public void scanMinerals() {
         goldLocation = sampling.scan();
         telemetry.addData("Gold Location", goldLocation);
         telemetry.update();
     }
+
+    public double turnCorrection = 0;
+    public double turnCorrectionTwo = 0;
 
     public void samplingDepot() {
         moveIntake(intakeDown);
@@ -257,18 +272,20 @@ public abstract class autonomousFrame extends LinearOpMode {
             right(40, 0.75);
             timedForward(30, 0.5, 5000);
             left(45, 0.75);
+            turnCorrectionTwo = 15; //only for 2
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
             timedForward(47,0.5, 5000);
-            left(35, 0.75);
+            turnCorrection = 10; //always 10
         }
         if (goldLocation == 3) { // gold in right position
             right(25, 0.75);
             timedForward(30, 0.5, 5000);
             left(40, 0.75);
             timedForward(25, 0.5, 5000);
-            left(20, 0.75);
+            turnCorrection = 15; //only for 1
         }
+        turnCorrection = turnCorrectionTwo;
     }
 
     public void samplingCrater() {

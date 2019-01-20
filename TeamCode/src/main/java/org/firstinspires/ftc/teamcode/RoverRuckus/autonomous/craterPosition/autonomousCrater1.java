@@ -29,10 +29,7 @@ public class autonomousCrater1 extends autonomousFrame {
 
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 2000);
-        timedForward(15, 0.2, 1500);
-        moveWinch(1, 2000);
-        moveWinch(-1, 1500);
+        descend();
 
         // push central mineral
         telemetry.addData("Status", "Sampling"); telemetry.update();

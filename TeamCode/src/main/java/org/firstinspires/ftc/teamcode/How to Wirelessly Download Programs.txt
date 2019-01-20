@@ -17,3 +17,5 @@ How to initially install android apps over wifi:
     adb connect <ip address>:5555 (example: adb connect 192.168.49.1:5555)
     adb devices (to find if phone connected, not needed)
 9. Yay! If you followed the instructions, you should be able to download programs over wifi
+
+*Please note, if you connect to another wifi network, you may have to start this process again
