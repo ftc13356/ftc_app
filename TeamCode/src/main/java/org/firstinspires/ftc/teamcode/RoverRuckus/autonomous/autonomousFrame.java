@@ -9,18 +9,31 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
+import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
+import com.qualcomm.robotcore.util.ThreadPool;
+import com.vuforia.Frame;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
@@ -57,6 +70,8 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     public ColorSensor colorSensor;
 
+    WebcamName webcamName;
+
     // Intake Encoder Variables
     protected int intakeDown = -1000;
     protected int intakeUp = 0;
@@ -69,6 +84,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     final String vuforia_key = key;
     //CameraName webcamName;
     private VuforiaLocalizer vuforia;
+    int captureCounter = 0;
+    File captureDirectory = AppUtil.ROBOT_DATA_DIR;
     private OpenGLMatrix lastLocation = null;
     private boolean targetVisible = false;
     private static final float mmPerInch = 25.4f;
@@ -99,10 +116,10 @@ public abstract class autonomousFrame extends LinearOpMode {
         intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
         winchMotor = hardwareMap.dcMotor.get("winchMotor");
 
+        webcamName = hardwareMap.get(WebcamName.class, "Webcam");
+
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-        //webcamName = hardwareMap.get(WebcamName.class, "Webcam");
     }
 
     public void initializeTensorFlow() {
@@ -371,9 +388,9 @@ public abstract class autonomousFrame extends LinearOpMode {
      *        This is the vertical location of the phone relative to the center of the robot.
      * @param camera_left_displacement
      *        This is the left location of the phone relative to the center of the robot.
+     */
 
-    public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement,
-                                  final int camera_left_displacement) {
+    public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement, final int camera_left_displacement) {
 
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground
@@ -383,11 +400,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.cameraName = webcamName;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -403,46 +420,47 @@ public abstract class autonomousFrame extends LinearOpMode {
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
-        blueRover.setLocation(blueRoverLocationOnField);
+        blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
-        redFootprint.setLocation(redFootprintLocationOnField);
+        redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
-        frontCraters.setLocation(frontCratersLocationOnField);
+        frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
-        backSpace.setLocation(backSpaceLocationOnField);
+        backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
-        OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix(
+                        AxesReference.EXTRINSIC, AxesOrder.XZY,
+                        AngleUnit.DEGREES, 90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables)
         {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
     }
 
-    public List MoveToLocation(final int camera_forward_displacement, final int camera_left_displacement,
-                               final int camera_vertical_displacement) {
+    //public List MoveToLocation(final int camera_forward_displacement, final int camera_left_displacement, final int camera_vertical_displacement) {
+    public void MoveToLocation(final int camera_forward_displacement, final int camera_left_displacement, final int camera_vertical_displacement) {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraDirection   = CAMERA_CHOICE;
+        parameters.cameraName = webcamName;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        VuforiaTrackables targetsRoverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -458,30 +476,31 @@ public abstract class autonomousFrame extends LinearOpMode {
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
-        blueRover.setLocation(blueRoverLocationOnField);
+        blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
-        redFootprint.setLocation(redFootprintLocationOnField);
+        redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
-        frontCraters.setLocation(frontCratersLocationOnField);
+        frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
-        backSpace.setLocation(backSpaceLocationOnField);
+        backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
-        OpenGLMatrix phoneLocationOnRobot = OpenGLMatrix
+        OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, YZX, DEGREES,
-                        CAMERA_CHOICE == BACK ? 90 : -90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix(
+                        AxesReference.EXTRINSIC, AxesOrder.XZY,
+                        AngleUnit.DEGREES, 90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(phoneLocationOnRobot, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
         List returnList = new ArrayList();
@@ -524,6 +543,6 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         }
 
-        return returnList;
-    }*/
+        //return returnList;
+    }
 }
