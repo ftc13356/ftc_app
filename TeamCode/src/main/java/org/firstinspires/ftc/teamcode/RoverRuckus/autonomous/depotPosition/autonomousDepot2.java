@@ -27,12 +27,9 @@ public class autonomousDepot2 extends autonomousFrame {
 
         waitForStart();
 
-        // descend
+        /*// descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 2000);
-        timedForward(15, 0.2, 1500);
-        moveWinch(1, 2000);
-        moveWinch(-1, 1500);
+        descend();*/
 
         // push central mineral
         telemetry.addData("Status", "Sampling"); telemetry.update();
@@ -45,7 +42,7 @@ public class autonomousDepot2 extends autonomousFrame {
 
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        right(35,0.75);
+        right(45 - turnCorrection,0.75);
         backward(85, 0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();

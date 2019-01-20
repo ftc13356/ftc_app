@@ -67,7 +67,7 @@ public class tensorFlow {
      */
     private TFObjectDetector tfod;
 
-    private int timeout = 10000;
+    private int timeout = 5000;
     private ElapsedTime sampleTime = new ElapsedTime();
 
     private autonomousFrame frame;
@@ -127,9 +127,11 @@ public class tensorFlow {
                                     position = 1;
                                 } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
                                     frame.telemetry.addData("Gold Mineral Position", "Right");
+                                    frame.telemetry.update();
                                     position = 3;
                                 } else {
                                     frame.telemetry.addData("Gold Mineral Position", "Center");
+                                    frame.telemetry.update();
                                     position = 2;
                                 }
                             }
@@ -160,7 +162,7 @@ public class tensorFlow {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = frame.vuforia_key;
-        parameters.cameraName = frame.hardwareMap.get(WebcamName.class, "Webcam");
+        parameters.cameraName = frame.webcam;
 
         // Instantiate the Vuforia engine
         vuforia = ClassFactory.getInstance().createVuforia(parameters); // fails here
