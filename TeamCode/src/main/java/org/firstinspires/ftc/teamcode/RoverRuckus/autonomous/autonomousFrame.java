@@ -57,7 +57,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.2 - 1/19/19 ";
+    private static final String autonomousVersionNumber = "6.3 - 1/19/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -120,11 +120,8 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-<<<<<<< HEAD
-=======
 
         webcam = hardwareMap.get(WebcamName.class, "Webcam");
->>>>>>> 8507f51b03fdf4626c64102e160c559da38daa25
     }
 
     public void initializeTensorFlow() {
