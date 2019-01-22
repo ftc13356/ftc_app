@@ -42,7 +42,7 @@ public class autonomousCraterDoubleSampling extends autonomousFrame {
 
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
-        samplingDepot();
+        //samplingDepot();
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();

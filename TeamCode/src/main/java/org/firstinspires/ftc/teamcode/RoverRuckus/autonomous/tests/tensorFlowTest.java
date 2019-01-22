@@ -11,7 +11,6 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tensorFlow;
  */
 
 @Autonomous(name="Tensor Flow Test")
-@Disabled
 public class tensorFlowTest extends autonomousFrame {
 
     @Override
@@ -26,7 +25,7 @@ public class tensorFlowTest extends autonomousFrame {
         int goldLocation = tensorFlowSampling.scan();
         telemetry.addData("Location", goldLocation);
         telemetry.update();
-
+        /*
         if (goldLocation == 1) {
             left(45, 0.5);
         }
@@ -35,6 +34,6 @@ public class tensorFlowTest extends autonomousFrame {
         }
         if (goldLocation == 3) {
             right(45, 0.5);
-        }
+        }*/
     }
 }

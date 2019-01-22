@@ -33,7 +33,7 @@ public class autonomousDepot1 extends autonomousFrame {
 
         // push central mineral
         telemetry.addData("Status", "Sampling"); telemetry.update();
-        samplingDepot();
+        samplingDepot(true);
 
         // drop team marker
         telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
@@ -43,9 +43,8 @@ public class autonomousDepot1 extends autonomousFrame {
         // go to crater
         telemetry.addData("Status", "Going to Crater"); telemetry.update();
         telemetry.addData("correction", turnCorrection); telemetry.update();
-        sleep(1000);
-        left(55 - turnCorrection,0.75);
-        backward(85,0.25); //was .75
+        left(primaryBase - turnCorrection,0.75);
+        backward(85,0.75);
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

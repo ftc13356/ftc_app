@@ -57,7 +57,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.4 - 1/21/19 ";
+    private static final String autonomousVersionNumber = "6.5 - 1/21/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -256,61 +256,75 @@ public abstract class autonomousFrame extends LinearOpMode {
         telemetry.update();
     }
 
-    public double turnCorrection = 0;
-    public double turnCorrectionTwo = 0;
+    protected double primaryBase = 70;
+    protected double secondaryBase = 45;
+    protected double turnCorrection = 0;
+    private double turnCorrectionTwo = 0;
 
-    public void samplingDepot() {
+    public void samplingDepot(boolean primary) {
         moveIntake(intakeDown);
+        //timedBackward(6, 0.75, 5000);
         scanMinerals();
+        //timedForward(6, 0.75, 5000);
 
         if (goldLocation == 1) { // gold in left position
-            left(20, 0.75);
-            timedForward(30, 0.5, 5000);
-            right(40, 0.75);
-            timedForward(30, 0.5, 5000);
-            left(45, 0.75);
-            turnCorrectionTwo = 15; //only for 2
+            left(23, 0.75);
+            timedForward(32, 0.75, 5000);
+            right(57, 0.75);
+            timedForward(27, 0.75, 5000);
+            // turnCorrection = 0; // base for 1
+            double secondaryLeft = 30;
+            turnCorrectionTwo = secondaryBase - secondaryLeft; // only for 2
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
-            timedForward(47,0.5, 5000);
-            turnCorrection = 10; //always 10
+            timedForward(48,0.75, 5000);
+            double middle = 35;
+            turnCorrection = primaryBase - middle;
+            turnCorrectionTwo = secondaryBase - middle;
         }
         if (goldLocation == 3) { // gold in right position
-            right(25, 0.75);
-            timedForward(30, 0.5, 5000);
-            left(40, 0.75);
-            timedForward(25, 0.5, 5000);
-            turnCorrection = 15; //only for 1
+            right(28, 0.75);
+            timedForward(28, 0.75, 5000);
+            left(43, 0.75);
+            timedForward(25, 0.75, 5000);
+            double primaryRight = 23;
+            turnCorrection = primaryBase - primaryRight; // only for 1
+            // turnCorrectionTwo = 0; // base for 2
         }
-        turnCorrection = turnCorrectionTwo;
+        if (!primary) {
+            turnCorrection = turnCorrectionTwo;
+        }
     }
+
+    protected double baseDistance = 45;
+    protected double distanceCorrection = 0;
 
     public void samplingCrater() {
         moveIntake(intakeDown);
         scanMinerals();
 
         if (goldLocation == 1) { // gold in left position
-            right(120,0.5);
             left(20, 0.75);
-            timedForward(23, 0.5, 5000);
-            backward(11, 0.5);
-            left(45, 0.75);
-            timedForward(41, 0.5, 5000);
+            timedForward(23, 0.75, 5000);
+            left(35, 0.75);
+            backward(11, 0.75);
+            left(70, 0.75);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
-            right(120,0.5);
-            timedForward(21, 0.5, 5000);
-            backward(11, 0.5);
+            timedForward(21, 0.75, 5000);
+            backward(11, 0.75);
             left(70, 0.75);
-            timedForward(41, 0.5, 5000);
+            double middleDistance = 41;
+            distanceCorrection = baseDistance - middleDistance;
         }
         if (goldLocation == 3) { // gold in right position
-            right(120,0.5);
             right(20, 0.75);
-            timedForward(23, 0.5, 5000);
-            backward(11, 0.5);
-            left(135, 0.75);
-            timedForward(41, 0.5, 5000);
+            timedForward(23, 0.75, 5000);
+            right(35, 0.75);
+            backward(11, 0.75);
+            left(70, 0.75);
+            double leftDistance = 37;
+            distanceCorrection = baseDistance - leftDistance;
         }
     }
 

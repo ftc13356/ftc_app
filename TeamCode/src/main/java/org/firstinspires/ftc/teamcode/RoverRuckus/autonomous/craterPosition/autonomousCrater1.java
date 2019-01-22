@@ -27,9 +27,9 @@ public class autonomousCrater1 extends autonomousFrame {
 
         waitForStart();
 
-        // descend
+        /*// descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        descend();
+        descend();*/
 
         // push central mineral
         telemetry.addData("Status", "Sampling"); telemetry.update();
@@ -37,8 +37,7 @@ public class autonomousCrater1 extends autonomousFrame {
 
         // go to depot
         telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(70, 0.75);
-        timedForward(41, 0.75, 3000);
+        timedForward(baseDistance - distanceCorrection, 0.75, 3000);
         left(48, 0.75);
         timedForward(40, 0.75, 3000);
 
