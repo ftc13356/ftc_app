@@ -45,8 +45,8 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
         final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
         final float mmTargetHeight = (6) * mmPerInch;
 
-        int camera_forward_displacement=220;
-        int camera_left_displacement=110;
+        int camera_forward_displacement=0;
+        int camera_left_displacement=0;
         int camera_vertical_displacement=0;
 
         waitForStart();

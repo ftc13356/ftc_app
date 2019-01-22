@@ -28,7 +28,7 @@ public class WatchThisWillWorkAndThenYouTakeElsAndITakeDubs extends autonomousFr
 
         waitForStart();
 
-        //List locationData = MoveToLocation(200,100,0);
+        //List locationData = DetectLocationWebcam();
 
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
