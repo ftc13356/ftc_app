@@ -27,10 +27,11 @@
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
@@ -95,7 +96,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
 
 @Autonomous(name="Vuforia Navigation Test")
 @Disabled
-public class VuforiaNavigationTest extends autonomousFrame {
+public class VuforiaNavigationTest extends LinearOpMode {
 
     private static final String VUFORIA_KEY = key;
 
@@ -119,7 +120,7 @@ public class VuforiaNavigationTest extends autonomousFrame {
     VuforiaLocalizer vuforia;
 
     @Override public void runOpMode() {
-        initializeRobot();
+
 
         /*
          * Configure Vuforia by creating a Parameter object, and passing it to the Vuforia engine.
