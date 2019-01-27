@@ -6,14 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.function.Consumer;
-import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -25,21 +21,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
 import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
-import com.qualcomm.robotcore.util.ThreadPool;
-import com.vuforia.Frame;
 
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
-import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.YZX;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer.CameraDirection.BACK;
 import static org.firstinspires.ftc.teamcode.key.key;
 
 /**
@@ -57,7 +46,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.5 - 1/21/19 ";
+    private static final String autonomousVersionNumber = "6.6 - 1/27/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -70,7 +59,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     public ColorSensor colorSensor;
 
-    WebcamName webcamName;
+    WebcamName webcamTensor;
 
     // Intake Encoder Variables
     protected int intakeDown = -1000;
@@ -82,7 +71,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // Initialize Vuforia Navigation Variables
     final String vuforia_key = key;
-    CameraName webcam;
+    CameraName webcamVuforia;
     private VuforiaLocalizer vuforia;
     int captureCounter = 0;
     File captureDirectory = AppUtil.ROBOT_DATA_DIR;
@@ -116,12 +105,11 @@ public abstract class autonomousFrame extends LinearOpMode {
         intakeAngleMotor = hardwareMap.dcMotor.get("intakeAngle");
         winchMotor = hardwareMap.dcMotor.get("winchMotor");
 
-        webcamName = hardwareMap.get(WebcamName.class, "Webcam");
-
         intakeAngleMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         intakeAngleMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        webcam = hardwareMap.get(WebcamName.class, "Webcam");
+        webcamTensor = hardwareMap.get(WebcamName.class, "Webcam");
+        webcamVuforia = hardwareMap.get(WebcamName.class, "Webcam");
     }
 
     public void initializeTensorFlow() {
@@ -206,7 +194,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         if (opModeIsActive()) {
             intakeAngleMotor.setTargetPosition(newAngleMotorTarget);
             intakeAngleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            intakeAngleMotor.setPower(0.25);
+            intakeAngleMotor.setPower(0.75);
             while (opModeIsActive() && intakeAngleMotor.isBusy()) {
                 if ((intakeAngleMotor.getCurrentPosition()<= newAngleMotorTarget - 50) && (intakeAngleMotor.getCurrentPosition()>= -newAngleMotorTarget + 50)) {
                     newAngleMotorTarget = intakeAngleMotor.getCurrentPosition();
@@ -251,45 +239,44 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     public void scanMinerals() {
-        goldLocation = sampling.scan();
+        goldLocation = sampling.scan(2);
         telemetry.addData("Gold Location", goldLocation);
         telemetry.update();
     }
 
-    protected double primaryBase = 70;
-    protected double secondaryBase = 45;
+    protected double primaryBase = 0;
+    protected double secondaryBase = 0;
     protected double turnCorrection = 0;
     private double turnCorrectionTwo = 0;
 
     public void samplingDepot(boolean primary) {
         moveIntake(intakeDown);
-        //timedBackward(6, 0.75, 5000);
         scanMinerals();
-        //timedForward(6, 0.75, 5000);
 
         if (goldLocation == 1) { // gold in left position
             left(23, 0.75);
-            timedForward(32, 0.75, 5000);
-            right(57, 0.75);
-            timedForward(27, 0.75, 5000);
-            // turnCorrection = 0; // base for 1
-            double secondaryLeft = 30;
+            timedForward(36, 0.75, 2000);
+            right(60, 0.75);
+            timedForward(25, 0.75, 2000);
+            primaryBase = 70; // base for 1
+            double secondaryLeft = 0;
             turnCorrectionTwo = secondaryBase - secondaryLeft; // only for 2
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
-            timedForward(48,0.75, 5000);
-            double middle = 35;
-            turnCorrection = primaryBase - middle;
-            turnCorrectionTwo = secondaryBase - middle;
+            timedForward(48,0.75, 3000);
+            double primaryMiddle = 35;
+            double secondaryMiddle = 40;
+            turnCorrection = primaryBase - primaryMiddle;
+            turnCorrectionTwo = secondaryBase - secondaryMiddle;
         }
         if (goldLocation == 3) { // gold in right position
             right(28, 0.75);
-            timedForward(28, 0.75, 5000);
-            left(43, 0.75);
-            timedForward(25, 0.75, 5000);
-            double primaryRight = 23;
+            timedForward(28, 0.75, 2000);
+            left(47, 0.75);
+            timedForward(26, 0.75, 2000);
+            double primaryRight = 20;
             turnCorrection = primaryBase - primaryRight; // only for 1
-            // turnCorrectionTwo = 0; // base for 2
+            secondaryBase = 60; // base for 2
         }
         if (!primary) {
             turnCorrection = turnCorrectionTwo;
@@ -428,7 +415,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraName = webcamName;
+        parameters.cameraName = webcamTensor;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -484,7 +471,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraName = webcamName;
+        parameters.cameraName = webcamTensor;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
@@ -576,7 +563,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
-        parameters.cameraName = webcamName;
+        parameters.cameraName = webcamTensor;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 

@@ -17,14 +17,13 @@ public class tensorFlowTest extends autonomousFrame {
     public void runOpMode() {
         initializeRobot();
         tensorFlow tensorFlowSampling = new tensorFlow(this);
-
         tensorFlowSampling.initialize();
 
         waitForStart();
 
-        int goldLocation = tensorFlowSampling.scan();
-        telemetry.addData("Location", goldLocation);
-        telemetry.update();
+        int goldLocation = tensorFlowSampling.scan(2);
+        //telemetry.addData("Location", goldLocation);
+        //telemetry.update();
         /*
         if (goldLocation == 1) {
             left(45, 0.5);

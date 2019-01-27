@@ -32,9 +32,6 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.Camera;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.CameraName;
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
 import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
@@ -85,7 +82,7 @@ public class tensorFlow {
         }
     }
 
-    public int scan() {
+    public int scan(int scanMode) { // 1=left 2, 2=right 2, 3=all 3
         int position = 0;
 
         if (frame.opModeIsActive()) {
@@ -97,14 +94,72 @@ public class tensorFlow {
             sampleTime.reset();
             while (frame.opModeIsActive()) {
                 if (tfod != null) {
-                    // getUpdatedRecognitions() will return null if no new information is available since
-                    // the last time that call was made.
+                    /* getUpdatedRecognitions() will return null if no new information is available since
+                    the last time that call was made. */
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
 
                     if (updatedRecognitions != null) {
                         frame.telemetry.addData("# Object Detected", updatedRecognitions.size());
 
-                        if (updatedRecognitions.size() == 3) {
+                        // sampling when seeing left 2 or right 2 minerals
+                        if (updatedRecognitions.size() == 2) {
+                            int goldMineralX = -1;
+                            int silverMineral1X = -1;
+                            int silverMineral2X = -1;
+
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(gold_mineral_label)) {
+                                    goldMineralX = (int) recognition.getLeft();
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+                                } else {
+                                    silverMineral2X = (int) recognition.getLeft();
+                                }
+                            }
+
+                            /*frame.telemetry.addData("Gold", goldMineralX);
+                            frame.telemetry.addData("Silver1", silverMineral1X);
+                            frame.telemetry.addData("Silver2", silverMineral2X);
+                            frame.telemetry.update();
+                            frame.sleep(5000);*/
+
+                            // sampling when seeing left 2 minerals
+                            if (scanMode == 1) {
+                                if (goldMineralX < silverMineral1X && silverMineral2X == -1) {
+                                    frame.telemetry.addData("Gold Mineral Position", "Left");
+                                    frame.telemetry.update();
+                                    position = 1;
+                                } else if (goldMineralX > silverMineral1X && silverMineral2X == -1) {
+                                    frame.telemetry.addData("Gold Mineral Position", "Center");
+                                    frame.telemetry.update();
+                                    position = 2;
+                                } else if (goldMineralX == -1 && silverMineral1X != 0 && silverMineral2X != 0) {
+                                    frame.telemetry.addData("Gold Mineral Position", "Right");
+                                    frame.telemetry.update();
+                                    position = 3;
+                                }
+                            }
+
+                            // sampling when seeing right 2 minerals
+                            if (scanMode == 2){
+                                if (goldMineralX == -1 && silverMineral1X != 0 && silverMineral2X != 0) {
+                                    frame.telemetry.addData("Gold Mineral Position", "Left");
+                                    frame.telemetry.update();
+                                    position = 1;
+                                } else if (goldMineralX < silverMineral1X && silverMineral2X == -1) {
+                                    frame.telemetry.addData("Gold Mineral Position", "Center");
+                                    frame.telemetry.update();
+                                    position = 2;
+                                } else if (goldMineralX > silverMineral1X && silverMineral2X == -1){
+                                    frame.telemetry.addData("Gold Mineral Position", "Right");
+                                    frame.telemetry.update();
+                                    position = 3;
+                                }
+                            }
+                        }
+
+                        // sampling when seeing all 3 minerals
+                        if (updatedRecognitions.size() == 3 && scanMode == 3) {
                             int goldMineralX = -1;
                             int silverMineral1X = -1;
                             int silverMineral2X = -1;
@@ -162,10 +217,10 @@ public class tensorFlow {
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters();
 
         parameters.vuforiaLicenseKey = frame.vuforia_key;
-        parameters.cameraName = frame.webcam;
+        parameters.cameraName = frame.webcamTensor;
 
         // Instantiate the Vuforia engine
-        vuforia = ClassFactory.getInstance().createVuforia(parameters); // fails here
+        vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
         // Loading trackables is not necessary for the Tensor Flow Object Detection engine.
     }

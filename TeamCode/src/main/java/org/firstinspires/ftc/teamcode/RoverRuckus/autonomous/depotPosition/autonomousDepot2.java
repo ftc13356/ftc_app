@@ -25,6 +25,7 @@ public class autonomousDepot2 extends autonomousFrame {
         initializeRobot();
         initializeTensorFlow();
 
+        telemetry.addData("Status", "Ready"); telemetry.update();
         waitForStart();
 
         /*// descend
