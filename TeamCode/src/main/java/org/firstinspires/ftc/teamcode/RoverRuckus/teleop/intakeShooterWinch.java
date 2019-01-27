@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 /**
  * <h2>Intake</h2>
@@ -29,6 +30,8 @@ public class intakeShooterWinch extends OpMode {
     private DcMotor shooter;
 
     private DcMotor winchMotor;
+    private Servo lifter;
+    private double liftUpPosition = 1.0;
 
     private OpMode op;
     intakeShooterWinch(OpMode opMode) {
@@ -39,6 +42,7 @@ public class intakeShooterWinch extends OpMode {
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         shooter = op.hardwareMap.dcMotor.get("shooter");
         winchMotor = op.hardwareMap.dcMotor.get("winchMotor");
+        lifter = op.hardwareMap.servo.get("lifter");
 
         leftIntake = op.hardwareMap.crservo.get("leftIntake");
         rightIntake = op.hardwareMap.crservo.get("rightIntake");
@@ -61,6 +65,10 @@ public class intakeShooterWinch extends OpMode {
 
         winchPower = op.gamepad1.right_trigger - op.gamepad1.left_trigger;
 
+        if (op.gamepad2.x) {
+            lifter.setPosition(liftUpPosition);
+        }
+
         // If a pressed, minerals sucked in
         if (op.gamepad2.a) {
             intakePower = -1;
@@ -71,6 +79,7 @@ public class intakeShooterWinch extends OpMode {
         }
 
         op.telemetry.addData("Current Position", intakeAngleMotor.getCurrentPosition());
+        op.telemetry.addData("Servo Position", lifter.getPosition());
 
         leftIntake.setPower(intakePower);
         rightIntake.setPower(-intakePower);

@@ -15,7 +15,7 @@ public class teleopMain extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String teleopVersionNumber = "1.5 - 1/11/18 ";
+    private final String teleopVersionNumber = "1.6 - 1/27/18 ";
 
     // Creates (instances of) chassis, and intake
     private hexChassisT chassis = new hexChassisT(this);
