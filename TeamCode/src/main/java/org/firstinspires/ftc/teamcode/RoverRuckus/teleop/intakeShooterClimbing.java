@@ -10,12 +10,12 @@ import com.qualcomm.robotcore.hardware.Servo;
 /**
  * <h2>Intake</h2>
  * Purpose:
- * <p> Contains the functions and variables used for the intake, shooter, and the winch for climbing
+ * <p> Contains the functions and variables used for the intake, shooter, and the winch and servo arm for climbing
  */
 
 @TeleOp(name = "Intake")
 @Disabled
-public class intakeShooterWinch extends OpMode {
+public class intakeShooterClimbing extends OpMode {
 
     // GO TO
     // teleopMain.java TO
@@ -31,10 +31,9 @@ public class intakeShooterWinch extends OpMode {
 
     private DcMotor winchMotor;
     private Servo lifter;
-    private double liftUpPosition = 1.0;
 
     private OpMode op;
-    intakeShooterWinch(OpMode opMode) {
+    intakeShooterClimbing(OpMode opMode) {
         op = opMode;
     }
 
@@ -65,8 +64,11 @@ public class intakeShooterWinch extends OpMode {
 
         winchPower = op.gamepad1.right_trigger - op.gamepad1.left_trigger;
 
-        if (op.gamepad2.x) {
-            lifter.setPosition(liftUpPosition);
+        if (op.gamepad1.left_bumper) {
+            lifter.setPosition(lifter.getPosition() + 0.1);
+        }
+        if (op.gamepad1.right_bumper) {
+            lifter.setPosition(lifter.getPosition() - 0.1);
         }
 
         // If a pressed, minerals sucked in

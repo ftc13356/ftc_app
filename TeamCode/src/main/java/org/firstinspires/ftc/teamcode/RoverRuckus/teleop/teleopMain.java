@@ -15,13 +15,13 @@ public class teleopMain extends OpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private final String teleopVersionNumber = "1.6 - 1/27/18 ";
+    private final String teleopVersionNumber = "1.7 - 1/27/18 ";
 
     // Creates (instances of) chassis, and intake
     private hexChassisT chassis = new hexChassisT(this);
     //private chassisAndyMark chassis = new chassisAndyMark(this);
 
-    private intakeShooterWinch intakeShooterWinch = new intakeShooterWinch(this);
+    private intakeShooterClimbing intakeShooterClimbing = new intakeShooterClimbing(this);
 
     // Calls methods in chassis and arm
     // Maps chassis, intake, shooter, and winch motors to their names in the robot config file
@@ -31,7 +31,7 @@ public class teleopMain extends OpMode {
         telemetry.addData("Robot", "Initializing");
 
         chassis.init();
-        intakeShooterWinch.init();
+        intakeShooterClimbing.init();
 
         telemetry.addData("Robot", "Initialized");
     }
@@ -40,6 +40,6 @@ public class teleopMain extends OpMode {
     @Override
     public void loop() {
         chassis.loop();
-        intakeShooterWinch.loop();
+        intakeShooterClimbing.loop();
     }
 }
