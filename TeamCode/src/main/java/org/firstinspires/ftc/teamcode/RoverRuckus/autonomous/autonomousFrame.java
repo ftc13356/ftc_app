@@ -562,12 +562,21 @@ public abstract class autonomousFrame extends LinearOpMode {
             }
             telemetry.update();
 
-            int x1;
-            //x1 = currentPosition.get(0);
+            Object x1 = currentPosition.get(0);
+            Object y1 = currentPosition.get(1);
+            Object z1 = currentPosition.get(6);
+
+            int x2 = desiredX;
+            int y2 = desiredY;
+            int z2 = desiredHeading;
+
             /*
-            *angle currentPosition.get(0);
-            * move
-            * angle
+            //wont work because x1, y1, z1 are all not ints.
+            double CG = Math.sqrt((x1-x2)^2+(y1-y2)^2);
+            double theta = Math.asin((x1-x2)/CG);
+            double firstTurn = z1+90-theta
+            double Straight = CG
+            double secondTurn = z2+90-theta
              */
 
         }
