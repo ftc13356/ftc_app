@@ -32,7 +32,7 @@ public class autonomousDepot1 extends autonomousFrame {
         telemetry.addData("Status", "Descend"); telemetry.update();
         descend();*/
 
-        // push central mineral
+        // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingDepot(true);
 

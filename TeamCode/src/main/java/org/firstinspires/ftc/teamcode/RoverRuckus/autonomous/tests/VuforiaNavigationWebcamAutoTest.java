@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -30,6 +31,7 @@ import static org.firstinspires.ftc.teamcode.key.key;
  */
 
 @Autonomous(name = "VuforiaNavigationWebcamAutoTest")
+@Disabled
 public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
 
     @Override

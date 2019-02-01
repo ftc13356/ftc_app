@@ -1,20 +1,17 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.craterPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 /**
  * Purpose: Autonomous Program for Crater Position (Strategy 2)
- * What it does- sampling, delivers team marker, parks in crater
+ * Goes to our alliance's crater
+ * What it does- descending from lander, sampling, delivers team marker (if center), parks in crater
  */
 
 @Autonomous(name = "Autonomous Crater 2", group = "Crater")
-@Disabled
 public class autonomousCrater2 extends autonomousFrame {
-
-    // THIS IS THE SAME AS CRATER 1!
 
     @Override
     public void runOpMode() {
@@ -26,34 +23,41 @@ public class autonomousCrater2 extends autonomousFrame {
 
         versionPrint();
         initializeRobot();
+        initializeTensorFlow();
 
         waitForStart();
 
-        // descend
+        /*// descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        moveWinch(1, 5000);
+        descend();*/
 
         // push central mineral
-        telemetry.addData("Status", "Knock Random Mineral"); telemetry.update();
-        moveIntake(intakeDown);
-        timedForward(23, 0.5, 5000);
-        backward(11, 0.5);
+        telemetry.addData("Status", "Sampling"); telemetry.update();
+        samplingCrater(false);
 
-        // go to depot
-        telemetry.addData("Status", "Going to Depot"); telemetry.update();
-        left(70, 0.75);
-        timedForward(41, 0.5, 5000);
-        left(36, 0.75);
-        timedForward(40, 0.5, 6000);
+        if (gotoDepot) {
+            // go to depot
+            telemetry.addData("Status", "Going to Depot"); telemetry.update();
+            backward(11, 0.75);
+            left(70, 0.75);
+            timedForward(40, 0.75, 3000);
+            left(48, 0.75);
+            timedForward(40, 0.75, 3000);
 
-        // drop team marker
-        telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
-        expelMarker();
-        moveIntake(intakeUp);
+            // drop team marker
+            telemetry.addData("Status", "Drop Team Marker"); telemetry.update();
+            expelMarker();
+            moveIntake(intakeUp);
 
-        // go to crater
-        telemetry.addData("Status", "Going to Crater"); telemetry.update();
-        backward(95,0.5);
+            // go to crater
+            telemetry.addData("Status", "Going to Crater"); telemetry.update();
+            backward(75, 0.75);
+            backward(5, 0.75);
+        } else {
+            // go to crater
+            telemetry.addData("Status", "Going to Crater"); telemetry.update();
+            forward(7, 0.75);
+        }
 
         telemetry.addData("Status", "Everything executed"); telemetry.update();
         stop();

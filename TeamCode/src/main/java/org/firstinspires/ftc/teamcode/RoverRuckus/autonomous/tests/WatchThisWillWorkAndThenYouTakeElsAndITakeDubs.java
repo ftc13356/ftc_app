@@ -12,6 +12,7 @@ import java.util.List;
  */
 
 @Autonomous(name = "Vuforia Test with Crater", group = "Crater")
+@Disabled
 public class WatchThisWillWorkAndThenYouTakeElsAndITakeDubs extends autonomousFrame {
 
     @Override

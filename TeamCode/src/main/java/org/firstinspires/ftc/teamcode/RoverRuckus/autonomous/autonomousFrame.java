@@ -46,7 +46,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.6 - 1/27/19 ";
+    private static final String autonomousVersionNumber = "6.7 - 1/30/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -255,141 +255,59 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         if (goldLocation == 1) { // gold in left position
             left(23, 0.75);
-            timedForward(36, 0.75, 2000);
+            timedForward(38, 0.75, 3000);
             right(60, 0.75);
-            timedForward(25, 0.75, 2000);
-            primaryBase = 70; // base for 1
+            timedForward(24, 0.75, 2000);
+            primaryBase = 78; // base for 1
             double secondaryLeft = 0;
             turnCorrectionTwo = secondaryBase - secondaryLeft; // only for 2
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
-            timedForward(48,0.75, 3000);
-            double primaryMiddle = 35;
-            double secondaryMiddle = 40;
+            timedForward(50,0.75, 3000);
+            double primaryMiddle = 40;
+            double secondaryMiddle = 45;
             turnCorrection = primaryBase - primaryMiddle;
             turnCorrectionTwo = secondaryBase - secondaryMiddle;
         }
         if (goldLocation == 3) { // gold in right position
-            right(28, 0.75);
-            timedForward(28, 0.75, 2000);
-            left(47, 0.75);
-            timedForward(26, 0.75, 2000);
-            double primaryRight = 20;
+            right(23, 0.75);
+            timedForward(35, 0.75, 3000);
+            left(55, 0.75);
+            timedForward(22, 0.75, 2000);
+            double primaryRight = 0;
             turnCorrection = primaryBase - primaryRight; // only for 1
-            secondaryBase = 60; // base for 2
+            secondaryBase = 78; // base for 2
         }
         if (!primary) {
             turnCorrection = turnCorrectionTwo;
         }
     }
 
-    protected double baseDistance = 45;
-    protected double distanceCorrection = 0;
+    protected boolean gotoDepot = false;
 
-    public void samplingCrater() {
+    public void samplingCrater(boolean primary) {
         moveIntake(intakeDown);
         scanMinerals();
 
         if (goldLocation == 1) { // gold in left position
-            left(20, 0.75);
-            timedForward(23, 0.75, 5000);
-            left(35, 0.75);
-            backward(11, 0.75);
-            left(70, 0.75);
+            left(23, 0.75);
+            timedForward(24, 0.75, 3000);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
-            timedForward(21, 0.75, 5000);
-            backward(11, 0.75);
-            left(70, 0.75);
-            double middleDistance = 41;
-            distanceCorrection = baseDistance - middleDistance;
+            if (!primary) {
+                gotoDepot = true;
+            }
+            timedForward(21, 0.75, 3000);
         }
         if (goldLocation == 3) { // gold in right position
-            right(20, 0.75);
-            timedForward(23, 0.75, 5000);
-            right(35, 0.75);
-            backward(11, 0.75);
-            left(70, 0.75);
-            double leftDistance = 37;
-            distanceCorrection = baseDistance - leftDistance;
-        }
-    }
-
-    public void oldSamplingCode() {
-    /**
-     * Checks if the mineral is gold or silver during sampling
-     * <ul>
-     *     <li>If the mineral is gold, the robot will knock it and head to the depot</li>
-     *     <li>If the mineral is silver, the robot will scan the next mineral</li>
-     * </ul>
-     * @param sampleId Tells robot which position the robot is currently checking (Left: 1, Center: 2, Right: 3)
-     */
-    //private void sample(int sampleId) {
-
-        /*sampleTime.reset();
-
-        colorChecker samplingDetector = new colorChecker(this);
-
-        while (sampleTime.milliseconds() <= 5000) {
-            if (samplingDetector.detectObject() == 1) {
-                samplingDone = true;
-                telemetry.addData("Status", samplingDone);
-                telemetry.update();
-            }
-            break;
+            right(23, 0.75);
+            timedForward(24, 0.75, 3000);
         }
 
-        if (samplingDone) {
-            knock jewel here
-            left(45, 0.5);
-            forward(-3, 0.5);
-            right(45, 0.5);
-
-
-            if (sampleId == 1) {
-                forward(15,0.5);
-            }
-            else if (sampleId == 2) {
-                forward(30,0.5);
-            }
-            else if (sampleId == 3) {
-                forward(45,0.5);
-            }
-        }*/
-    //}
-
-    /**
-     * Preforms sampling-
-     * <ul>
-     *     <li>Robot scans left mineral</li>
-     *     <li>If it is gold, it goes to the depot</li>
-     *     <li>If it is not gold, it backs up to the next mineral to measure it (and so on)</li>
-     * </ul>
-     * <p> See {@linkplain #sample(int)} for more detail
-     */
-    //public void sampling() {
-        /*sample(1);
-
-        telemetry.addData("Status", samplingDone);
-        telemetry.update();
-
-        if (!samplingDone){
-            backward(-15,0.5);
-            sample(2);
-
-            telemetry.addData("Status", samplingDone);
-            telemetry.update();
-
-            if (!samplingDone)
-                backward(-15,0.5);
-                sample(3);
-
-                telemetry.addData("Status", samplingDone);
-                telemetry.update();
-            }*/
-    //}
+        if (primary) {
+            moveIntake(intakeUp);
+        }
     }
-
 
     /* NEEDS to be REWRITTEN to support Webcam.. sorry ansh
      *
