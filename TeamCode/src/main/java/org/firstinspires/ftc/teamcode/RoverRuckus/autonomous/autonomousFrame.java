@@ -644,6 +644,18 @@ public abstract class autonomousFrame extends LinearOpMode {
             }
             telemetry.update();
 
+            int x1;
+            //x1 = currentPosition.get(0);
+            /*
+            *angle currentPosition.get(0);
+            * move
+            * angle
+             */
+
         }
+
+        //return currentPosition;
+
     }
+    //function ended
 }
