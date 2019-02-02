@@ -133,7 +133,7 @@ public class tensorFlow {
                                     frame.telemetry.addData("Gold Mineral Position", "Center");
                                     frame.telemetry.update();
                                     position = 2;
-                                } else if (goldMineralX == -1 && silverMineral1X != 0 && silverMineral2X != 0) {
+                                } else if (goldMineralX == -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                                     frame.telemetry.addData("Gold Mineral Position", "Right");
                                     frame.telemetry.update();
                                     position = 3;
@@ -142,7 +142,7 @@ public class tensorFlow {
 
                             // sampling when seeing right 2 minerals
                             if (scanMode == 2){
-                                if (goldMineralX == -1 && silverMineral1X != 0 && silverMineral2X != 0) {
+                                if (goldMineralX == -1 && silverMineral1X != -1 && silverMineral2X != -1) {
                                     frame.telemetry.addData("Gold Mineral Position", "Left");
                                     frame.telemetry.update();
                                     position = 1;
