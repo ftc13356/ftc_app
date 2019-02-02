@@ -524,8 +524,6 @@ public abstract class autonomousFrame extends LinearOpMode {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        List currentPosition = new ArrayList();
-
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
 
@@ -543,18 +541,19 @@ public abstract class autonomousFrame extends LinearOpMode {
                 }
             }
 
+            double x1 = 0;
+            double y1 = 0;
+            double z1 = 0;
+
             if (targetVisible) {
 
                 VectorF translation = lastLocation.getTranslation();
-                currentPosition.add(translation.get(0) / mmPerInch);
-                currentPosition.add(translation.get(1) / mmPerInch);
-                currentPosition.add(translation.get(2) / mmPerInch);
+                x1 = translation.get(0) / mmPerInch;
+                y1 = translation.get(1) / mmPerInch;
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f", translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                currentPosition.add(rotation.firstAngle);
-                currentPosition.add(rotation.secondAngle);
-                currentPosition.add(rotation.thirdAngle);
+                z1 = rotation.thirdAngle;
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
@@ -562,27 +561,21 @@ public abstract class autonomousFrame extends LinearOpMode {
             }
             telemetry.update();
 
-            Object x1 = currentPosition.get(0);
-            Object y1 = currentPosition.get(1);
-            Object z1 = currentPosition.get(6);
-
             int x2 = desiredX;
             int y2 = desiredY;
             int z2 = desiredHeading;
 
-            /*
-            //wont work because x1, y1, z1 are all not ints.
-            double CG = Math.sqrt((x1-x2)^2+(y1-y2)^2);
+            double CG = Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2));
             double theta = Math.asin((x1-x2)/CG);
-            double firstTurn = z1+90-theta
-            double Straight = CG
-            double secondTurn = z2+90-theta
-             */
+            double firstTurn = z1+90-theta;
+            double Straight = CG;
+            double secondTurn = z2+90-theta;
+            right(firstTurn,0.5);
+            forward(Straight,0.5);
+            left(secondTurn,0.5);
 
         }
 
-        //return currentPosition;
-
     }
-    //function ended
+
 }
