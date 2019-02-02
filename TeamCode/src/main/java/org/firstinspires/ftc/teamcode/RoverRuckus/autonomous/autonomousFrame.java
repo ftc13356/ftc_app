@@ -46,7 +46,7 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     // VERSION NUMBER(MAJOR.MINOR) - DATE
     // DO BEFORE EVERY COMMIT!
-    private static final String autonomousVersionNumber = "6.7 - 1/30/19 ";
+    private static final String autonomousVersionNumber = "7.0 - 2/1/19 ";
 
     // Initialize Motors, Servos, and Sensor Variables
     private hexChassisA chassis = new hexChassisA();
@@ -212,7 +212,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         leftIntake.setPower(1);
         rightIntake.setPower(-1);
 
-        sleep(1000);
+        sleep(2000);
 
         leftIntake.setPower(0);
         rightIntake.setPower(0);
@@ -232,9 +232,9 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     public void descend() {
-        moveWinch(1, 2000);
-        timedForward(15, 0.2, 1500);
-        moveWinch(1, 2000);
+        moveWinch(1, 3000);
+        //timedForward(15, 0.2, 1500);
+        //moveWinch(1, 2000);
         moveWinch(-1, 1500);
     }
 
@@ -258,14 +258,14 @@ public abstract class autonomousFrame extends LinearOpMode {
             timedForward(38, 0.75, 3000);
             right(60, 0.75);
             timedForward(24, 0.75, 2000);
-            primaryBase = 78; // base for 1
+            primaryBase = 90; // base for 1
             double secondaryLeft = 0;
             turnCorrectionTwo = secondaryBase - secondaryLeft; // only for 2
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
             timedForward(50,0.75, 3000);
-            double primaryMiddle = 40;
-            double secondaryMiddle = 45;
+            double primaryMiddle = 55;
+            double secondaryMiddle = 55;
             turnCorrection = primaryBase - primaryMiddle;
             turnCorrectionTwo = secondaryBase - secondaryMiddle;
         }
@@ -276,7 +276,7 @@ public abstract class autonomousFrame extends LinearOpMode {
             timedForward(22, 0.75, 2000);
             double primaryRight = 0;
             turnCorrection = primaryBase - primaryRight; // only for 1
-            secondaryBase = 78; // base for 2
+            secondaryBase = 90; // base for 2
         }
         if (!primary) {
             turnCorrection = turnCorrectionTwo;
@@ -291,17 +291,17 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         if (goldLocation == 1) { // gold in left position
             left(23, 0.75);
-            timedForward(24, 0.75, 3000);
+            timedForward(25, 0.75, 3000);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
             if (!primary) {
                 gotoDepot = true;
             }
-            timedForward(21, 0.75, 3000);
+            timedForward(22, 0.75, 3000);
         }
         if (goldLocation == 3) { // gold in right position
             right(23, 0.75);
-            timedForward(24, 0.75, 3000);
+            timedForward(25, 0.75, 3000);
         }
 
         if (primary) {

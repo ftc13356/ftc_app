@@ -28,9 +28,9 @@ public class autonomousDepot1 extends autonomousFrame {
         telemetry.addData("Status", "Ready"); telemetry.update();
         waitForStart();
 
-        /*// descend
+        // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        descend();*/
+        descend();
 
         // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();

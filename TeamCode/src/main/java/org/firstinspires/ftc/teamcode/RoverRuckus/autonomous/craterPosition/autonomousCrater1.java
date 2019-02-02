@@ -27,11 +27,11 @@ public class autonomousCrater1 extends autonomousFrame {
 
         waitForStart();
 
-        /*// descend
+        // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
-        descend();*/
+        descend();
 
-        // push central mineral
+        // sampling
         telemetry.addData("Status", "Sampling"); telemetry.update();
         samplingCrater(true);
 
