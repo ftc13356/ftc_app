@@ -475,7 +475,7 @@ public abstract class autonomousFrame extends LinearOpMode {
         //return returnList;
     }
 
-    public void MoveToLocationWebcam(final int desiredX, final int desiredY, final int desiredZ, final int desiredRoll, final int desiredPitch, final int desiredHeading) {
+    public void MoveToLocationWebcam(final int desiredX, final int desiredY, final int desiredHeading) {
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
@@ -570,9 +570,9 @@ public abstract class autonomousFrame extends LinearOpMode {
             double firstTurn = z1+90-theta;
             double Straight = CG;
             double secondTurn = z2+90-theta;
-            right(firstTurn,0.5);
-            forward(Straight,0.5);
-            left(secondTurn,0.5);
+            right(firstTurn,0.25);
+            forward(Straight,0.3);
+            left(secondTurn,0.25);
 
         }
 

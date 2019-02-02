@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.key.key;
  */
 
 @Autonomous(name = "VuforiaNavigationWebcamAutoTest")
-@Disabled
+// @Disabled
 public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
 
     @Override
@@ -47,9 +47,13 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
         final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
         final float mmTargetHeight = (6) * mmPerInch;
 
-        int camera_forward_displacement=0;
-        int camera_left_displacement=0;
-        int camera_vertical_displacement=0;
+        int desiredX = 0;
+        int desiredY = 0;
+        int desiredHeading = 0;
+
+        int camera_forward_displacement = 0;
+        int camera_left_displacement = 0;
+        int camera_vertical_displacement = 0;
 
         waitForStart();
 
@@ -104,15 +108,15 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
-        List returnList = new ArrayList();
-
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
+            String targetName = "0";
 
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
+                    targetName = trackable.getName();
                     targetVisible = true;
 
                     OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -123,24 +127,65 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
                 }
             }
 
+            if (targetName == "Blue-Rover") {
+                desiredX = 45;
+                desiredY = -45;
+            }
+            else if (targetName == "Red-Footprint") {
+                desiredX = -45;
+                desiredY = 45;
+            }
+            else if (targetName == "Front-Craters") {
+                desiredX = -30;
+                desiredY = -30;
+            }
+            else if (targetName == "Back-Space") {
+                desiredX = 30;
+                desiredY = 30;
+            }
+
+            double x1 = 0;
+            double y1 = 0;
+            double z1 = 0;
+
             if (targetVisible) {
 
                 VectorF translation = lastLocation.getTranslation();
-                returnList.add(translation.get(0) / mmPerInch);
-                returnList.add(translation.get(1) / mmPerInch);
-                returnList.add(translation.get(2) / mmPerInch);
+                x1 = translation.get(0) / mmPerInch;
+                y1 = translation.get(1) / mmPerInch;
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f", translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
-                returnList.add(rotation.firstAngle);
-                returnList.add(rotation.secondAngle);
-                returnList.add(rotation.thirdAngle);
+                z1 = rotation.thirdAngle;
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
+
+            double x2 = desiredX;
+            double y2 = desiredY;
+            double z2 = desiredHeading;
+
+            double temp0 = x1-x2;
+            double temp1 = Math.pow(temp0, 2);
+            double temp2 = Math.pow(y1-y2, 2);
+            double CG = Math.sqrt(temp1 + temp2);
+            double theta = Math.asin(temp0/CG);
+            double firstTurn = z1+90-theta;
+            double Straight = CG;
+            double secondTurn = z2+90-theta;
+
+            telemetry.addData("FirstTurn",firstTurn);
+            telemetry.addData("Straight",Straight);
+            telemetry.addData("SecondTurn",secondTurn);
+
+            /*
+            right(firstTurn,0.25);
+            forward(Straight,0.3);
+            left(secondTurn,0.25);
+            */
 
         }
 
