@@ -1,6 +1,7 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.depotPosition;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.oldAutonomous.dalyCity;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
@@ -10,8 +11,9 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  * What it does- descending from lander, sampling, delivers team marker, parks in crater
  */
 
-@Autonomous(name = "Autonomous Depot 1", group = "Depot")
-public class autonomousDepot1 extends autonomousFrame {
+@Autonomous(name = "Daly City Autonomous Depot 1", group = "Depot")
+@Disabled
+public class autonomousDepot1Daly extends autonomousFrame {
 
     @Override
     public void runOpMode() {
