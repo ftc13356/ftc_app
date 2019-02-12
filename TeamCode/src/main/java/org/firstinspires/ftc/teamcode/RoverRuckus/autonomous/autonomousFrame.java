@@ -232,7 +232,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     public void descend() {
-        moveWinch(1, 3000);
+        moveWinch(1, 4000);
         //timedForward(15, 0.2, 1500);
         //moveWinch(1, 2000);
         moveWinch(-1, 1500);
@@ -291,17 +291,17 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         if (goldLocation == 1) { // gold in left position
             left(23, 0.75);
-            timedForward(25, 0.75, 3000);
+            timedForward(27, 0.75, 3000);
         }
         if (goldLocation == 0 || goldLocation == 2) { // gold not detected or in center position
             if (!primary) {
                 gotoDepot = true;
             }
-            timedForward(22, 0.75, 3000);
+            timedForward(23, 0.75, 3000);
         }
         if (goldLocation == 3) { // gold in right position
             right(23, 0.75);
-            timedForward(25, 0.75, 3000);
+            timedForward(27, 0.75, 3000);
         }
 
         if (primary) {

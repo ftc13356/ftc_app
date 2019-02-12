@@ -66,7 +66,7 @@ public class intakeShooterClimbing extends OpMode {
         double intakeAngleMotorPower = -op.gamepad2.left_stick_y * speedControl;
 
         // Right bumper fires shooter
-        if (op.gamepad2.right_bumper) {
+        if (op.gamepad2.left_bumper) {
             shooterPower = -1;
         }
 
