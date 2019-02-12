@@ -18,7 +18,7 @@ public class FunctionTest extends autonomousFrame {
     public void runOpMode() {
 
         final int desiredX = 60;
-        final int desiredY = 0;
+        final int desiredY = 90;
         final int desiredHeading = 0;
 
         final double x1 = 0;
