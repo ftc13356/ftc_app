@@ -62,7 +62,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     WebcamName webcamTensor;
 
     // Intake Encoder Variables
-    protected int intakeDown = -1000;
+    protected int intakeDown = -1300;
     protected int intakeUp = 0;
 
     // Initialize Sampling Variables
@@ -232,9 +232,9 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     public void descend() {
-        moveWinch(1, 4000);
+        moveWinch(1, 5000);
         //timedForward(15, 0.2, 1500);
-        //moveWinch(1, 2000);
+        //moveWinch(-1, 2000);
         moveWinch(-1, 1500);
     }
 

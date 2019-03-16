@@ -1,21 +1,34 @@
 How to initially install android apps over wifi:
 (help from https://futurestud.io/tutorials/how-to-debug-your-android-app-without-root)
 
-1. Make sure driver station and robot controller connected using wifi direct 
-	(make sure rc hosts group)
+Mac Start Here:
+1. Add platform-tools to your path
+       echo 'export ANDROID_HOME=/Users/$USER/Library/Android/sdk' >> ~/.bash_profile
+       echo 'export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools' >> ~/.bash_profile
+2. Refresh your bash profile (or restart your terminal app)
+       source ~/.bash_profile
+
+Windows Start Here:
+1. Make sure driver station and robot controller connected using wifi direct (make sure rc hosts group)
 2. Connect to RC's wifi direct network (use group password)
-3. Connect rc via usb to computer
+3. Connect RC via usb to computer
 4. In android studio terminal, type
-    cd C:\Users\jonat\AppData\Local\Android\Sdk\platform-tools (this is where adb located)
-	adb devices (to find current connected usb devices, not needed)
+       Windows Only
+           cd C:\Users\USER_NAME\AppData\Local\Android\Sdk\platform-tools (this is where adb located)
+	adb devices (to find current connected usb devices)
 	adb tcpip 5555
 5. Disconnect phone from computer
-6. Open a new cmd window, type
-	ipconfig /all
-7. Find default gateway ip address
+6. Windows-
+       Open a new cmd window, type
+	       ipconfig /all
+       Find default gateway ip address
+   Mac-
+       Open System Preferences
+       Click Network
+       Find IP Address
 8. In android studio terminal, type
-    adb connect <ip address>:5555 (example: adb connect 192.168.49.1:5555)
-    adb devices (to find if phone connected, not needed)
+       adb connect <ip address>:5555 (example: adb connect 192.168.49.1:5555 or 192.168.49.163:5555)
+       adb devices (to find if phone connected)
 9. Yay! If you followed the instructions, you should be able to download programs over wifi
 
-*Please note, if you connect to another wifi network, you may have to start this process again
+***Please note, if you connect to another wifi network, you may have to start this process again

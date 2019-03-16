@@ -27,6 +27,7 @@ public class autonomousCrater2 extends autonomousFrame {
 
         waitForStart();
 
+        scanMinerals();
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
         descend();
