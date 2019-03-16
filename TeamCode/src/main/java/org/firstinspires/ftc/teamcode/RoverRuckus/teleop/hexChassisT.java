@@ -4,6 +4,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
+import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -17,10 +20,30 @@ import com.qualcomm.robotcore.util.Range;
 @Disabled
 public class hexChassisT extends OpMode {
 
-    private DcMotor motorLeftFront;
-    private DcMotor motorRightFront;
-    private DcMotor motorLeftBack;
-    private DcMotor motorRightBack;
+    private DcMotorEx motorLeftFront;
+    private DcMotorEx motorRightFront;
+    private DcMotorEx motorLeftBack;
+    private DcMotorEx motorRightBack;
+
+    static final double LF_P = 5;
+    static final double LF_I = 1;
+    static final double LF_D = 5;
+    static final double LF_F = 0;
+
+    static final double LB_P = 5;
+    static final double LB_I = 1;
+    static final double LB_D = 5;
+    static final double LB_F = 0;
+
+    static final double RF_P = 1;
+    static final double RF_I = 0.01;
+    static final double RF_D = 0.05;
+    static final double RF_F = 0;
+
+    static final double RB_P = 1;
+    static final double RB_I = 0.01;
+    static final double RB_D = 0.05;
+    static final double RB_F = 0;
 
     private double speedControl = 0.5;
 
@@ -34,13 +57,25 @@ public class hexChassisT extends OpMode {
     }
 
     public void init() {
-        motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
-        motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
-        motorLeftBack = op.hardwareMap.dcMotor.get("motorLeftBack");
-        motorRightBack = op.hardwareMap.dcMotor.get("motorRightBack");
+        motorLeftFront = (DcMotorEx) op.hardwareMap.dcMotor.get("motorLeftFront");
+        motorRightFront = (DcMotorEx) op.hardwareMap.dcMotor.get("motorRightFront");
+        motorLeftBack = (DcMotorEx) op.hardwareMap.dcMotor.get("motorLeftBack");
+        motorRightBack = (DcMotorEx) op.hardwareMap.dcMotor.get("motorRightBack");
 
         motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
+
+        PIDFCoefficients pidNewLF = new PIDFCoefficients(LF_P, LF_I, LF_D, LF_F, MotorControlAlgorithm.LegacyPID);
+        motorLeftFront.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewLF);
+
+        PIDFCoefficients pidNewLB = new PIDFCoefficients(LB_P, LB_I, LB_D, LB_F, MotorControlAlgorithm.LegacyPID);
+        motorLeftBack.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewLB);
+
+        PIDFCoefficients pidNewRF = new PIDFCoefficients(RF_P, RF_I, RF_D, RF_F, MotorControlAlgorithm.LegacyPID);
+        motorRightFront.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewRF);
+
+        PIDFCoefficients pidNewRB = new PIDFCoefficients(RB_P, RB_I, RB_D, RB_F, MotorControlAlgorithm.LegacyPID);
+        motorRightBack.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewRB);
     }
 
     public void loop() {
@@ -56,40 +91,16 @@ public class hexChassisT extends OpMode {
         if (op.gamepad1.a) {
             speedControl = 1;
             display = 0;
-            hold = 0;
         }
         // This sets the speed mode to medium when the "X" button is pressed (Medium Speed)
         else if (op.gamepad1.x) {
             speedControl = 0.5;
             display = 1;
-            hold = 1;
         }
         // This sets the speed mode to slow when the "B" button is pressed (Slow Speed)
         else if (op.gamepad1.b) {
             speedControl = 0.25;
             display = 2;
-            hold = 2;
-        }
-        // This sets the speed mode to micro-adjustment speed when the left trigger is held down
-        else if(op.gamepad1.left_trigger != 0) {
-            speedControl = 0.15;
-            display = 3;
-        }
-
-        // Allows micro-adjustment mode to work only when left trigger is held down
-        else if(op.gamepad1.left_trigger == 0) {
-            if (hold == 0) {
-                speedControl = 1;
-                display = 0;
-            }
-            if (hold == 1) {
-                speedControl = 0.5;
-                display = 1;
-            }
-            if (hold == 2) {
-                speedControl = 0.25;
-                display = 2;
-            }
         }
 
         motorLeftFrontPower = Range.clip((driveFW - turn) * speedControl, -1.0, 1.0);
@@ -110,9 +121,6 @@ public class hexChassisT extends OpMode {
         }
         else if (display == 2) {
             op.telemetry.addData("SpeedMode", "Slow");
-        }
-        else if (display == 3) {
-            op.telemetry.addData("SpeedMode", "Micro-Adjustment");
         }
     }
 }

@@ -80,17 +80,17 @@ public class intakeShooterClimbing extends OpMode {
 
         // Left trigger raises climbing arm, right trigger lowers it
         if (op.gamepad1.left_trigger != 0) {
-            hookAnglePower = op.gamepad1.left_trigger * 0.5;
+            hookAnglePower = op.gamepad1.left_trigger * 0.3;
         }
         if (op.gamepad1.right_trigger != 0) {
-            hookAnglePower = -op.gamepad1.right_trigger * 0.5;
+            hookAnglePower = -op.gamepad1.right_trigger * 0.3;
         }
 
         // (When pressed) Right trigger raises hook, (When released) returns to starting position
         if (op.gamepad2.right_trigger != 0) {
-            hookDeliverPosition = op.gamepad2.right_trigger;
+            hookDeliverPosition = 1;
         } else {
-            hookDeliverPosition = 0.08;
+            hookDeliverPosition = 0;
         }
 
         // "A" button sucks in minerals
@@ -104,7 +104,6 @@ public class intakeShooterClimbing extends OpMode {
         }
 
         op.telemetry.addData("Current Position", intakeAngleMotor.getCurrentPosition());
-        op.telemetry.addData("Hook Angle Position", hookAngle.getCurrentPosition());
         op.telemetry.addData("Hook Deliver Position", hookDeliver.getPosition());
 
         leftIntake.setPower(intakePower);

@@ -95,7 +95,7 @@ import static org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocaliz
  */
 
 @Autonomous(name="Vuforia Navigation Test")
-//@Disabled
+@Disabled
 public class VuforiaNavigationTest extends LinearOpMode {
 
     private static final String VUFORIA_KEY = key;

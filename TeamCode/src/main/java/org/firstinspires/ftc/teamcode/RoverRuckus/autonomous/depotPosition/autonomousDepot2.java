@@ -28,7 +28,6 @@ public class autonomousDepot2 extends autonomousFrame {
         telemetry.addData("Status", "Ready"); telemetry.update();
         waitForStart();
 
-        scanMinerals();
         // descend
         telemetry.addData("Status", "Descend"); telemetry.update();
         descend();
