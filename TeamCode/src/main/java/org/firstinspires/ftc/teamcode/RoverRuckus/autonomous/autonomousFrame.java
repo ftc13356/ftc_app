@@ -62,7 +62,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     WebcamName webcamTensor;
 
     // Intake Encoder Variables
-    protected int intakeDown = -1300;
+    protected int intakeDown = -1050;
     protected int intakeUp = 0;
 
     // Initialize Sampling Variables
@@ -196,7 +196,8 @@ public abstract class autonomousFrame extends LinearOpMode {
             intakeAngleMotor.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             intakeAngleMotor.setPower(0.75);
             while (opModeIsActive() && intakeAngleMotor.isBusy()) {
-                if ((intakeAngleMotor.getCurrentPosition()<= newAngleMotorTarget - 50) && (intakeAngleMotor.getCurrentPosition()>= -newAngleMotorTarget + 50)) {
+                if ((intakeAngleMotor.getCurrentPosition()<= newAngleMotorTarget - 50)
+                        && (intakeAngleMotor.getCurrentPosition()>= -newAngleMotorTarget + 50)) {
                     newAngleMotorTarget = intakeAngleMotor.getCurrentPosition();
                 }
                 telemetry.addData("Target Value", newAngleMotorTarget);
@@ -232,10 +233,10 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     public void descend() {
-        moveWinch(1, 5000);
+        /*moveWinch(1, 5000);
         //timedForward(15, 0.2, 1500);
         //moveWinch(-1, 2000);
-        moveWinch(-1, 1500);
+        moveWinch(-1, 1500);*/
     }
 
     public void scanMinerals() {
@@ -323,13 +324,15 @@ public abstract class autonomousFrame extends LinearOpMode {
      *        This is the left location of the phone relative to the center of the robot.
      */
 
-    public void vuforiaNavigation(final int camera_forward_displacement, final int camera_vertical_displacement, final int camera_left_displacement) {
+    public void vuforiaNavigation(final int camera_forward_displacement,
+                                  final int camera_vertical_displacement, final int camera_left_displacement) {
 
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground
         // Camera is ON the robot's center line
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().
+                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -385,7 +388,8 @@ public abstract class autonomousFrame extends LinearOpMode {
     public void DetectLocationWebcam() {
     //public List DetectLocationWebcam() {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().
+                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -426,7 +430,8 @@ public abstract class autonomousFrame extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
-        OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
+        OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).
+                multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
@@ -457,13 +462,15 @@ public abstract class autonomousFrame extends LinearOpMode {
                 returnList.add(translation.get(0) / mmPerInch);
                 returnList.add(translation.get(1) / mmPerInch);
                 returnList.add(translation.get(2) / mmPerInch);
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f", translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 returnList.add(rotation.firstAngle);
                 returnList.add(rotation.secondAngle);
                 returnList.add(rotation.thirdAngle);
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                telemetry.addData("Rot (deg)",
+                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
                 telemetry.addData("Visible Target", "none");
@@ -477,7 +484,8 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     public void MoveToLocationWebcam(final int desiredX, final int desiredY, final int desiredHeading) {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
+                "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -518,7 +526,8 @@ public abstract class autonomousFrame extends LinearOpMode {
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
-        OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
+        OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).
+                multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables) {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
@@ -550,11 +559,13 @@ public abstract class autonomousFrame extends LinearOpMode {
                 VectorF translation = lastLocation.getTranslation();
                 x1 = translation.get(0) / mmPerInch;
                 y1 = translation.get(1) / mmPerInch;
-                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f", translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
+                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 z1 = rotation.thirdAngle;
-                telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                telemetry.addData("Rot (deg)",
+                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
                 telemetry.addData("Visible Target", "none");
