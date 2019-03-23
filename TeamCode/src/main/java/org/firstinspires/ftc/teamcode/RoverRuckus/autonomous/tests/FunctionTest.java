@@ -11,50 +11,50 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "FunctionTest")
-@Disabled
+// @Disabled
 public class FunctionTest extends autonomousFrame {
 
     @Override
     public void runOpMode() {
 
-        final int desiredX = 60;
-        final int desiredY = 90;
-        final int desiredHeading = 0;
+        final int desiredX = 20;
+        final int desiredY = 20;
+        final int desiredHeading = 180;
 
-        final double x1 = 0;
-        final double y1 = 0;
-        final double z1 = 0;
+        final double x3 = 30;
+        final double y3 = 20 + 10 * Math.sqrt(3);
+        final double z3 = 80;
 
         final double x2 = desiredX;
         final double y2 = desiredY;
         final double z2 = desiredHeading;
 
-        final double temp0 = x1 - x2;
-        final double temp1 = Math.pow(temp0, 2);
-        final double temp2 = Math.pow(y1 - y2, 2);
-        final double CG = Math.sqrt(temp1 + temp2);
-        double theta = Math.toDegrees(Math.asin(temp0/CG));
-        final double firstTurn = z1 + 90 - theta;
+        final double deltaX = Math.abs(x3 - x2);
+        final double deltaY = Math.abs(y3 - y2);
+        final double CG = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+        final double theta = Math.toDegrees(Math.atan(deltaX/deltaY));
+        final double firstTurn = theta + 90 - z3;
         double Straight = CG;
-        final double secondTurn = z2 + 90 - theta;
+        final double secondTurn = z2 + 90 - theta + z3;
 
-        if (y1>y2) {
+        /*
+        if (y3>y2) {
             Straight = -1 * Straight;
         }
 
-        if (x1>x2) {
+        if (x3>x2) {
             Straight = -1 * Straight;
         }
+        */
 
-        telemetry.addData("x1, y1, z1", x1 + ", " + y1  + ", "+ z1);
+        telemetry.addData("x3, y3 z3", x3 + ", " + y3  + ", "+ z3);
 
         telemetry.addData("x2, y2, z2", x2 + ", " + y2 + ", " + z2);
 
-        telemetry.addData("FirstTurn, Straight, SecondTurn", firstTurn + ", " + Straight  + ", " + secondTurn);
+        telemetry.addData("First Turn, Straight, Second Turn", firstTurn + ", " + Straight  + ", " + secondTurn);
 
         telemetry.update();
 
         sleep(10000);
-
     }
 }
