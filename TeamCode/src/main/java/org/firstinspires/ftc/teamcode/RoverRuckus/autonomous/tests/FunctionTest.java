@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "FunctionTest")
-// @Disabled
+@Disabled
 public class FunctionTest extends autonomousFrame {
 
     @Override
