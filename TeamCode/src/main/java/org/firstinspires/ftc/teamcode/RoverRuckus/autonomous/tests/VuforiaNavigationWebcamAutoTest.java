@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.key.key;
  */
 
 @Autonomous(name = "VuforiaNavigationWebcamAutoTest")
-@Disabled
+// @Disabled
 public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
 
     @Override
@@ -47,9 +47,13 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
         final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
         final float mmTargetHeight = (6) * mmPerInch;
 
-        int desiredX = 0;
-        int desiredY = 0;
-        int desiredHeading = 0;
+        double x1 = 0;
+        double y1 = 0;
+        double z1 = 0;
+
+        final double x2 = 0;
+        final double y2 = -30;
+        final double z2 = 0;
 
         int camera_forward_displacement = 0;
         int camera_left_displacement = 0;
@@ -110,13 +114,11 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
 
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
-            String targetName = "0";
 
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
                 if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
-                    targetName = trackable.getName();
                     targetVisible = true;
 
                     OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
@@ -126,27 +128,6 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
                     break;
                 }
             }
-
-            if (targetName == "Blue-Rover") {
-                desiredX = 45;
-                desiredY = -45;
-            }
-            else if (targetName == "Red-Footprint") {
-                desiredX = -45;
-                desiredY = 45;
-            }
-            else if (targetName == "Front-Craters") {
-                desiredX = -30;
-                desiredY = -30;
-            }
-            else if (targetName == "Back-Space") {
-                desiredX = 30;
-                desiredY = 30;
-            }
-
-            double x1 = 0;
-            double y1 = 0;
-            double z1 = 0;
 
             if (targetVisible) {
 
@@ -164,22 +145,47 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
             }
             telemetry.update();
 
-            double x2 = desiredX;
-            double y2 = desiredY;
-            double z2 = desiredHeading;
-
-            double temp0 = x1-x2;
-            double temp1 = Math.pow(temp0, 2);
-            double temp2 = Math.pow(y1-y2, 2);
-            double CG = Math.sqrt(temp1 + temp2);
-            double theta = Math.asin(temp0/CG);
-            double firstTurn = z1+90-theta;
+            /*
+            final double deltaX = Math.abs(x1 - x2);
+            final double deltaY = Math.abs(y1 - y2);
+            final double CG = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
+            final double theta = Math.toDegrees(Math.atan(deltaX/deltaY));
+            final double firstTurn = theta + 90 - z1;
             double Straight = CG;
-            double secondTurn = z2+90-theta;
+            final double secondTurn = z2 + 90 - theta + z1;
 
-            telemetry.addData("FirstTurn",firstTurn);
-            telemetry.addData("Straight",Straight);
-            telemetry.addData("SecondTurn",secondTurn);
+            telemetry.addData("FirstTurn", firstTurn);
+            telemetry.addData("Straight", Straight);
+            telemetry.addData("SecondTurn", secondTurn);
+            */
+
+            final double deltaX = Math.abs(x1 - x2);
+            final double deltaY = Math.abs(y1 - y2);
+            left(z1, 0.25);
+            double angle1 = 0;
+            double angle2 = 0;
+            if (y2 >= y1) {
+                angle1 = 0;
+            }
+            else if (y2 < y1) {
+                angle1 = 180;
+            }
+            right(angle1, 0.25);
+            forward(deltaY, 0.3);
+            left(angle1, 0.25);
+            if (x2 > x1) {
+                angle2 = 90;
+            }
+            else if (x2 < x1) {
+                angle2 = -90;
+            }
+            else if (x2 == x1) {
+                angle2 = 0;
+            }
+            right(angle2, 0.25);
+            forward(deltaX, 0.3);
+            left(angle2, 0.25);
+            right(z2, 0.25);
 
             /*
             right(firstTurn,0.25);
