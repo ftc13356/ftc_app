@@ -1,10 +1,18 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
+package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
+import android.graphics.Bitmap;
 
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.RobotLog;
+import com.qualcomm.robotcore.util.ThreadPool;
+import com.vuforia.Frame;
 
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
+import org.firstinspires.ftc.robotcore.external.function.Consumer;
+import org.firstinspires.ftc.robotcore.external.function.Continuation;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.robotcore.external.matrices.MatrixF;
 import org.firstinspires.ftc.robotcore.external.matrices.OpenGLMatrix;
 import org.firstinspires.ftc.robotcore.external.matrices.VectorF;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -15,61 +23,68 @@ import org.firstinspires.ftc.robotcore.external.navigation.VuforiaLocalizer;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackable;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackableDefaultListener;
 import org.firstinspires.ftc.robotcore.external.navigation.VuforiaTrackables;
-import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
-
-import java.util.ArrayList;
-import java.util.List;
+import org.firstinspires.ftc.robotcore.internal.system.AppUtil;
 
 import static org.firstinspires.ftc.robotcore.external.navigation.AngleUnit.DEGREES;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesOrder.XYZ;
 import static org.firstinspires.ftc.robotcore.external.navigation.AxesReference.EXTRINSIC;
-
 import static org.firstinspires.ftc.teamcode.key.key;
 
-/**
- * Purpose: Vuforia Navigation Test In Autonomous (W/ Webcam)
- */
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-@Autonomous(name = "VuforiaNavigationWebcamAutoTest")
+@TeleOp(name="Default Vuforia")
 // @Disabled
-public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
+public class ConceptVuforiaNavigationWebcam extends LinearOpMode {
 
-    private static final String vuforia_key = key;
-
-    private static final float mmPerInch = 25.4f;
-    private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
-    private static final float mmTargetHeight = (6) * mmPerInch;
+    public static final String TAG = "Vuforia Navigation Sample";
 
     OpenGLMatrix lastLocation = null;
-    boolean targetVisible = false;
+
+    int captureCounter = 0;
+    File captureDirectory = AppUtil.ROBOT_DATA_DIR;
 
     VuforiaLocalizer vuforia;
 
+    int camera_forward_displacement = 0;
+    int camera_left_displacement = 0;
+    int camera_vertical_displacement = 0;
+
+    boolean targetVisible = false;
+
+    double x1 = 0;
+    double y1 = 0;
+    double z1 = 0;
+
+    final double x2 = 0;
+    final double y2 = -30;
+    final double z2 = 0;
+
     WebcamName webcamName;
 
-    @Override
-    public void runOpMode() {
+    @Override public void runOpMode() {
+
         webcamName = hardwareMap.get(WebcamName.class, "Webcam");
-
-        double x1 = 0;
-        double y1 = 0;
-        double z1 = 0;
-
-        final double x2 = 0;
-        final double y2 = -30;
-        final double z2 = 0;
-
-        waitForStart();
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
-        parameters.vuforiaLicenseKey = vuforia_key;
+        parameters.vuforiaLicenseKey = key;
+
         parameters.cameraName = webcamName;
 
         vuforia = ClassFactory.getInstance().createVuforia(parameters);
 
-        VuforiaTrackables targetsRoverRuckus = this.vuforia.loadTrackablesFromAsset("RoverRuckus");
+        vuforia.enableConvertFrameToBitmap();
+
+        AppUtil.getInstance().ensureDirectoryExists(captureDirectory);
+
+
+        VuforiaTrackables targetsRoverRuckus = vuforia.loadTrackablesFromAsset("RoverRuckus");
         VuforiaTrackable blueRover = targetsRoverRuckus.get(0);
         blueRover.setName("Blue-Rover");
         VuforiaTrackable redFootprint = targetsRoverRuckus.get(1);
@@ -82,30 +97,29 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
         List<VuforiaTrackable> allTrackables = new ArrayList<VuforiaTrackable>();
         allTrackables.addAll(targetsRoverRuckus);
 
+        final float mmPerInch = 25.4f;
+        final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
+        final float mmTargetHeight = (6) * mmPerInch;
+
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
-        blueRover.setLocation(blueRoverLocationOnField);
+        blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
-        redFootprint.setLocation(redFootprintLocationOnField);
+        redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
-        frontCraters.setLocation(frontCratersLocationOnField);
+        frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
                 .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
-        backSpace.setLocation(backSpaceLocationOnField);
-
-        final int camera_forward_displacement = 0;
-        final int camera_left_displacement = 0;
-        final int camera_vertical_displacement = 0;
-
+        backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
         OpenGLMatrix robotFromCamera = OpenGLMatrix
                 .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
                 .multiplied(Orientation.getRotationMatrix(
@@ -116,16 +130,20 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
             ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
         }
 
+        telemetry.addData(">", "Press Play to start tracking");
+        telemetry.update();
+        waitForStart();
+
         targetsRoverRuckus.activate();
         while (opModeIsActive()) {
 
             targetVisible = false;
             for (VuforiaTrackable trackable : allTrackables) {
-                if (((VuforiaTrackableDefaultListener)trackable.getListener()).isVisible()) {
+                if (((VuforiaTrackableDefaultListener) trackable.getListener()).isVisible()) {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener) trackable.getListener()).getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -134,6 +152,7 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
             }
 
             if (targetVisible) {
+
                 VectorF translation = lastLocation.getTranslation();
                 x1 = translation.get(0) / mmPerInch;
                 y1 = translation.get(1) / mmPerInch;
@@ -142,76 +161,10 @@ public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 z1 = rotation.thirdAngle;
                 telemetry.addData("Rot (deg)", "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
-            }
-            else {
+            } else {
                 telemetry.addData("Visible Target", "none");
             }
             telemetry.update();
-
-
-            /*final double deltaX = Math.abs(x1 - x2);
-            final double deltaY = Math.abs(y1 - y2);
-            final double CG = Math.sqrt(Math.pow(deltaX, 2) + Math.pow(deltaY, 2));
-            final double theta = Math.toDegrees(Math.atan(deltaX/deltaY));
-            final double firstTurn = theta + 90 - z1;
-            double Straight = CG;
-            final double secondTurn = z2 + 90 - theta + z1;
-
-            telemetry.addData("FirstTurn", firstTurn);
-            telemetry.addData("Straight", Straight);
-            telemetry.addData("SecondTurn", secondTurn);*/
-
-
-            final double deltaX = Math.abs(x1 - x2);
-            final double deltaY = Math.abs(y1 - y2);
-            //left(z1, 0.25);
-
-            telemetry.addData("Left", z1);
-
-            double angle1 = 0;
-            double angle2 = 0;
-            if (y2 >= y1) {
-                angle1 = 0;
-            }
-            else if (y2 < y1) {
-                angle1 = 180;
-            }
-            /*right(angle1, 0.25);
-            forward(deltaY, 0.3);
-            left(angle1, 0.25);*/
-
-            telemetry.addData("Right", angle1);
-            telemetry.addData("Forward", deltaY);
-            telemetry.addData("Left", angle1);
-
-            if (x2 > x1) {
-                angle2 = 90;
-            }
-            else if (x2 < x1) {
-                angle2 = -90;
-            }
-            else if (x2 == x1) {
-                angle2 = 0;
-            }
-            /*right(angle2, 0.25);
-            forward(deltaX, 0.3);
-            left(angle2, 0.25);
-            right(z2, 0.25);*/
-
-            telemetry.addData("Right", angle2);
-            telemetry.addData("Forward", deltaX);
-            telemetry.addData("Left", angle2);
-            telemetry.addData("Right", z2);
-
-            /*
-            right(firstTurn,0.25);
-            forward(Straight,0.3);
-            left(secondTurn,0.25);
-            */
-
         }
-
-        stop();
-
     }
 }
