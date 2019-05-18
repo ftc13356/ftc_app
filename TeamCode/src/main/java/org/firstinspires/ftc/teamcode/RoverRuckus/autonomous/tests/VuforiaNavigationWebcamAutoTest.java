@@ -31,7 +31,7 @@ import static org.firstinspires.ftc.teamcode.key.key;
  */
 
 @Autonomous(name = "VuforiaNavigationWebcamAutoTest")
-// @Disabled
+@Disabled
 public class VuforiaNavigationWebcamAutoTest extends autonomousFrame {
 
     private static final String vuforia_key = key;

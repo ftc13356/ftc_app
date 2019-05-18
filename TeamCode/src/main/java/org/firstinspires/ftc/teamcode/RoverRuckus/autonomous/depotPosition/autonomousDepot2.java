@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.depotPosition;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
@@ -11,6 +12,7 @@ import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
  */
 
 @Autonomous(name = "Autonomous Depot 2", group = "Depot")
+@Disabled
 public class autonomousDepot2 extends autonomousFrame {
 
     @Override

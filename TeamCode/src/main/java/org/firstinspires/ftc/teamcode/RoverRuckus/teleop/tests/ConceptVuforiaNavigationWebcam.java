@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous;
+package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.tests;
 import android.graphics.Bitmap;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -38,7 +38,7 @@ import java.util.List;
 import java.util.Locale;
 
 @TeleOp(name="Default Vuforia")
-// @Disabled
+@Disabled
 public class ConceptVuforiaNavigationWebcam extends LinearOpMode {
 
     public static final String TAG = "Vuforia Navigation Sample";
