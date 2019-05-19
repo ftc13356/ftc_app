@@ -17,8 +17,6 @@ public class chassisSTEAM extends OpMode {
     private DcMotor motorRightBack;
 
     private ElapsedTime runtime = new ElapsedTime();
-    private double timeLeft;
-    private double startTime = runtime.seconds();
 
     private OpMode op;
     chassisSTEAM(OpMode opMode) {
@@ -39,6 +37,8 @@ public class chassisSTEAM extends OpMode {
         runtime.reset();
     }
 
+    private double timeLeft;
+    private double startTime = runtime.seconds();
     public void loop() {
         double motorLeftFrontPower;
         double motorRightFrontPower;
