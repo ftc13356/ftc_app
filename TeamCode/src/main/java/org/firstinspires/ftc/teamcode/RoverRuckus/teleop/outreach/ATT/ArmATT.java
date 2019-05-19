@@ -93,10 +93,10 @@ public class ArmATT extends OpMode{
             rightPosition = rightDrummer.getPosition();
 
             if (op.gamepad2.dpad_up) {
-                timeLeft=timeLeft+5;
+                timeLeft = timeLeft + 5;
             }
             if (op.gamepad2.dpad_down) {
-                timeLeft=timeLeft-5;
+                timeLeft = timeLeft - 5;
             }
 
             op.telemetry.addData("Arm Status", "Time Left- %.1f",  timeLeft);

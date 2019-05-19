@@ -5,12 +5,11 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @TeleOp(name = "Intake")
 @Disabled
-public class IntakeSTEAM extends OpMode {
+public class intakeShooterSTEAM extends OpMode {
 
     private CRServo leftIntake;
     private CRServo rightIntake;
@@ -19,10 +18,11 @@ public class IntakeSTEAM extends OpMode {
     private DcMotor shooter;
 
     private ElapsedTime runtime = new ElapsedTime();
+    private double timeLeft;
+    private double startTime = runtime.seconds();
 
     private OpMode op;
-
-    IntakeSTEAM(OpMode opMode) {
+    intakeShooterSTEAM(OpMode opMode) {
         op = opMode;
     }
 
@@ -38,9 +38,6 @@ public class IntakeSTEAM extends OpMode {
     public void start() {
         runtime.reset();
     }
-
-    double timeLeft;
-    double startTime = runtime.seconds();
 
     public void loop() {
 
@@ -64,10 +61,19 @@ public class IntakeSTEAM extends OpMode {
         }
 
         timeLeft = 60 + startTime - op.getRuntime();
+
+        if (op.gamepad2.dpad_up) {
+            timeLeft = timeLeft + 5;
+        }
+        if (op.gamepad2.dpad_down) {
+            timeLeft = timeLeft - 5;
+        }
+
         if (timeLeft <= 0) {
             intakePower = 0;
             intakeAngleMotorPower = 0;
             shooterPower = 0;
+            op.telemetry.addData("Intake + Shooting Status", "Disabled");
         }
 
         leftIntake.setPower(intakePower);
@@ -75,6 +81,8 @@ public class IntakeSTEAM extends OpMode {
         intakeAngleMotor.setPower(intakeAngleMotorPower);
         shooter.setPower(shooterPower);
 
-        op.telemetry.addData("Driving Status", "Time Left: " + timeLeft);
+        if (timeLeft >= 0) {
+            op.telemetry.addData("Intake + Shooting Status", "Time Left- %.1f", timeLeft);
+        }
     }
 }

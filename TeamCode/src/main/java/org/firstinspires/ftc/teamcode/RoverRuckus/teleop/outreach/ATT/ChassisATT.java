@@ -62,16 +62,8 @@ public class ChassisATT extends OpMode{
         double motorLeftbackPower;
         double motorRightbackPower;
 
-        double driveFW;
-        double turn;
-
-        if (op.gamepad2.a) {
-            driveFW = op.gamepad2.left_stick_y;
-            turn  = op.gamepad2.right_stick_x;
-        } else {
-            driveFW = op.gamepad1.left_stick_y;
-            turn  = op.gamepad1.right_stick_x;
-        }
+        double driveFW = op.gamepad1.left_stick_y;
+        double turn = op.gamepad1.right_stick_x;
 
         motorLeftfrontPower = Range.clip((driveFW - turn) * speedControl, -1.0, 1.0) ;
         motorRightfrontPower = Range.clip((-driveFW - turn) * speedControl, -1.0, 1.0) ;
@@ -87,10 +79,10 @@ public class ChassisATT extends OpMode{
         }
 
         if (op.gamepad2.dpad_up) {
-            timeLeft=timeLeft+5;
+            timeLeft = timeLeft + 5;
         }
         if (op.gamepad2.dpad_down) {
-            timeLeft=timeLeft-5;
+            timeLeft = timeLeft - 5;
         }
 
         motorLeftfront.setPower(motorLeftfrontPower);

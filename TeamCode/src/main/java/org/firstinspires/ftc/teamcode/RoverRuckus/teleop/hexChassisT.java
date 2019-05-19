@@ -4,9 +4,6 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 import com.qualcomm.robotcore.util.Range;
 
 /**
@@ -20,36 +17,14 @@ import com.qualcomm.robotcore.util.Range;
 @Disabled
 public class hexChassisT extends OpMode {
 
-    private DcMotorEx motorLeftFront;
-    private DcMotorEx motorRightFront;
-    private DcMotorEx motorLeftBack;
-    private DcMotorEx motorRightBack;
-
-    static final double LF_P = 5;
-    static final double LF_I = 1;
-    static final double LF_D = 5;
-    static final double LF_F = 0;
-
-    static final double LB_P = 5;
-    static final double LB_I = 1;
-    static final double LB_D = 5;
-    static final double LB_F = 0;
-
-    static final double RF_P = 1;
-    static final double RF_I = 0.01;
-    static final double RF_D = 0.05;
-    static final double RF_F = 0;
-
-    static final double RB_P = 1;
-    static final double RB_I = 0.01;
-    static final double RB_D = 0.05;
-    static final double RB_F = 0;
+    private DcMotor motorLeftFront;
+    private DcMotor motorRightFront;
+    private DcMotor motorLeftBack;
+    private DcMotor motorRightBack;
 
     private double speedControl = 0.5;
 
     private int display = 0;
-
-    private int hold = 0;
 
     private OpMode op;
     public hexChassisT(OpMode opMode) {
@@ -57,25 +32,13 @@ public class hexChassisT extends OpMode {
     }
 
     public void init() {
-        motorLeftFront = (DcMotorEx) op.hardwareMap.dcMotor.get("motorLeftFront");
-        motorRightFront = (DcMotorEx) op.hardwareMap.dcMotor.get("motorRightFront");
-        motorLeftBack = (DcMotorEx) op.hardwareMap.dcMotor.get("motorLeftBack");
-        motorRightBack = (DcMotorEx) op.hardwareMap.dcMotor.get("motorRightBack");
+        motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
+        motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
+        motorLeftBack = op.hardwareMap.dcMotor.get("motorLeftBack");
+        motorRightBack = op.hardwareMap.dcMotor.get("motorRightBack");
 
         motorLeftFront.setDirection(DcMotor.Direction.REVERSE);
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
-
-        PIDFCoefficients pidNewLF = new PIDFCoefficients(LF_P, LF_I, LF_D, LF_F, MotorControlAlgorithm.LegacyPID);
-        motorLeftFront.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewLF);
-
-        PIDFCoefficients pidNewLB = new PIDFCoefficients(LB_P, LB_I, LB_D, LB_F, MotorControlAlgorithm.LegacyPID);
-        motorLeftBack.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewLB);
-
-        PIDFCoefficients pidNewRF = new PIDFCoefficients(RF_P, RF_I, RF_D, RF_F, MotorControlAlgorithm.LegacyPID);
-        motorRightFront.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewRF);
-
-        PIDFCoefficients pidNewRB = new PIDFCoefficients(RB_P, RB_I, RB_D, RB_F, MotorControlAlgorithm.LegacyPID);
-        motorRightBack.setPIDFCoefficients(DcMotor.RunMode.RUN_USING_ENCODER, pidNewRB);
     }
 
     public void loop() {
