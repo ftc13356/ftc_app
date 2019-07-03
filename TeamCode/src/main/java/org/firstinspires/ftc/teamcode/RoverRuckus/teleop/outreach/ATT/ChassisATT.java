@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * Contains chassis functions for AT&T Discovery Day Outreach program
+ */
+
 @TeleOp(name = "Chassis")
 @Disabled
 public class ChassisATT extends OpMode{
@@ -21,7 +25,6 @@ public class ChassisATT extends OpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private OpMode op;
-
     ChassisATT(OpMode opmode){
         op = opmode;
     }
@@ -42,10 +45,6 @@ public class ChassisATT extends OpMode{
         motorRightback.setDirection(DcMotor.Direction.FORWARD);
 
         op.telemetry.addData("Chassis", "Initialized");
-    }
-
-
-    public void init_loop() {
     }
 
     public void start() {

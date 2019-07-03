@@ -13,9 +13,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class andyMarkChassisA extends baseChassisA {
 
+    /**
+     * Creates a andymark chassis object
+     */
     andyMarkChassisA() {
-        type = e_type.AndyMark;
-
         // Set hex motor chassis encoder variables
         counts_per_motor_rev = 1680;
         counts_per_inch_default = (counts_per_motor_rev * drive_gear_reduction) /
@@ -63,7 +64,7 @@ public class andyMarkChassisA extends baseChassisA {
         double motorLeftBackEncoder;
         double motorRightBackEncoder;
 
-//        turnDegrees = turnDegrees * counts_per_degree / counts_per_inch;
+        turnDegrees = turnDegrees * counts_per_degree_default / counts_per_inch_default;
 
         motorLeftFrontEncoder = (-driveFB - turnDegrees) * counts_per_inch_default;
         motorRightFrontEncoder = (driveFB - turnDegrees) * counts_per_inch_default;

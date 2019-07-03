@@ -13,9 +13,10 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 public class hexChassisA extends baseChassisA {
 
+    /**
+     * Creates a hex chassis object
+     */
     hexChassisA() {
-        type = e_type.CoreHex;
-
         // Set hex motor chassis encoder variables
         counts_per_motor_rev = 288;
 
@@ -48,8 +49,8 @@ public class hexChassisA extends baseChassisA {
      * @param turnDegrees Degrees to turn left or right (right: +, left: -)
      * @param speed Speed of robot (min: 0, max: 1)
      * @param turning Whether robot is currently turning
-     * @param timerRequested
-     * @param timerRequestTime
+     * @param timerRequested Whether this move is timed
+     * @param timerRequestTime If move is timed, length of move is milliseconds
      * @param opModeIsActive Type "opModeIsActive()" boolean in autonomousFrame (program extending LinerOpMode)
      * @param frame Type "this" to pass in autonomousFrame (when calling in autonomousFrame)
      *              so this function can access it
@@ -120,12 +121,14 @@ public class hexChassisA extends baseChassisA {
             while (opModeIsActive && (motorLeftFront.isBusy() || motorRightFront.isBusy() ||
                     motorLeftBack.isBusy() || motorRightBack.isBusy())) {
 
+                // Turning timer
                 if (turning) {
                     frame.telemetry.addData("Turning", turning);
                     frame.telemetry.addData("Turn Timer", turnTime.milliseconds());
                     frame.telemetry.update();
                 }
 
+                // Forward/Backward Timer
                 if (timerRequested) {
                     frame.telemetry.addData("Turning", turning);
                     frame.telemetry.addData("Linear Timer", linearTime.milliseconds());
@@ -139,6 +142,7 @@ public class hexChassisA extends baseChassisA {
                     break;
                 }
 
+                // Stop telling robot to move forward/backward if timer expired
                 if (timerRequested && linearTime.milliseconds() > timerRequestTime) {
                     frame.telemetry.addData("Motor Status", "Timeout");
                     frame.telemetry.update();

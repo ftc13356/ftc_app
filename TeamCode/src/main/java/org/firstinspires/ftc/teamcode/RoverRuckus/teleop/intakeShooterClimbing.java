@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
 /**
- * <h2>Intake</h2>
+ * <h2>Intake, Shooter, and Climbing</h2>
  * Purpose:
  * <p> Contains the functions and variables used for the intake, shooter,
  * and the winch and servo arm for climbing
@@ -36,10 +36,18 @@ public class intakeShooterClimbing extends OpMode {
     private double hookDeliverPosition = 0.08;
 
     private OpMode op;
+    /**
+     * Constructs an intake, shooter, and climbing object
+     * @param opMode the main program usually "this"
+     */
     intakeShooterClimbing(OpMode opMode) {
         op = opMode;
     }
 
+    /**
+     * Map intake, shooter, and winch motors to their names in the robot config file
+     * and sets 0 power behavior
+     */
     public void init() {
         intakeAngleMotor = op.hardwareMap.dcMotor.get("intakeAngle");
         shooter = op.hardwareMap.dcMotor.get("shooter");
@@ -54,6 +62,9 @@ public class intakeShooterClimbing extends OpMode {
         hookAngle.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
     }
 
+    /**
+     * Allows the intake, shooter, and winch motor to move based on controller input
+     */
     public void loop() {
 
         // Power variables
