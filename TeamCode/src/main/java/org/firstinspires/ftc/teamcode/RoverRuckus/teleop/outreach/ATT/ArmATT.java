@@ -6,6 +6,10 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Contains drum stick functions (playing of the drum) for AT&T Discovery Day Outreach program
+ */
+
 @TeleOp(name = "Arm")
 @Disabled
 public class ArmATT extends OpMode{
@@ -22,7 +26,6 @@ public class ArmATT extends OpMode{
     private ElapsedTime runtime = new ElapsedTime();
 
     private OpMode op;
-
     ArmATT(OpMode opmode){
         op = opmode;
     }
@@ -39,8 +42,6 @@ public class ArmATT extends OpMode{
         op.telemetry.addData("Arm", "Initialized");
         //leftArm's down is rightArm's up
     }
-
-    public void init_loop() {}
 
     public void start(){
         runtime.reset();

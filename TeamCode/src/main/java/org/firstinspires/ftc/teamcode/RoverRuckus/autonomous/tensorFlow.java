@@ -39,11 +39,11 @@ import org.firstinspires.ftc.robotcore.external.tfod.TFObjectDetector;
 import java.util.List;
 
 /**
- * This 2018-2019 OpMode illustrates the basics of using the TensorFlow Object Detection API to
- * determine the position of the gold and silver minerals.
+ * <h2>TensorFlow</h2>
+ * Used the TensorFlow Object Detection API to determine the position of the gold and silver minerals.
  *
  * <a href="https://github.com/ftctechnh/ftc_app/wiki/Java-Sample-TensorFlow-Object-Detection-Op-Mode">
- *     How this code works</a>
+ * How this code works</a>
  */
 
 public class tensorFlow {
@@ -53,13 +53,13 @@ public class tensorFlow {
     private static final String silver_mineral_label = "Silver Mineral";
 
     /**
-     * {@link #vuforia} is the variable we will use to store our instance of the Vuforia
+     * the variable we will use to store our instance of the Vuforia
      * localization engine.
      */
     private VuforiaLocalizer vuforia;
 
     /**
-     * {@link #tfod} is the variable we will use to store our instance of the Tensor Flow Object
+     * the variable we will use to store our instance of the Tensor Flow Object
      * Detection engine.
      */
     private TFObjectDetector tfod;
@@ -68,10 +68,17 @@ public class tensorFlow {
     private ElapsedTime sampleTime = new ElapsedTime();
 
     private autonomousFrame frame;
+    /**
+     * Constructs a tensor flow object
+     * @param inputFrame the main program usually "this"
+     */
     public tensorFlow(autonomousFrame inputFrame) {
         frame = inputFrame;
     }
 
+    /**
+     * Sets up tensor flow
+     */
     public void initialize() {
         // The TFObjectDetector uses the camera frames from the VuforiaLocalizer, so we create that first.
         initVuforia();
@@ -82,7 +89,12 @@ public class tensorFlow {
         }
     }
 
-    public int scan(int scanMode) { // 1=left 2, 2=right 2, 3=all 3
+    /**
+     * Scans the minerals and returns the position of the gold mineral
+     * @param scanMode 1- scan left 2 minerals, 2- scan right 2 minerals, 3- scan all 3 minerals
+     * @return the position of the gold mineral- 1 = left, 2 = center, 3 = right
+     */
+    public int scan(int scanMode) {
         int position = 0;
 
         if (frame.opModeIsActive()) {

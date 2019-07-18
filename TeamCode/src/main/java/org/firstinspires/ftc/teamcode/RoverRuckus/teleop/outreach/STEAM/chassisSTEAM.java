@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+/**
+ * Contains chassis functions for STEAM Night Outreach program
+ */
+
 @TeleOp(name = "Chassis")
 @Disabled
 public class chassisSTEAM extends OpMode {

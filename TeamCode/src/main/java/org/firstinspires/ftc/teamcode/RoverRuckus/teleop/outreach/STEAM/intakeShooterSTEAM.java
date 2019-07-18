@@ -7,6 +7,10 @@ import com.qualcomm.robotcore.hardware.CRServo;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+/**
+ * Contains intake and shooter functions for STEAM Night Outreach program
+ */
+
 @TeleOp(name = "Intake")
 @Disabled
 public class intakeShooterSTEAM extends OpMode {

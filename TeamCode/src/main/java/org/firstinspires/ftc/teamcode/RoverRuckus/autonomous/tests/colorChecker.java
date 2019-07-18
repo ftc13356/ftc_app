@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.tests;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.hardware.ColorSensor;
+
 import org.firstinspires.ftc.teamcode.RoverRuckus.autonomous.autonomousFrame;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ import java.util.ArrayList;
  */
 
 public class colorChecker {
+
+    private ColorSensor colorSensor;
 
     private float hsvValues[] = {0F, 0F, 0F};
 
@@ -51,6 +55,10 @@ public class colorChecker {
         frame = inputFrame;
     }
 
+    /**
+     * Uses collected data to decide weather the mineral is gold or silver
+     * @return weather the mineral is gold(1) or silver (2)
+     */
     public int detectObject() {
 
         calibrate();
@@ -74,10 +82,15 @@ public class colorChecker {
         return objectDetected;
     }
 
+    /**
+     * Collect color saturation values
+     */
     public void calibrate() {
+        colorSensor = frame.hardwareMap.colorSensor.get("colorSensor");
+
         // Takes 10 saturation readings from the color sensor and adds them to a list
         for (int i = 0; i <= timesToCheck; i++) {
-            Color.RGBToHSV(frame.colorSensor.red(), frame.colorSensor.green(), frame.colorSensor.blue(), hsvValues);
+            Color.RGBToHSV(colorSensor.red(), colorSensor.green(), colorSensor.blue(), hsvValues);
 
             checksSaturation.add(hsvValues[1]);
 
@@ -94,8 +107,11 @@ public class colorChecker {
         frame.telemetry.update();
     }
 
-    // To calculate the average:
-    // add up all data points, divide by number of data points
+    /**
+     * To calculate the average- add up all data points, divide by number of data points
+     * @param myList list to calculate average of
+     * @return average of the list
+     */
     public float calculateAverage(ArrayList myList) {
         float total = 0;
         for (int i = 0; i < myList.size(); i++) {
@@ -105,8 +121,13 @@ public class colorChecker {
         return total / myList.size();
     }
 
-    // To calculate the standard deviation (sigma):
-    // subtract average from each data point, square that, take average of the squares, take square root of average
+    /**
+     * To calculate the standard deviation (sigma)-
+     * subtract average from each data point, square that, take average of the squares, take square root of average
+     * @param myList list to find the standard deviation (sigma) of
+     * @param average the average of the input list
+     * @return the standard deviation of the list
+     */
     public float calculateSigma(ArrayList myList, float average) {
         float squaredTotals = 0;
         for (int i = 0; i < myList.size(); i++) {

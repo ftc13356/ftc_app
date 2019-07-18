@@ -36,8 +36,9 @@ import static org.firstinspires.ftc.teamcode.key.key;
  * Purpose:
  * <p> Contains all the common variables and functions in autonomous programs
  * so that they are neat and organized
- * <p>
- * <p> Current Version: {@value autonomousVersionNumber}
+ *
+ * @version 7.0 on 2/1/19
+ * @author Jonthan Ma and Ansh Gandhi
  */
 
 @Autonomous(name="Basic Autonomous Frame")
@@ -57,13 +58,11 @@ public abstract class autonomousFrame extends LinearOpMode {
     private DcMotor intakeAngleMotor;
     private DcMotor winchMotor;
 
-    public ColorSensor colorSensor;
-
     WebcamName webcamTensor;
 
     // Intake Encoder Variables
-    protected int intakeDown = -1050;
-    protected int intakeUp = 0;
+    protected final int intakeDown = -1050;
+    protected final int intakeUp = 0;
 
     // Initialize Sampling Variables
     private tensorFlow sampling;
@@ -79,13 +78,12 @@ public abstract class autonomousFrame extends LinearOpMode {
     private boolean targetVisible = false;
     private static final float mmPerInch = 25.4f;
     // width of the FTC field (from the center point to the outer panels)
-        private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
+    private static final float mmFTCFieldWidth = (12 * 6) * mmPerInch;
     // height of the center of the target image above the floor
-        private static final float mmTargetHeight = (6) * mmPerInch;
+    private static final float mmTargetHeight = (6) * mmPerInch;
 
     /**
      * Prints version number of autonomous program
-     * <p> Current Version: {@value autonomousVersionNumber}
      */
     public void versionPrint() {
         telemetry.addData("Autonomous Program Version", autonomousVersionNumber);
@@ -95,8 +93,7 @@ public abstract class autonomousFrame extends LinearOpMode {
     /**
      * Maps motors, servos, and sensors to their names in the robot config file
      *
-     * Sets chassis specific motor direction
-     * <p> Tells motors to not apply brakes when power is 0
+     * <p> Sets chassis specific motor direction and 0 power behavior
      */
     public void initializeRobot() {
         chassis.initializeMotors(hardwareMap);
@@ -112,20 +109,32 @@ public abstract class autonomousFrame extends LinearOpMode {
         webcamVuforia = hardwareMap.get(WebcamName.class, "Webcam");
     }
 
+    /**
+     * Creates tensor flow object for detecting minerals and initializes it
+     */
     public void initializeTensorFlow() {
         sampling = new tensorFlow(this);
         sampling.initialize();
     }
 
     /**
-     * Allows robot to be programmed to go forward, backward a certain amount of inches
+     * **Not used directly by autonomous programs**
+     * <p> See
+     * {@linkplain autonomousFrame#forward(double, double)},
+     * {@linkplain autonomousFrame#backward(double, double)},
+     * {@linkplain autonomousFrame#left(double, double)}, and
+     * {@linkplain autonomousFrame#right(double, double)}
+     * <p>
+     * <p> Allows robot to be programmed to go forward, backward a certain amount of inches
      * <p> Allows robot to be programmed to turn left and right a certain number of degrees
      * @param driveFB Inches to move forward or backward (forward: +, backward: -)
      * @param turnDegrees Degrees to turn left or right (right: +, left: -)
      * @param speed Speed of robot (min: 0, max: 1)
-     * @param turning Whether robot is currently turning
+     * @param turning Whether the robot is currently turning
+     * @param timerRequested Whether this move is timed
+     * @param timerRequestTime If move is timed, length of move is milliseconds
      */
-    private void encoderDrive(double driveFB, double turnDegrees, double speed,
+    public void encoderDrive(double driveFB, double turnDegrees, double speed,
                               boolean turning, boolean timerRequested, int timerRequestTime) {
 
         // get function from current chassis
@@ -143,6 +152,12 @@ public abstract class autonomousFrame extends LinearOpMode {
         encoderDrive(distance, 0, speed, false, false, 0);
     }
 
+    /**
+     * Moves robot forward for a certain amount of time
+     * @param distance Inches forward
+     * @param speed Speed of robot
+     * @param timeMilliseconds Time in milliseconds of forward move
+     */
     public void timedForward(double distance, double speed, int timeMilliseconds) {
         encoderDrive(distance, 0, speed, false, true, timeMilliseconds);
     }
@@ -156,6 +171,12 @@ public abstract class autonomousFrame extends LinearOpMode {
         encoderDrive(-distance, 0, speed, false, false, 0);
     }
 
+    /**
+     * Moves robot backward for a certain amount of time
+     * @param distance Inches forward
+     * @param speed Speed of robot
+     * @param timeMilliseconds Time in milliseconds of backward move
+     */
     public void timedBackward(double distance, double speed, int timeMilliseconds) {
         encoderDrive(-distance, 0, speed, false, true, timeMilliseconds);
     }
@@ -180,8 +201,19 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     /**
-     * {@linkplain /baseChassis#encoderDriveBasic(double, double, double, double, double, boolean) Documentation Here}
+     * **Not Used Anymore**
+     * <p> Replace by
+     * {@linkplain autonomousFrame#encoderDrive(double, double, double, boolean, boolean, int)}
+     * <p>
+     * <p> Allows each individual motor to be programmed to go forward (+), backward (-)
+     * a certain amount of inches
+     * @param leftFrontInches Inches to move motorLeftFront
+     * @param rightFrontInches Inches to move motorRightFront
+     * @param leftBackInches Inches to move motorLeftBack
+     * @param rightBackInches Inches to move motorRightBack
+     * @param speed Speed of robot (min: 0, max: 1)
      */
+    @Deprecated
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed) {
         // get function from chassis
@@ -189,6 +221,10 @@ public abstract class autonomousFrame extends LinearOpMode {
                 speed, opModeIsActive());
     }
 
+    /**
+     * Moves the robot's intake
+     * @param newAngleMotorTarget the encoder value to ove the intake to
+     */
     public void moveIntake(int newAngleMotorTarget) {
 
         if (opModeIsActive()) {
@@ -209,6 +245,9 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
     }
 
+    /***
+     * Expels the team marker to the depot by spinning the intake wheels
+     */
     public void expelMarker() {
         leftIntake.setPower(1);
         rightIntake.setPower(-1);
@@ -220,10 +259,10 @@ public abstract class autonomousFrame extends LinearOpMode {
     }
 
     /**
-     * Winch Motor
      * <p> This is a simple function that controls the movement of the winch motor.
-     * @param power This is the power given to the winch motor. Negative power means that the winch will
-     *              retract, lifting the robot. Negative power means that the winch will lower, lowering the robot.
+     * @param power This is the power given to the winch motor.
+     *              Negative power means that the winch will retract, lifting the robot.
+     *              Positive power means that the winch will lower, lowering the robot.
      * @param time This is the time, in milliseconds, that the motor needs to spin.
      */
     public void moveWinch(double power, long time) {
@@ -232,13 +271,19 @@ public abstract class autonomousFrame extends LinearOpMode {
         winchMotor.setPower(0);
     }
 
+    /**
+     * Lowers a hanging robot by using the winch
+     */
     public void descend() {
-        /*moveWinch(1, 5000);
-        //timedForward(15, 0.2, 1500);
-        //moveWinch(-1, 2000);
-        moveWinch(-1, 1500);*/
+        moveWinch(1, 5000);
+        timedForward(15, 0.2, 1500);
+        moveWinch(-1, 2000);
+        moveWinch(-1, 1500);
     }
 
+    /**
+     * Scans the minerals and stores the location of the gold mineral
+     */
     public void scanMinerals() {
         goldLocation = sampling.scan(2);
         telemetry.addData("Gold Location", goldLocation);
@@ -250,6 +295,10 @@ public abstract class autonomousFrame extends LinearOpMode {
     protected double turnCorrection = 0;
     private double turnCorrectionTwo = 0;
 
+    /**
+     * Does sampling for the depot side of the lander
+     * @param primary whether the primary program is running
+     */
     public void samplingDepot(boolean primary) {
         moveIntake(intakeDown);
         scanMinerals();
@@ -286,6 +335,10 @@ public abstract class autonomousFrame extends LinearOpMode {
 
     protected boolean gotoDepot = false;
 
+    /**
+     * Does sampling for the crater side of the lander
+     * @param primary whether the primary program is running
+     */
     public void samplingCrater(boolean primary) {
         moveIntake(intakeDown);
         scanMinerals();
@@ -310,9 +363,8 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
     }
 
-    /* NEEDS to be REWRITTEN to support Webcam.. sorry ansh
-     *
-     * Vuforia Navigation
+    /**
+     * Vuforia Navigation **Experimental, Not Tested, not for webcam
      * <p> This contains some of the Vuforia initialization code.
      * The function also calculates the location of the robot based on the the VuMarks detected.
      *
@@ -323,16 +375,16 @@ public abstract class autonomousFrame extends LinearOpMode {
      * @param camera_left_displacement
      *        This is the left location of the phone relative to the center of the robot.
      */
-
     public void vuforiaNavigation(final int camera_forward_displacement,
-                                  final int camera_vertical_displacement, final int camera_left_displacement) {
+                                  final int camera_vertical_displacement,
+                                  final int camera_left_displacement) {
 
         // Camera is 110 mm in front of robot center
         // Camera is 200 mm above ground
         // Camera is ON the robot's center line
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().
-                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier
+                ("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -355,41 +407,49 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
         blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
         redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
         frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix
-                .translation(camera_forward_displacement, camera_left_displacement, camera_vertical_displacement)
+                .translation(camera_forward_displacement, camera_left_displacement,
+                        camera_vertical_displacement)
                 .multiplied(Orientation.getRotationMatrix(
                         AxesReference.EXTRINSIC, AxesOrder.XZY,
                         AngleUnit.DEGREES, 90, 90, 0));
 
-        for (VuforiaTrackable trackable : allTrackables)
-        {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+        for (VuforiaTrackable trackable : allTrackables) {
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation
+                    (robotFromCamera, parameters.cameraDirection);
         }
     }
 
+    /**
+     * **Experimental, Not Tested
+     */
     public void DetectLocationWebcam() {
     //public List DetectLocationWebcam() {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().
-                getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier
+                ("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -412,29 +472,36 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
         blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
         redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
         frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).
-                multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
+                multiplied(Orientation.getRotationMatrix
+                (AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES,
+                90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation
+                    (robotFromCamera, parameters.cameraDirection);
         }
 
         List returnList = new ArrayList();
@@ -448,7 +515,9 @@ public abstract class autonomousFrame extends LinearOpMode {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform =
+                            ((VuforiaTrackableDefaultListener)trackable.getListener()).
+                                    getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -463,14 +532,16 @@ public abstract class autonomousFrame extends LinearOpMode {
                 returnList.add(translation.get(1) / mmPerInch);
                 returnList.add(translation.get(2) / mmPerInch);
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        translation.get(0) / mmPerInch, translation.get(1) /
+                                mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 returnList.add(rotation.firstAngle);
                 returnList.add(rotation.secondAngle);
                 returnList.add(rotation.thirdAngle);
                 telemetry.addData("Rot (deg)",
-                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f",
+                        rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
                 telemetry.addData("Visible Target", "none");
@@ -482,10 +553,13 @@ public abstract class autonomousFrame extends LinearOpMode {
         //return returnList;
     }
 
+    /**
+     * **Experimental, Not Tested
+     */
     public void MoveToLocationWebcam(final int desiredX, final int desiredY, final int desiredHeading) {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId",
-                "id", hardwareMap.appContext.getPackageName());
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier
+                ("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         VuforiaLocalizer.Parameters parameters = new VuforiaLocalizer.Parameters(cameraMonitorViewId);
 
         parameters.vuforiaLicenseKey = vuforia_key;
@@ -508,29 +582,36 @@ public abstract class autonomousFrame extends LinearOpMode {
 
         OpenGLMatrix blueRoverLocationOnField = OpenGLMatrix
                 .translation(0, mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 0));
         blueRover.setLocationFtcFieldFromTarget(blueRoverLocationOnField);
 
         OpenGLMatrix redFootprintLocationOnField = OpenGLMatrix
                 .translation(0, -mmFTCFieldWidth, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, 180));
         redFootprint.setLocationFtcFieldFromTarget(redFootprintLocationOnField);
 
         OpenGLMatrix frontCratersLocationOnField = OpenGLMatrix
                 .translation(-mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0 , 90));
         frontCraters.setLocationFtcFieldFromTarget(frontCratersLocationOnField);
 
         OpenGLMatrix backSpaceLocationOnField = OpenGLMatrix
                 .translation(mmFTCFieldWidth, 0, mmTargetHeight)
-                .multiplied(Orientation.getRotationMatrix(EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
+                .multiplied(Orientation.getRotationMatrix
+                        (EXTRINSIC, XYZ, DEGREES, 90, 0, -90));
         backSpace.setLocationFtcFieldFromTarget(backSpaceLocationOnField);
 
         OpenGLMatrix robotFromCamera = OpenGLMatrix.translation(0,0,0).
-                multiplied(Orientation.getRotationMatrix(AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES, 90, 90, 0));
+                multiplied(Orientation.getRotationMatrix
+                (AxesReference.EXTRINSIC, AxesOrder.XZY, AngleUnit.DEGREES,
+                90, 90, 0));
 
         for (VuforiaTrackable trackable : allTrackables) {
-            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation(robotFromCamera, parameters.cameraDirection);
+            ((VuforiaTrackableDefaultListener)trackable.getListener()).setPhoneInformation
+                    (robotFromCamera, parameters.cameraDirection);
         }
 
         targetsRoverRuckus.activate();
@@ -542,7 +623,9 @@ public abstract class autonomousFrame extends LinearOpMode {
                     telemetry.addData("Visible Target", trackable.getName());
                     targetVisible = true;
 
-                    OpenGLMatrix robotLocationTransform = ((VuforiaTrackableDefaultListener)trackable.getListener()).getUpdatedRobotLocation();
+                    OpenGLMatrix robotLocationTransform =
+                            ((VuforiaTrackableDefaultListener)trackable.getListener()).
+                                    getUpdatedRobotLocation();
                     if (robotLocationTransform != null) {
                         lastLocation = robotLocationTransform;
                     }
@@ -560,12 +643,14 @@ public abstract class autonomousFrame extends LinearOpMode {
                 x1 = translation.get(0) / mmPerInch;
                 y1 = translation.get(1) / mmPerInch;
                 telemetry.addData("Pos (in)", "{X, Y, Z} = %.1f, %.1f, %.1f",
-                        translation.get(0) / mmPerInch, translation.get(1) / mmPerInch, translation.get(2) / mmPerInch);
+                        translation.get(0) / mmPerInch, translation.get(1) /
+                                mmPerInch, translation.get(2) / mmPerInch);
 
                 Orientation rotation = Orientation.getOrientation(lastLocation, EXTRINSIC, XYZ, DEGREES);
                 z1 = rotation.thirdAngle;
                 telemetry.addData("Rot (deg)",
-                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f", rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
+                        "{Roll, Pitch, Heading} = %.0f, %.0f, %.0f",
+                        rotation.firstAngle, rotation.secondAngle, rotation.thirdAngle);
             }
             else {
                 telemetry.addData("Visible Target", "none");
@@ -588,5 +673,4 @@ public abstract class autonomousFrame extends LinearOpMode {
         }
 
     }
-
 }

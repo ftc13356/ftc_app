@@ -32,17 +32,9 @@ public abstract class baseChassisA {
     double counts_per_degree_default = 0;
     double counts_per_degree_high_grip = 0;
 
-    public enum e_type {
-        AndyMark,
-        CoreHex
-    }
-
-    public e_type type;
-
     /**
-     * Tells motors to not apply brakes when power is 0
-     *
-     * Maps chassis motors to their names in the robot config file
+     * Sets 0 power behavior
+     * <p> Maps chassis motors to their names in the robot config file
      * @param hardwareMap hardware map of robot in autonomousFrame (program extending LinerOpMode)
      */
     public void initializeMotors(HardwareMap hardwareMap) {
@@ -58,7 +50,8 @@ public abstract class baseChassisA {
     }
 
     /**
-     * Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
+     * **Not Used Anymore**
+     * <p> Allows each individual motor to be programmed to go forward (+), backward (-) a certain amount of inches
      * @param leftFrontInches Inches to move motorLeftFront
      * @param rightFrontInches Inches to move motorRightFront
      * @param leftBackInches Inches to move motorLeftBack
@@ -66,6 +59,7 @@ public abstract class baseChassisA {
      * @param speed Speed of robot (min: 0, max: 1)
      * @param opModeIsActive Use opModeIsActive() boolean in autonomousFrame (program extending LinerOpMode)
      */
+    @Deprecated
     public void encoderDriveBasic(double leftFrontInches, double rightFrontInches,
                                   double leftBackInches, double rightBackInches, double speed, boolean opModeIsActive) {
 

@@ -27,10 +27,17 @@ public class hexChassisT extends OpMode {
     private int display = 0;
 
     private OpMode op;
+    /**
+     * Constructs a hex chassis object
+     * @param opMode the main program usually "this"
+     */
     public hexChassisT(OpMode opMode) {
         op = opMode;
     }
 
+    /**
+     * Map chassis motors to their names in the robot config file and sets their direction
+     */
     public void init() {
         motorLeftFront = op.hardwareMap.dcMotor.get("motorLeftFront");
         motorRightFront = op.hardwareMap.dcMotor.get("motorRightFront");
@@ -41,6 +48,10 @@ public class hexChassisT extends OpMode {
         motorRightBack.setDirection(DcMotor.Direction.REVERSE);
     }
 
+    /**
+     * Allows the robot to be driven based on controller input
+     * <p> 3 speed modes- slow, medium, and fast
+     */
     public void loop() {
         double motorLeftFrontPower;
         double motorRightFrontPower;
