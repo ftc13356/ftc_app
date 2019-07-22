@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.RoverRuckus.teleop.outreach.STEAM;
 
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -11,6 +12,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
  */
 
 @TeleOp(name = "MSJE STEAM Event")
+@Disabled
 public class teleopMainSTEAM extends OpMode {
 
     private chassisSTEAM chassis = new chassisSTEAM(this);
