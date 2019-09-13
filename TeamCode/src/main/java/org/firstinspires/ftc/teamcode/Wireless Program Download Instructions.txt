@@ -1,39 +1,45 @@
 How to Install Android Apps Over WiFi:
 
 Mac Start Here:
-1. In android studio terminal, type (adds platform-tools to your path)
+1. In terminal, type (adds adb to your path)
        echo 'export ANDROID_HOME=/Users/$USER/Library/Android/sdk' >> ~/.bash_profile
        echo 'export PATH=${PATH}:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools' >> ~/.bash_profile
-       source ~/.bash_profile (refresh your bash profile)
+       source ~/.bash_profile
        adb devices (test to see if adb is working)
            if terminal says adb is invalid command, restart android studio
-2. Continue to Windows directions
+2. Continue to "After After ADB Path Set"
 
 Windows Start Here:
+1. In command prompt, type (adds adb to your path)
+    setx PATH "%PATH%;%USERPROFILE%\AppData\Local\Android\sdk\platform-tools"
+    adb devices (test to see if adb is working)
+           if terminal says adb is invalid command, restart android studio
+2. Continue to "After After ADB Path Set"
+
+After ADB Path Set:
 1. Make sure Driver Station phone and Robot Controller phone (RC) are connected using wifi direct
        (make sure RC phone hosts group)
 2. Connect to RC's wifi direct network (use group password)
 3. Connect RC via usb to computer
-4. In android studio terminal, type
-    Windows Only
-        cd C:\Users\USER_NAME\AppData\Local\Android\Sdk\platform-tools (this is where adb located)
+4. In cmd or terminal, type
 	adb devices (to find current connected usb devices)
 	adb tcpip 5555
 5. Disconnect RC from computer
 6. Windows-
        Open a new cmd window, type
 	       ipconfig
-       Find default gateway IP address
+       Find "Default Gateway" IP address for wifi adapter
    Mac-
        Open System Preferences
        Click Network
-       Find IP Address
+       Find Current IP Address
 8. In android studio terminal, type
        adb connect <ip address>:5555 (example: adb connect 192.168.49.1:5555)
        adb devices (to find if phone connected)
-9. Yay! If you followed the instructions, you should be able to download programs over wifi
+9. Yay! If you followed the instructions, you should be able to download and install programs over wifi :-)
 
 ***Please note, if you connect to another wifi network, you may have to start this process again
+
 Sources:
 https://futurestud.io/tutorials/how-to-debug-your-android-app-over-wifi-without-root
 https://stackoverflow.com/questions/17901692/set-up-adb-on-mac-os-x
